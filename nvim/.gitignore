@@ -1,0 +1,38 @@
+# Lazy.nvim plugin manager
+lazy-lock.json
+.lazy/
+
+# Plugin directory (auto-generated)
+plugin/
+
+# Backup files
+*.bak
+*.backup
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# LSP and language server files
+.luarc.json
+.stylua.toml
+
+# Session files
+Session.vim
+.session
+
+# Undo history
+.*.un~
+
+# Netrw history
+.netrwhist
+
+# Log files
+*.log
+
+# Compiled files
+*.pyc
+*.pyo
