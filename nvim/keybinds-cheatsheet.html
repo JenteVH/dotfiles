@@ -230,8 +230,8 @@
             <table>
                 <tr><td>[d</td><td>Previous</td></tr>
                 <tr><td>]d</td><td>Next</td></tr>
-                <tr><td><span class="leader">⎵</span>E</td><td>Float</td></tr>
-                <tr><td><span class="leader">⎵</span>dl</td><td>List</td></tr>
+                <tr><td><span class="leader">⎵</span>d</td><td>Float</td></tr>
+                <tr><td><span class="leader">⎵</span>q</td><td>Loclist</td></tr>
                 <tr><td><span class="leader">⎵</span>xx</td><td>Trouble</td></tr>
                 <tr><td><span class="leader">⎵</span>xw</td><td>LSP view</td></tr>
                 <tr><td><span class="leader">⎵</span>xd</td><td>Buf diags</td></tr>
@@ -264,7 +264,7 @@
                 <tr><td><span class="leader">⎵</span>hb</td><td>Blame line</td></tr>
                 <tr><td><span class="leader">⎵</span>hd</td><td>Diff this</td></tr>
                 <tr><td><span class="leader">⎵</span>hD</td><td>Diff ~</td></tr>
-                <tr><td><span class="leader">⎵</span>td</td><td>Toggle deleted</td></tr>
+                <tr><td><span class="leader">⎵</span>gd</td><td>Toggle deleted</td></tr>
                 <tr><td>ih</td><td>Select hunk</td></tr>
             </table>
         </div>
@@ -380,29 +380,26 @@
         
         <!-- File Explorer -->
         <div class="category">
-            <h2>🗂️ NvimTree</h2>
+            <h2>🗂️ Oil.nvim</h2>
             <table>
-                <tr><td><span class="leader">⎵</span>e</td><td>Toggle</td></tr>
-                <tr><td>?</td><td>Help</td></tr>
-                <tr><td>C</td><td>CD to node</td></tr>
-                <tr><td>a</td><td>Create</td></tr>
-                <tr><td>d</td><td>Delete</td></tr>
-                <tr><td>r</td><td>Rename</td></tr>
-                <tr><td>x</td><td>Cut</td></tr>
-                <tr><td>c</td><td>Copy</td></tr>
-                <tr><td>p</td><td>Paste</td></tr>
-                <tr><td>H</td><td>Toggle hidden</td></tr>
-                <tr><td>I</td><td>Toggle gitignore</td></tr>
-                <tr><td>R</td><td>Refresh</td></tr>
-                <tr><td>W</td><td>Collapse all</td></tr>
-                <tr><td>E</td><td>Expand all</td></tr>
-                <tr><td>y</td><td>Copy name</td></tr>
-                <tr><td>Y</td><td>Copy path</td></tr>
-                <tr><td>-</td><td>Up dir</td></tr>
-                <tr><td>o</td><td>Open</td></tr>
-                <tr><td><span class="key">Tab</span></td><td>Preview</td></tr>
-                <tr><td><span class="key">C-v</span></td><td>V-split</td></tr>
-                <tr><td><span class="key">C-x</span></td><td>H-split</td></tr>
+                <tr><td><span class="leader">⎵</span>e</td><td>Open Oil</td></tr>
+                <tr><td>-</td><td>Parent dir</td></tr>
+                <tr><td>g?</td><td>Help</td></tr>
+                <tr><td><span class="key">CR</span></td><td>Select</td></tr>
+                <tr><td><span class="key">C-c</span></td><td>Close</td></tr>
+                <tr><td><span class="key">C-l</span></td><td>Refresh</td></tr>
+                <tr><td><span class="key">C-s</span></td><td>V-split</td></tr>
+                <tr><td><span class="key">C-h</span></td><td>H-split</td></tr>
+                <tr><td><span class="key">C-t</span></td><td>Tab</td></tr>
+                <tr><td><span class="key">C-p</span></td><td>Preview</td></tr>
+                <tr><td>_</td><td>Open cwd</td></tr>
+                <tr><td>`</td><td>CD</td></tr>
+                <tr><td>~</td><td>Tcd</td></tr>
+                <tr><td>gs</td><td>Change sort</td></tr>
+                <tr><td>gx</td><td>Open external</td></tr>
+                <tr><td>g.</td><td>Toggle hidden</td></tr>
+                <tr><td>g\</td><td>Toggle trash</td></tr>
+                <tr><td>:w</td><td>Save changes</td></tr>
             </table>
         </div>
         
@@ -431,7 +428,6 @@
         <div class="category">
             <h2>⚡ Quick</h2>
             <table>
-                <tr><td><span class="leader">⎵</span>q</td><td>Close window</td></tr>
                 <tr><td><span class="leader">⎵</span>Q</td><td>Quit all!</td></tr>
                 <tr><td class="new"><span class="leader">⎵</span>w</td><td class="new">Save</td></tr>
                 <tr><td class="new"><span class="leader">⎵</span>W</td><td class="new">Save all</td></tr>
@@ -454,8 +450,27 @@
                 <tr><td>:ESLintToggle</td><td>Toggle ESLint</td></tr>
                 <tr><td>:ESLintQuiet</td><td>Clear ESLint</td></tr>
                 <tr><td>:Trouble</td><td>Diagnostics</td></tr>
-                <tr><td>:NvimTreeToggle</td><td>File tree</td></tr>
+                <tr><td>:Oil</td><td>File explorer</td></tr>
                 <tr><td>:Gitsigns</td><td>Git signs cmd</td></tr>
+            </table>
+        </div>
+
+        <!-- Dooing (Todo) -->
+        <div class="category">
+            <h2>✅ Dooing Todo</h2>
+            <table>
+                <tr><td><span class="leader">⎵</span>td</td><td>Toggle todos</td></tr>
+                <tr><td><span class="leader">⎵</span>tD</td><td>Project todos</td></tr>
+                <tr><td>:Dooing</td><td>Open todos</td></tr>
+            </table>
+            <table style="margin-top: 5px;">
+                <tr><td colspan="2" style="color: #89b4fa; font-weight: bold;">Default Keys:</td></tr>
+                <tr><td>i</td><td>Insert new</td></tr>
+                <tr><td>d</td><td>Delete todo</td></tr>
+                <tr><td>x</td><td>Toggle done</td></tr>
+                <tr><td>e</td><td>Edit todo</td></tr>
+                <tr><td>?</td><td>Show help</td></tr>
+                <tr><td colspan="2" style="color: #f38ba8; font-size: 0.85em;">Note: Buffer is read-only</td></tr>
             </table>
         </div>
     </div>

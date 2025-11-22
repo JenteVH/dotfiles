@@ -6,6 +6,7 @@ return {
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
       "nvim-treesitter/playground",
+      "windwp/nvim-ts-autotag",
     },
     config = function()
       require("nvim-treesitter.configs").setup({
@@ -36,6 +37,9 @@ return {
           additional_vim_regex_highlighting = false,
         },
         indent = {
+          enable = true,
+        },
+        autotag = {
           enable = true,
         },
         incremental_selection = {

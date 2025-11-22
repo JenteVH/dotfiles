@@ -51,10 +51,10 @@ return {
       -- Diagnostic keymaps
       vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
       vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
-      vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show diagnostic in float" })
+      vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Show diagnostic in float" })
       vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Set diagnostic to loclist" })
 
-      -- LSP attach function for keymaps
+      -- LSP attach function for keymaps and dynamic configuration
       local on_attach = function(client, bufnr)
         local function buf_set_keymap(mode, lhs, rhs, desc)
           vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
@@ -78,6 +78,8 @@ return {
         buf_set_keymap("n", "<leader>f", function()
           vim.lsp.buf.format({ async = true })
         end, "Format document")
+
+        -- For Pyright, just ensure it's using the right root directory
       end
 
       -- Python: Pyright configuration
@@ -85,23 +87,50 @@ return {
         cmd = { "pyright-langserver", "--stdio" },
         filetypes = { "python" },
         root_dir = function(fname)
-          return find_root(fname, {
+          local root = find_root(fname, {
+            "pyrightconfig.json",  -- Prioritize pyrightconfig.json
             "pyproject.toml",
             "setup.py",
             "setup.cfg",
             "requirements.txt",
             "Pipfile",
-            "pyrightconfig.json",
             ".git",
           })
+          -- Ensure we return a valid directory
+          if root and vim.fn.isdirectory(root) == 1 then
+            return root
+          end
+          return vim.fn.getcwd()
+        end,
+        on_new_config = function(new_config, new_root_dir)
+          -- Set the working directory for pyright-langserver to the project root
+          new_config.cmd_cwd = new_root_dir
+        end,
+        on_init = function(client)
+          -- Ensure client knows the workspace root
+          if client.config.root_dir then
+            client.config.workspace_folders = {
+              {
+                uri = vim.uri_from_fname(client.config.root_dir),
+                name = vim.fn.fnamemodify(client.config.root_dir, ":t"),
+              }
+            }
+          end
         end,
         settings = {
           python = {
             analysis = {
+              extraPaths = {
+                "/app/inspection",
+                "/app/sales",
+                "/app/asset",
+                "/app/api_gateway",
+                "/app/backend",
+              },
+              typeCheckingMode = "basic",
               autoSearchPaths = true,
               useLibraryCodeForTypes = true,
-              diagnosticMode = "workspace",
-              typeCheckingMode = "basic",
+              reportMissingImports = true,
             },
           },
         },
@@ -109,63 +138,7 @@ return {
         on_attach = on_attach,
       }
 
-      -- Python: python-lsp-server configuration
-      vim.lsp.config.pylsp = {
-        cmd = { "pylsp" },
-        filetypes = { "python" },
-        root_dir = function(fname)
-          return find_root(fname, {
-            "pyproject.toml",
-            "setup.py",
-            "setup.cfg",
-            "requirements.txt",
-            "Pipfile",
-            ".git",
-          })
-        end,
-        settings = {
-          pylsp = {
-            plugins = {
-              -- Formatter
-              black = {
-                enabled = true,
-                line_length = 88,
-              },
-              -- Import sorting
-              isort = {
-                enabled = true,
-              },
-              -- Linting with ruff
-              ruff = {
-                enabled = true,
-                lineLength = 88,
-              },
-              -- Disable other linters in favor of ruff
-              flake8 = { enabled = false },
-              pylint = { enabled = false },
-              pycodestyle = { enabled = false },
-              pydocstyle = { enabled = false },
-              pyflakes = { enabled = false },
-              -- Type checking - we use pyright
-              mypy = { enabled = false },
-              -- Code completion
-              jedi_completion = {
-                enabled = true,
-                fuzzy = true,
-              },
-              -- Documentation
-              jedi_hover = { enabled = true },
-              jedi_references = { enabled = true },
-              jedi_signature_help = { enabled = true },
-              jedi_symbols = { enabled = true },
-              -- Formatter - we use black
-              yapf = { enabled = false },
-            },
-          },
-        },
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
+      -- Python: Only Pyright is used (pylsp disabled to avoid conflicts)
 
       -- Lua LSP configuration
       vim.lsp.config.lua_ls = {
@@ -310,15 +283,62 @@ return {
         on_attach = on_attach,
       }
 
+      -- TypeScript/JavaScript LSP (vtsls)
+      vim.lsp.config.vtsls = {
+        cmd = { "vtsls", "--stdio" },
+        filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+        root_dir = function(fname)
+          return find_root(fname, {
+            "package.json",
+            "tsconfig.json",
+            "jsconfig.json",
+            ".git",
+          })
+        end,
+        settings = {
+          vtsls = {
+            experimental = {
+              completion = {
+                enableServerSideFuzzyMatch = true,
+              },
+            },
+          },
+          typescript = {
+            inlayHints = {
+              includeInlayParameterNameHints = "all",
+              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayVariableTypeHints = true,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayEnumMemberValueHints = true,
+            },
+          },
+          javascript = {
+            inlayHints = {
+              includeInlayParameterNameHints = "all",
+              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayVariableTypeHints = true,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayEnumMemberValueHints = true,
+            },
+          },
+        },
+        capabilities = capabilities,
+        on_attach = on_attach,
+      }
+
       -- Auto-start LSP for configured filetypes
       vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "python", "lua", "sh", "bash", "yaml", "yml", "json", "jsonc", "html", "htm", "css", "scss", "less", "dockerfile" },
+        pattern = { "python", "lua", "sh", "bash", "yaml", "yml", "json", "jsonc", "html", "htm", "css", "scss", "less", "dockerfile", "javascript", "javascriptreact", "typescript", "typescriptreact" },
         callback = function(args)
           local ft = vim.bo[args.buf].filetype
 
           -- Map filetypes to LSP servers
           local ft_to_lsp = {
-            python = { "pyright", "pylsp" },
+            python = { "pyright" },  -- Only Pyright (pylsp disabled to avoid conflicts)
             lua = { "lua_ls" },
             sh = { "bashls" },
             bash = { "bashls" },
@@ -332,13 +352,26 @@ return {
             scss = { "cssls" },
             less = { "cssls" },
             dockerfile = { "dockerls" },
+            javascript = { "vtsls" },
+            javascriptreact = { "vtsls" },
+            typescript = { "vtsls" },
+            typescriptreact = { "vtsls" },
           }
 
           local servers = ft_to_lsp[ft]
           if servers then
             for _, server in ipairs(servers) do
-              -- Start the LSP server using vim.lsp.start with the config name
-              vim.lsp.start(vim.lsp.config[server])
+              -- Start the LSP server using vim.lsp.start with the config and buffer
+              local config = vim.tbl_deep_extend("force", {}, vim.lsp.config[server])
+              -- Resolve root_dir if it's a function
+              if type(config.root_dir) == "function" then
+                config.root_dir = config.root_dir(vim.api.nvim_buf_get_name(args.buf))
+              end
+              -- Set cmd_cwd to the resolved root_dir so pyright-langserver starts there
+              if config.root_dir then
+                config.cmd_cwd = config.root_dir
+              end
+              vim.lsp.start(config, { bufnr = args.buf })
             end
           end
         end,

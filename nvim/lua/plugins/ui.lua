@@ -1,75 +1,59 @@
 return {
   -- File explorer
   {
-    "nvim-tree/nvim-tree.lua",
+    "stevearc/oil.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
-      require("nvim-tree").setup({
-        sort_by = "case_sensitive",
-        view = {
-          width = 30,
-          side = "left",
-          number = true,
-          relativenumber = true,
+      require("oil").setup({
+        columns = {
+          "icon",
+          "permissions",
+          "size",
+          "mtime",
         },
-        renderer = {
-          group_empty = true,
-          icons = {
-            show = {
-              file = true,
-              folder = true,
-              folder_arrow = true,
-              git = true,
-            },
+        delete_to_trash = true,
+        skip_confirm_for_simple_edits = false,
+        view_options = {
+          show_hidden = true,
+          is_hidden_file = function(name, bufnr)
+            return vim.startswith(name, ".")
+          end,
+          is_always_hidden = function(name, bufnr)
+            return name == ".." or name == ".git"
+          end,
+        },
+        float = {
+          padding = 2,
+          max_width = 90,
+          max_height = 30,
+          border = "rounded",
+          win_options = {
+            winblend = 0,
           },
         },
-        filters = {
-          dotfiles = false,
-          custom = { "__pycache__", ".pyc", ".pyo", ".egg-info" },
+        keymaps = {
+          ["g?"] = "actions.show_help",
+          ["<CR>"] = "actions.select",
+          ["<C-s>"] = "actions.select_vsplit",
+          ["<C-h>"] = "actions.select_split",
+          ["<C-t>"] = "actions.select_tab",
+          ["<C-p>"] = "actions.preview",
+          ["<C-c>"] = "actions.close",
+          ["<C-l>"] = "actions.refresh",
+          ["-"] = "actions.parent",
+          ["_"] = "actions.open_cwd",
+          ["`"] = "actions.cd",
+          ["~"] = "actions.tcd",
+          ["gs"] = "actions.change_sort",
+          ["gx"] = "actions.open_external",
+          ["g."] = "actions.toggle_hidden",
+          ["g\\"] = "actions.toggle_trash",
         },
-        git = {
-          enable = true,
-          ignore = false,
-        },
-        actions = {
-          open_file = {
-            quit_on_open = false,
-          },
-          change_dir = {
-            enable = true,
-            global = false,
-          },
-        },
-        on_attach = function(bufnr)
-          local api = require("nvim-tree.api")
-          
-          local function opts(desc)
-            return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-          end
-          
-          api.config.mappings.default_on_attach(bufnr)
-          
-          -- Custom mappings
-          vim.keymap.set("n", "?", api.tree.toggle_help, opts("Help"))
-          vim.keymap.set("n", "C", api.tree.change_root_to_node, opts("CD"))
-        end,
-        update_focused_file = {
-          enable = true,
-          update_root = true,
-        },
-      })
-
-      -- Auto open on startup
-      vim.api.nvim_create_autocmd("VimEnter", {
-        callback = function()
-          if vim.fn.argc() == 0 then
-            require("nvim-tree.api").tree.open()
-          end
-        end,
       })
 
       -- Keymaps
-      vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { desc = "Toggle file explorer" })
+      vim.keymap.set("n", "<leader>e", "<cmd>Oil<CR>", { desc = "Open file explorer" })
+      vim.keymap.set("n", "-", "<cmd>Oil<CR>", { desc = "Open parent directory" })
     end,
   },
 
@@ -92,14 +76,6 @@ return {
             local icon = level:match("error") and " " or " "
             return " " .. icon .. count
           end,
-          offsets = {
-            {
-              filetype = "NvimTree",
-              text = "File Explorer",
-              text_align = "center",
-              separator = true,
-            },
-          },
         },
       })
 

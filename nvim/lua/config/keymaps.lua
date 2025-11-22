@@ -42,8 +42,7 @@ keymap("v", ">", ">gv", { desc = "Indent right" })
 -- Better paste
 keymap("v", "p", '"_dP', { desc = "Paste without yanking" })
 
--- Quick quit (window, not buffer)
-keymap("n", "<leader>q", ":close<CR>", { desc = "Close window" })
+-- Quick quit
 keymap("n", "<leader>Q", ":qa!<CR>", { desc = "Quit all without saving" })
 
 -- Format is handled by LSP config (lua/plugins/lsp.lua)
