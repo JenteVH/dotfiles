@@ -19,6 +19,7 @@ return {
     config = function()
       local telescope = require("telescope")
       local builtin = require("telescope.builtin")
+      local actions = require("telescope.actions")
 
       telescope.setup({
         defaults = {
@@ -57,11 +58,11 @@ return {
               ["<C-k>"] = "move_selection_previous",
               ["<C-n>"] = "cycle_history_next",
               ["<C-p>"] = "cycle_history_prev",
-              ["<C-q>"] = "smart_send_to_qflist",
+              ["<C-q>"] = actions.smart_send_to_qflist,
               ["<C-s>"] = "select_horizontal",
             },
             n = {
-              ["<C-q>"] = "smart_send_to_qflist",
+              ["<C-q>"] = actions.smart_send_to_qflist,
               ["q"] = "close",
             },
           },
@@ -86,7 +87,6 @@ return {
         },
         pickers = {
           find_files = {
-            find_command = { "rg", "--files", "--hidden", "--glob", "!.git/*" },
             hidden = true,
             follow = true,
           },

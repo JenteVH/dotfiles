@@ -107,14 +107,50 @@ return {
     ft = "python",
     config = function()
       local dap_python = require("dap-python")
-      
+
       dap_python.setup(vim.fn.exepath("python3") or vim.fn.exepath("python") or "python")
       dap_python.test_runner = "pytest"
-      
+
       -- Keymaps for Python debugging
       vim.keymap.set("n", "<leader>dn", dap_python.test_method, { desc = "Debug: Test method" })
       vim.keymap.set("n", "<leader>df", dap_python.test_class, { desc = "Debug: Test class" })
       vim.keymap.set("v", "<leader>ds", dap_python.debug_selection, { desc = "Debug: Selection" })
+    end,
+  },
+
+  -- Go specific debugging
+  {
+    "leoluz/nvim-dap-go",
+    dependencies = { "mfussenegger/nvim-dap" },
+    ft = "go",
+    config = function()
+      require("dap-go").setup({
+        -- Delve configuration
+        dap_configurations = {
+          {
+            type = "go",
+            name = "Attach remote",
+            mode = "remote",
+            request = "attach",
+          },
+        },
+        -- Delve CLI command
+        delve = {
+          path = "dlv",
+          initialize_timeout_sec = 20,
+          port = "${port}",
+          args = {},
+          build_flags = "",
+        },
+      })
+
+      -- Keymaps for Go debugging
+      vim.keymap.set("n", "<leader>dt", function()
+        require("dap-go").debug_test()
+      end, { desc = "Debug: Go Test" })
+      vim.keymap.set("n", "<leader>dT", function()
+        require("dap-go").debug_last_test()
+      end, { desc = "Debug: Go Last Test" })
     end,
   },
 }

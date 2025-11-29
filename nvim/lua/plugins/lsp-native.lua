@@ -51,8 +51,8 @@ return {
       -- Diagnostic keymaps
       vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
       vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
-      vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Show diagnostic in float" })
-      vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Set diagnostic to loclist" })
+      vim.keymap.set("n", "<leader>de", vim.diagnostic.open_float, { desc = "Show diagnostic in float" })
+      vim.keymap.set("n", "<leader>dq", vim.diagnostic.setloclist, { desc = "Set diagnostic to loclist" })
 
       -- LSP attach function for keymaps and dynamic configuration
       local on_attach = function(client, bufnr)
@@ -330,9 +330,44 @@ return {
         on_attach = on_attach,
       }
 
+      -- Go LSP
+      vim.lsp.config.gopls = {
+        cmd = { "gopls" },
+        filetypes = { "go", "gomod", "gowork", "gotmpl" },
+        root_dir = function(fname)
+          return find_root(fname, {
+            "go.work",
+            "go.mod",
+            ".git",
+          })
+        end,
+        settings = {
+          gopls = {
+            analyses = {
+              unusedparams = true,
+              shadow = true,
+            },
+            staticcheck = true,
+            gofumpt = true,
+            usePlaceholders = true,
+            completeUnimported = true,
+            hints = {
+              assignVariableTypes = true,
+              compositeLiteralFields = true,
+              constantValues = true,
+              functionTypeParameters = true,
+              parameterNames = true,
+              rangeVariableTypes = true,
+            },
+          },
+        },
+        capabilities = capabilities,
+        on_attach = on_attach,
+      }
+
       -- Auto-start LSP for configured filetypes
       vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "python", "lua", "sh", "bash", "yaml", "yml", "json", "jsonc", "html", "htm", "css", "scss", "less", "dockerfile", "javascript", "javascriptreact", "typescript", "typescriptreact" },
+        pattern = { "python", "lua", "sh", "bash", "yaml", "yml", "json", "jsonc", "html", "htm", "css", "scss", "less", "dockerfile", "javascript", "javascriptreact", "typescript", "typescriptreact", "go", "gomod", "gowork", "gotmpl" },
         callback = function(args)
           local ft = vim.bo[args.buf].filetype
 
@@ -356,6 +391,10 @@ return {
             javascriptreact = { "vtsls" },
             typescript = { "vtsls" },
             typescriptreact = { "vtsls" },
+            go = { "gopls" },
+            gomod = { "gopls" },
+            gowork = { "gopls" },
+            gotmpl = { "gopls" },
           }
 
           local servers = ft_to_lsp[ft]

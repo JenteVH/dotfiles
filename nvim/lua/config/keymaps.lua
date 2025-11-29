@@ -59,6 +59,21 @@ keymap("n", "<leader>C", ":bdelete!<CR>", { desc = "Force close buffer" })
 keymap("n", "<leader>w", ":w<CR>", { desc = "Save file" })
 keymap("n", "<leader>W", ":wa<CR>", { desc = "Save all files" })
 
+-- Folding keymaps (basic ones work without ufo)
+-- za, zc, zo work out of the box
+-- zK for peeking fold content (requires nvim-ufo)
+keymap("n", "zK", function()
+  local has_ufo, ufo = pcall(require, "ufo")
+  if has_ufo then
+    local winid = ufo.peekFoldedLinesUnderCursor()
+    if not winid then
+      vim.lsp.buf.hover()
+    end
+  else
+    vim.lsp.buf.hover()
+  end
+end, { desc = "Peek fold or hover" })
+
 -- Git blame (changed from gb to gB to avoid conflict with git branches)
 keymap("n", "<leader>gB", ":Gitsigns toggle_current_line_blame<CR>", { desc = "Toggle git blame" })
 

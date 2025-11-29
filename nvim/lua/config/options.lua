@@ -68,8 +68,7 @@ opt.hidden = true  -- Allow hidden buffers (don't force save when switching)
 -- Python specific
 opt.pyxversion = 3
 
--- Folding
-opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
-opt.foldlevel = 99  -- Start with all folds open
-opt.foldenable = true
+-- Folding (configured by nvim-ufo plugin)
+-- Basic settings, ufo will override these
+opt.foldlevel = 99
+opt.foldlevelstart = 99

@@ -12,7 +12,6 @@ return {
           native_lsp = {
             enabled = true,
           },
-          nvimtree = true,
           telescope = true,
           which_key = true,
           indent_blankline = {

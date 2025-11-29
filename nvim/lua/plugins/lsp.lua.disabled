@@ -74,6 +74,14 @@ return {
           json = { "prettier" },
           yaml = { "prettier" },
           markdown = { "prettier" },
+          go = { "gofumpt", "goimports" },
+          dart = { "dart_format" },
+        },
+        formatters = {
+          dart_format = {
+            command = "dart",
+            args = { "format" },
+          },
         },
         -- Format on save DISABLED - still removing generics somehow
         format_on_save = false,
