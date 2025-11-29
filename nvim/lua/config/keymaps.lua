@@ -79,6 +79,10 @@ keymap("n", "<leader>gB", ":Gitsigns toggle_current_line_blame<CR>", { desc = "T
 
 -- Terminal mode mappings
 keymap("t", "<C-q>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
+keymap("t", "<C-h>", [[<C-\><C-n><C-w>h]], { desc = "Navigate left" })
+keymap("t", "<C-j>", [[<C-\><C-n><C-w>j]], { desc = "Navigate down" })
+keymap("t", "<C-k>", [[<C-\><C-n><C-w>k]], { desc = "Navigate up" })
+keymap("t", "<C-l>", [[<C-\><C-n><C-w>l]], { desc = "Navigate right" })
 
 -- Debug helper - show current window number
 keymap("n", "<leader>?", function()
