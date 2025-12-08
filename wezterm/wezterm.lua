@@ -2,8 +2,10 @@
 local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
+-- Default Shell (uses system default - bash)
+
 -- Font Configuration
-config.font = wezterm.font('JetBrains Mono', { weight = 'Medium' })
+config.font = wezterm.font('FiraCode Nerd Font', { weight = 'Medium' })
 config.font_size = 13.0
 config.harfbuzz_features = { 'calt=1', 'clig=1', 'liga=1' }
 
@@ -71,9 +73,9 @@ config.keys = {
   { key = 'x', mods = 'CMD|SHIFT', action = wezterm.action.ActivateCopyMode },
   
   -- Rename tab
-  { 
-    key = 'e', 
-    mods = 'CTRL|SHIFT', 
+  {
+    key = 'r',
+    mods = 'ALT',
     action = wezterm.action.PromptInputLine {
       description = 'Enter new name for tab',
       action = wezterm.action_callback(function(window, pane, line)
