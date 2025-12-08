@@ -65,7 +65,6 @@ return {
         buf_set_keymap("n", "gd", vim.lsp.buf.definition, "Go to definition")
         buf_set_keymap("n", "K", vim.lsp.buf.hover, "Hover documentation")
         buf_set_keymap("n", "gi", vim.lsp.buf.implementation, "Go to implementation")
-        buf_set_keymap("n", "<C-k>", vim.lsp.buf.signature_help, "Signature help")
         buf_set_keymap("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, "Add workspace folder")
         buf_set_keymap("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, "Remove workspace folder")
         buf_set_keymap("n", "<leader>wl", function()

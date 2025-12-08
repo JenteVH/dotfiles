@@ -21,7 +21,6 @@ return {
         buf_set_keymap("n", "gd", vim.lsp.buf.definition, "Go to definition")
         buf_set_keymap("n", "K", vim.lsp.buf.hover, "Hover documentation")
         buf_set_keymap("n", "gi", vim.lsp.buf.implementation, "Go to implementation")
-        buf_set_keymap("n", "<C-k>", vim.lsp.buf.signature_help, "Signature help")
         buf_set_keymap("n", "<leader>D", vim.lsp.buf.type_definition, "Type definition")
         buf_set_keymap("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
         buf_set_keymap({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code action")

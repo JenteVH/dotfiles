@@ -9,7 +9,12 @@ return {
       "windwp/nvim-ts-autotag",
     },
     config = function()
+      -- Use a writable location for parsers (needed for Docker)
+      local parser_install_dir = vim.fn.stdpath("data") .. "/treesitter-parsers"
+      vim.opt.runtimepath:prepend(parser_install_dir)
+
       require("nvim-treesitter.configs").setup({
+        parser_install_dir = parser_install_dir,
         ensure_installed = {
           "python",
           "lua",

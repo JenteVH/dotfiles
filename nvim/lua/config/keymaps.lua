@@ -84,6 +84,27 @@ keymap("t", "<C-j>", [[<C-\><C-n><C-w>j]], { desc = "Navigate down" })
 keymap("t", "<C-k>", [[<C-\><C-n><C-w>k]], { desc = "Navigate up" })
 keymap("t", "<C-l>", [[<C-\><C-n><C-w>l]], { desc = "Navigate right" })
 
+-- Scroll viewport without moving cursor (Alt + hjkl) - 10% of visible page
+local function scroll_percent(direction)
+  local lines = math.max(1, math.floor(vim.fn.winheight(0) * 0.1))
+  local cols = math.max(1, math.floor(vim.fn.winwidth(0) * 0.1))
+  local keys
+  if direction == "down" then
+    keys = vim.api.nvim_replace_termcodes(lines .. "<C-e>", true, false, true)
+  elseif direction == "up" then
+    keys = vim.api.nvim_replace_termcodes(lines .. "<C-y>", true, false, true)
+  elseif direction == "left" then
+    keys = cols .. "zh"
+  elseif direction == "right" then
+    keys = cols .. "zl"
+  end
+  vim.api.nvim_feedkeys(keys, "n", false)
+end
+keymap("n", "<M-j>", function() scroll_percent("down") end, { desc = "Scroll down 10%" })
+keymap("n", "<M-k>", function() scroll_percent("up") end, { desc = "Scroll up 10%" })
+keymap("n", "<M-h>", function() scroll_percent("left") end, { desc = "Scroll left 10%" })
+keymap("n", "<M-l>", function() scroll_percent("right") end, { desc = "Scroll right 10%" })
+
 -- Debug helper - show current window number
 keymap("n", "<leader>?", function()
   vim.notify("Window " .. vim.fn.winnr() .. " of " .. vim.fn.winnr('$'), vim.log.levels.INFO)

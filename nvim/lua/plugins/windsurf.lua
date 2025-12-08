@@ -15,7 +15,7 @@ return {
           virtual_text_priority = 65535,
           map_keys = true,
           key_bindings = {
-            accept = "<M-l>",
+            accept = "<M-o>",
             accept_word = false,
             accept_line = false,
             clear = false,
