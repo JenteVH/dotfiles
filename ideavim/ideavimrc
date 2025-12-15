@@ -1,0 +1,168 @@
+" IdeaVim configuration - synced from Neovim keymaps
+" Source: ~/.config/nvim/lua/config/keymaps.lua
+
+" Set leader key
+let mapleader = " "
+
+" Expand/shrink selection
+nmap <C-Space> :action EditorSelectWord<CR>
+vmap <C-Space> :action EditorSelectWord<CR>
+nmap <C-BS> :action EditorUnSelectWord<CR>
+vmap <C-BS> :action EditorUnSelectWord<CR>
+
+" Enable IdeaVim plugins
+set ideajoin
+set idearefactormode=keep
+set clipboard+=unnamed
+set clipboard+=ideaput
+
+" Basic vim settings
+set number
+set relativenumber
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+set scrolloff=8
+set sidescrolloff=8
+set showmode
+
+" Better window navigation
+nmap <C-h> <C-w>h
+nmap <C-j> <C-w>j
+nmap <C-k> <C-w>k
+nmap <C-l> <C-w>l
+
+" Window splits
+nmap <leader>wv :vsplit<CR>
+nmap <leader>wh :split<CR>
+nmap <leader>wx :close<CR>
+nmap <leader>we <C-w>=
+
+" Resize splits (using IDE actions)
+nmap <M-Up> :action StretchSplitToTop<CR>
+nmap <M-Down> :action StretchSplitToBottom<CR>
+nmap <M-Left> :action StretchSplitToLeft<CR>
+nmap <M-Right> :action StretchSplitToRight<CR>
+
+" Alternative resize with leader
+nmap <leader>wK :action StretchSplitToTop<CR>
+nmap <leader>wJ :action StretchSplitToBottom<CR>
+nmap <leader>wL :action StretchSplitToRight<CR>
+nmap <leader>wH :action StretchSplitToLeft<CR>
+
+" Move text up and down in visual mode
+vmap J :m '>+1<CR>gv=gv
+vmap K :m '<-2<CR>gv=gv
+
+" Stay in indent mode
+vmap < <gv
+vmap > >gv
+
+" Better paste (paste without yanking)
+vmap p "_dP
+
+" Quick quit
+nmap <leader>Q :qa!<CR>
+
+" Copy file path
+nmap <leader>yp :action CopyAbsolutePath<CR>
+nmap <leader>yr :action CopyContentRootPath<CR>
+
+" Buffer/Tab management
+nmap <leader>c :action CloseContent<CR>
+nmap <leader>C :action CloseContent<CR>
+
+" Save file
+nmap <leader>w :w<CR>
+nmap <leader>W :action SaveAll<CR>
+
+" Folding
+nmap zK :action QuickJavaDoc<CR>
+
+" Git blame
+nmap <leader>gB :action Annotate<CR>
+
+" Scroll viewport (approximate 10% scroll)
+nmap <M-j> 5<C-e>
+nmap <M-k> 5<C-y>
+nmap <M-h> 5zh
+nmap <M-l> 5zl
+
+" Additional useful IDE mappings
+
+" Go to definition/declaration
+nmap gd :action GotoDeclaration<CR>
+nmap gD :action GotoTypeDeclaration<CR>
+nmap gi :action GotoImplementation<CR>
+nmap gr :action FindUsages<CR>
+
+" Navigate back/forward (jumplist)
+sethandler <C-o> a:vim
+sethandler <C-i> a:vim
+nmap <C-o> :action Back<CR>
+nmap <C-i> :action Forward<CR>
+
+" LSP-like actions
+nmap K :action QuickJavaDoc<CR>
+nmap <leader>rn :action RenameElement<CR>
+nmap <leader>ca :action ShowIntentionActions<CR>
+nmap <leader>cf :action ReformatCode<CR>
+
+" Search/Find
+nmap <leader>ff :action GotoFile<CR>
+nmap <leader>fg :action FindInPath<CR>
+nmap <leader>fb :action Switcher<CR>
+nmap <leader>fs :action GotoSymbol<CR>
+
+" Diagnostics/Errors
+nmap [d :action GotoPreviousError<CR>
+nmap ]d :action GotoNextError<CR>
+nmap <leader>e :action ShowErrorDescription<CR>
+
+" Git actions
+nmap <leader>gg :action ActivateVersionControlToolWindow<CR>
+nmap <leader>gc :action CheckinProject<CR>
+nmap <leader>gp :action Vcs.Push<CR>
+nmap <leader>gl :action Vcs.UpdateProject<CR>
+nmap <leader>gb :action Git.Branches<CR>
+nmap <leader>gh :action Vcs.ShowTabbedFileHistory<CR>
+
+" Debugging
+nmap <leader>db :action ToggleLineBreakpoint<CR>
+nmap <leader>dc :action Resume<CR>
+nmap <leader>dn :action StepOver<CR>
+nmap <leader>di :action StepInto<CR>
+nmap <leader>do :action StepOut<CR>
+nmap <leader>dr :action Debug<CR>
+
+" Run
+nmap <leader>rr :action Run<CR>
+nmap <leader>rt :action RunClass<CR>
+
+" Refactoring
+nmap <leader>rm :action ExtractMethod<CR>
+vmap <leader>rm :action ExtractMethod<CR>
+nmap <leader>rv :action IntroduceVariable<CR>
+vmap <leader>rv :action IntroduceVariable<CR>
+nmap <leader>rf :action IntroduceField<CR>
+nmap <leader>ri :action Inline<CR>
+
+" File explorer
+nmap <leader>fe :action SelectInProjectView<CR>
+nmap <leader>fp :action ActivateProjectToolWindow<CR>
+
+" Terminal
+nmap <leader>tt :action ActivateTerminalToolWindow<CR>
+
+" Clear search highlight
+nmap <leader>h :noh<CR>
+
+" Center cursor when jumping
+nmap n nzzzv
+nmap N Nzzzv
+nmap <C-d> <C-d>zz
+nmap <C-u> <C-u>zz
+
+" Which-key style delay (if using IdeaVim-EasyMotion or similar)
+set notimeout
