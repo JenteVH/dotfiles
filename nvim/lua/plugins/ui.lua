@@ -1,77 +1,4 @@
 return {
-  -- File explorer with Oil.nvim
-  {
-    "stevearc/oil.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      require("oil").setup({
-        columns = {
-          "icon",
-          "permissions",
-          "size",
-          "mtime",
-        },
-        delete_to_trash = true,
-        skip_confirm_for_simple_edits = false,
-        view_options = {
-          show_hidden = true,
-          is_hidden_file = function(name, bufnr)
-            return vim.startswith(name, ".")
-          end,
-          is_always_hidden = function(name, bufnr)
-            return name == ".." or name == ".git"
-          end,
-        },
-        float = {
-          padding = 2,
-          max_width = 90,
-          max_height = 30,
-          border = "rounded",
-          win_options = {
-            winblend = 0,
-          },
-        },
-        keymaps = {
-          ["g?"] = "actions.show_help",
-          ["<CR>"] = "actions.select",
-          ["<C-s>"] = "actions.select_vsplit",
-          ["<C-x>"] = "actions.select_split",
-          ["<C-t>"] = "actions.select_tab",
-          ["<C-p>"] = "actions.preview",
-          ["<C-c>"] = "actions.close",
-          ["<C-r>"] = "actions.refresh",
-          ["-"] = "actions.parent",
-          ["_"] = "actions.open_cwd",
-          ["`"] = "actions.cd",
-          ["~"] = "actions.tcd",
-          ["gs"] = "actions.change_sort",
-          ["gx"] = "actions.open_external",
-          ["g."] = "actions.toggle_hidden",
-          ["g\\"] = "actions.toggle_trash",
-        },
-        -- Use default window navigation in oil buffers
-        use_default_keymaps = false,
-        progress = {
-          max_width = 0.9,
-          min_width = { 40, 0.4 },
-          width = nil,
-          max_height = { 10, 0.9 },
-          min_height = { 5, 0.1 },
-          height = nil,
-          border = "rounded",
-          minimized_border = "none",
-          win_options = {
-            winblend = 0,
-          },
-        },
-      })
-
-      -- Keymaps
-      vim.keymap.set("n", "<leader>e", "<cmd>Oil<CR>", { desc = "Open file explorer" })
-      vim.keymap.set("n", "-", "<cmd>Oil<CR>", { desc = "Open parent directory" })
-    end,
-  },
-
   -- Tree view file explorer
   {
     "nvim-tree/nvim-tree.lua",
@@ -109,9 +36,9 @@ return {
         },
       })
 
-      -- Keymaps (using <leader>E to not conflict with oil's <leader>e)
-      vim.keymap.set("n", "<leader>E", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle tree explorer" })
-      vim.keymap.set("n", "<leader>gf", "<cmd>NvimTreeFindFile<CR>", { desc = "Find file in tree" })
+      -- Keymaps
+      vim.keymap.set("n", "<leader>;", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle tree explorer" })
+      vim.keymap.set("n", "<leader>:", "<cmd>NvimTreeFindFile<CR>", { desc = "Find file in tree" })
     end,
   },
 
