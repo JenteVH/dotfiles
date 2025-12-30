@@ -1,0 +1,28 @@
+[mgr]
+# Show file size on the right
+linemode = "size"
+
+# Ratio of parent:current:preview columns
+ratio = [1, 3, 4]
+
+# Sorting
+sort_by = "natural"
+sort_sensitive = false
+sort_reverse = false
+sort_dir_first = true
+
+# Display
+show_hidden = false
+show_symlink = true
+
+[preview]
+# Enable image preview
+image_filter = "triangle"
+image_quality = 75
+max_width = 600
+max_height = 900
+
+[opener]
+edit = [
+  { run = 'nvim "$@"', block = true, for = "unix" },
+]

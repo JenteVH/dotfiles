@@ -1,0 +1,268 @@
+# Yazi keymap - Vim style motions
+
+# Number keys for relative-motions plugin (5j, 7k, etc.)
+[[mgr.prepend_keymap]]
+on = ["1"]
+run = "plugin relative-motions 1"
+desc = "Relative motion"
+
+[[mgr.prepend_keymap]]
+on = ["2"]
+run = "plugin relative-motions 2"
+desc = "Relative motion"
+
+[[mgr.prepend_keymap]]
+on = ["3"]
+run = "plugin relative-motions 3"
+desc = "Relative motion"
+
+[[mgr.prepend_keymap]]
+on = ["4"]
+run = "plugin relative-motions 4"
+desc = "Relative motion"
+
+[[mgr.prepend_keymap]]
+on = ["5"]
+run = "plugin relative-motions 5"
+desc = "Relative motion"
+
+[[mgr.prepend_keymap]]
+on = ["6"]
+run = "plugin relative-motions 6"
+desc = "Relative motion"
+
+[[mgr.prepend_keymap]]
+on = ["7"]
+run = "plugin relative-motions 7"
+desc = "Relative motion"
+
+[[mgr.prepend_keymap]]
+on = ["8"]
+run = "plugin relative-motions 8"
+desc = "Relative motion"
+
+[[mgr.prepend_keymap]]
+on = ["9"]
+run = "plugin relative-motions 9"
+desc = "Relative motion"
+
+[[mgr.prepend_keymap]]
+on = ["<C-u>"]
+run = "arrow -50%"
+desc = "Move up half page"
+
+[[mgr.prepend_keymap]]
+on = ["<C-d>"]
+run = "arrow 50%"
+desc = "Move down half page"
+
+[[mgr.prepend_keymap]]
+on = ["<C-b>"]
+run = "arrow -100%"
+desc = "Move up full page"
+
+[[mgr.prepend_keymap]]
+on = ["<C-f>"]
+run = "arrow 100%"
+desc = "Move down full page"
+
+[[mgr.prepend_keymap]]
+on = ["g", "g"]
+run = "arrow -99999999"
+desc = "Go to top"
+
+[[mgr.prepend_keymap]]
+on = ["G"]
+run = "arrow 99999999"
+desc = "Go to bottom"
+
+[[mgr.prepend_keymap]]
+on = ["H"]
+run = "back"
+desc = "Go back (parent directory)"
+
+[[mgr.prepend_keymap]]
+on = ["L"]
+run = "forward"
+desc = "Go forward (enter directory)"
+
+[[mgr.prepend_keymap]]
+on = ["/"]
+run = "find --smart"
+desc = "Find (search)"
+
+[[mgr.prepend_keymap]]
+on = ["n"]
+run = "find_arrow"
+desc = "Go to next found"
+
+[[mgr.prepend_keymap]]
+on = ["N"]
+run = "find_arrow --previous"
+desc = "Go to previous found"
+
+[[mgr.prepend_keymap]]
+on = ["v"]
+run = "select --state=none"
+desc = "Toggle selection (visual)"
+
+[[mgr.prepend_keymap]]
+on = ["V"]
+run = "visual_mode"
+desc = "Enter visual mode"
+
+[[mgr.prepend_keymap]]
+on = ["y", "y"]
+run = "yank"
+desc = "Yank (copy)"
+
+[[mgr.prepend_keymap]]
+on = ["d", "d"]
+run = "yank --cut"
+desc = "Cut"
+
+[[mgr.prepend_keymap]]
+on = ["p"]
+run = "paste"
+desc = "Paste"
+
+[[mgr.prepend_keymap]]
+on = ["P"]
+run = "paste --force"
+desc = "Paste (overwrite)"
+
+[[mgr.prepend_keymap]]
+on = ["u"]
+run = "unyank"
+desc = "Cancel yank"
+
+[[mgr.prepend_keymap]]
+on = ["o"]
+run = "open"
+desc = "Open file"
+
+[[mgr.prepend_keymap]]
+on = ["O"]
+run = "open --interactive"
+desc = "Open with..."
+
+[[mgr.prepend_keymap]]
+on = [":"]
+run = "shell --block --interactive"
+desc = "Run shell command"
+
+[[mgr.prepend_keymap]]
+on = ["."]
+run = "hidden toggle"
+desc = "Toggle hidden files"
+
+[[mgr.prepend_keymap]]
+on = ["z", "z"]
+run = "plugin zoxide"
+desc = "Jump with zoxide"
+
+[[mgr.prepend_keymap]]
+on = ["<Esc>"]
+run = ["escape", "unyank"]
+desc = "Escape and clear"
+
+# Rename like vim
+[[mgr.prepend_keymap]]
+on = ["r"]
+run = "rename --cursor=before_ext"
+desc = "Rename file"
+
+[[mgr.prepend_keymap]]
+on = ["c", "w"]
+run = "rename --empty=stem"
+desc = "Rename (clear name)"
+
+# Delete
+[[mgr.prepend_keymap]]
+on = ["x"]
+run = "remove"
+desc = "Trash file"
+
+[[mgr.prepend_keymap]]
+on = ["X"]
+run = "remove --permanently"
+desc = "Delete permanently"
+
+# Create
+[[mgr.prepend_keymap]]
+on = ["a"]
+run = "create"
+desc = "Create file/directory"
+
+# Marks (bookmarks)
+[[mgr.prepend_keymap]]
+on = ["m"]
+run = "bookmark_save"
+desc = "Save bookmark"
+
+[[mgr.prepend_keymap]]
+on = ["'"]
+run = "bookmark_jump"
+desc = "Jump to bookmark"
+
+[[mgr.prepend_keymap]]
+on = ["`"]
+run = "bookmark_jump"
+desc = "Jump to bookmark"
+
+# Tabs
+[[mgr.prepend_keymap]]
+on = ["t"]
+run = "tab_create --current"
+desc = "New tab"
+
+[[mgr.prepend_keymap]]
+on = ["T"]
+run = "tab_create"
+desc = "New tab (home)"
+
+[[mgr.prepend_keymap]]
+on = ["["]
+run = "tab_switch -1 --relative"
+desc = "Previous tab"
+
+[[mgr.prepend_keymap]]
+on = ["]"]
+run = "tab_switch 1 --relative"
+desc = "Next tab"
+
+[[mgr.prepend_keymap]]
+on = ["q"]
+run = "close"
+desc = "Close tab/quit"
+
+# Quick directory jumps
+[[mgr.prepend_keymap]]
+on = ["g", "h"]
+run = "cd ~"
+desc = "Go home"
+
+[[mgr.prepend_keymap]]
+on = ["g", "c"]
+run = "cd ~/.config"
+desc = "Go to config"
+
+[[mgr.prepend_keymap]]
+on = ["g", "d"]
+run = "cd ~/Downloads"
+desc = "Go to downloads"
+
+[[mgr.prepend_keymap]]
+on = ["g", "D"]
+run = "cd ~/Desktop"
+desc = "Go to desktop"
+
+[[mgr.prepend_keymap]]
+on = ["g", "p"]
+run = "cd ~/projects"
+desc = "Go to projects"
+
+[[mgr.prepend_keymap]]
+on = ["g", "."]
+run = "cd ~/dotfiles"
+desc = "Go to dotfiles"
