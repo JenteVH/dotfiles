@@ -15,6 +15,8 @@ set ideajoin
 set idearefactormode=keep
 set clipboard+=unnamed
 set clipboard+=ideaput
+set which-key
+set notimeout
 
 " Basic vim settings
 set number
@@ -163,6 +165,3 @@ nmap n nzzzv
 nmap N Nzzzv
 nmap <C-d> <C-d>zz
 nmap <C-u> <C-u>zz
-
-" Which-key style delay (if using IdeaVim-EasyMotion or similar)
-set notimeout
