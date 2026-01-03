@@ -10,7 +10,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
             background: #1e1e2e;
@@ -19,14 +19,14 @@
             line-height: 1.15;
             font-size: 12px;
         }
-        
+
         h1 {
             text-align: center;
             color: #89b4fa;
             margin-bottom: 8px;
             font-size: 1.3em;
         }
-        
+
         .container {
             max-width: 100%;
             margin: 0 auto;
@@ -34,14 +34,14 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 6px;
         }
-        
+
         .category {
             background: #313244;
             border-radius: 4px;
             padding: 6px;
             border: 1px solid #45475a;
         }
-        
+
         .category h2 {
             color: #a6e3a1;
             font-size: 0.9em;
@@ -49,43 +49,43 @@
             padding-bottom: 2px;
             border-bottom: 1px solid #45475a;
         }
-        
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
-        
+
         td {
             padding: 1px 3px;
             border-bottom: 1px solid #3a3c4e;
             vertical-align: top;
         }
-        
+
         td:first-child {
             color: #f9e2af;
             font-weight: bold;
             white-space: nowrap;
             width: 45%;
         }
-        
+
         td:last-child {
             color: #bac2de;
             font-size: 0.85em;
         }
-        
+
         tr:last-child td {
             border-bottom: none;
         }
-        
+
         tr:hover {
             background: #45475a;
         }
-        
+
         .leader {
             color: #f38ba8;
             font-weight: bold;
         }
-        
+
         .key {
             background: #45475a;
             padding: 0 2px;
@@ -93,36 +93,36 @@
             margin: 0 1px;
             font-size: 0.9em;
         }
-        
+
         .new {
             color: #a6e3a1;
         }
-        
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
             }
         }
-        
+
         @media (min-width: 1200px) {
             .container {
                 grid-template-columns: repeat(5, 1fr);
             }
         }
-        
+
         @media (min-width: 1600px) {
             .container {
                 grid-template-columns: repeat(6, 1fr);
             }
         }
-        
+
         @media (min-width: 2000px) {
             .container {
                 grid-template-columns: repeat(7, 1fr);
             }
         }
-        
+
         /* Legend */
         .legend {
             background: #313244;
@@ -133,29 +133,18 @@
             border: 1px solid #45475a;
             font-size: 0.85em;
         }
-        
+
         .legend span {
             margin: 0 6px;
         }
-        
-        .success-notice {
-            background: #313244;
-            border: 1px solid #a6e3a1;
-            border-radius: 4px;
-            padding: 4px;
-            margin: 6px 0;
-            text-align: center;
-            color: #a6e3a1;
-            font-size: 0.9em;
-        }
-        
+
         /* Vim motions section */
         .vim-section {
             margin-top: 8px;
             padding-top: 8px;
             border-top: 2px solid #45475a;
         }
-        
+
         .vim-section h2 {
             color: #89b4fa;
             text-align: center;
@@ -165,247 +154,292 @@
 </head>
 <body>
     <h1>Neovim Keybindings</h1>
-    
+
     <div class="legend">
-        <span><span class="leader">⎵</span> = Space (Leader)</span>
+        <span><span class="leader">Space</span> = Space (Leader)</span>
         <span><span class="key">C</span> = Ctrl</span>
         <span><span class="key">S</span> = Shift</span>
+        <span><span class="key">M</span> = Alt</span>
         <span><span class="key">CR</span> = Enter</span>
     </div>
-    
-    <div class="success-notice">
-        ✓ Updated: NvimTree → Oil.nvim | Diagnostics under &lt;leader&gt;d
-    </div>
-    
+
     <div class="container">
         <!-- File Finding -->
         <div class="category">
-            <h2>🔍 Telescope</h2>
+            <h2>Telescope</h2>
             <table>
-                <tr><td><span class="leader">⎵</span>ff</td><td>Files</td></tr>
-                <tr><td><span class="leader">⎵</span>fg</td><td>Grep</td></tr>
-                <tr><td><span class="leader">⎵</span>fb</td><td>Buffers</td></tr>
-                <tr><td><span class="leader">⎵</span>fo</td><td>Recent</td></tr>
-                <tr><td><span class="leader">⎵</span>fh</td><td>Help</td></tr>
-                <tr><td><span class="leader">⎵</span>fc</td><td>Commands</td></tr>
-                <tr><td><span class="leader">⎵</span>fk</td><td>Keymaps</td></tr>
-                <tr><td><span class="leader">⎵</span>fd</td><td>Diagnostics</td></tr>
-                <tr><td><span class="leader">⎵</span>fr</td><td>Resume</td></tr>
+                <tr><td><span class="leader">Space</span>ff</td><td>Files</td></tr>
+                <tr><td><span class="leader">Space</span>fg</td><td>Grep</td></tr>
+                <tr><td><span class="leader">Space</span>fb</td><td>Buffers</td></tr>
+                <tr><td><span class="leader">Space</span>fo</td><td>Recent files</td></tr>
+                <tr><td><span class="leader">Space</span>fh</td><td>Help tags</td></tr>
+                <tr><td><span class="leader">Space</span>fc</td><td>Commands</td></tr>
+                <tr><td><span class="leader">Space</span>fk</td><td>Keymaps</td></tr>
+                <tr><td><span class="leader">Space</span>fd</td><td>Diagnostics</td></tr>
+                <tr><td><span class="leader">Space</span>fr</td><td>Resume last</td></tr>
             </table>
         </div>
-        
+
+        <!-- Telescope Inside -->
+        <div class="category">
+            <h2>Telescope Keys</h2>
+            <table>
+                <tr><td><span class="key">C-j</span></td><td>Next item</td></tr>
+                <tr><td><span class="key">C-k</span></td><td>Previous item</td></tr>
+                <tr><td><span class="key">C-n</span></td><td>History next</td></tr>
+                <tr><td><span class="key">C-p</span></td><td>History prev</td></tr>
+                <tr><td><span class="key">C-q</span></td><td>Send to qflist</td></tr>
+                <tr><td><span class="key">C-s</span></td><td>Open horizontal</td></tr>
+                <tr><td><span class="key">C-d</span></td><td>Delete buffer</td></tr>
+                <tr><td>q</td><td>Close (normal)</td></tr>
+            </table>
+        </div>
+
         <!-- LSP Navigation -->
         <div class="category">
-            <h2>🔧 LSP Nav</h2>
+            <h2>LSP Nav</h2>
             <table>
                 <tr><td>gD</td><td>Declaration</td></tr>
                 <tr><td>gd</td><td>Definition</td></tr>
                 <tr><td>gi</td><td>Implementation</td></tr>
                 <tr><td>gr</td><td>References</td></tr>
                 <tr><td>K</td><td>Hover</td></tr>
-                <tr><td><span class="key">C-k</span></td><td>Signature</td></tr>
-                <tr><td><span class="leader">⎵</span>D</td><td>Type def</td></tr>
-                <tr><td><span class="leader">⎵</span>rn</td><td>Rename</td></tr>
-                <tr><td><span class="leader">⎵</span>ca</td><td>Code action</td></tr>
-                <tr><td><span class="leader">⎵</span>lf</td><td>Format</td></tr>
+                <tr><td><span class="leader">Space</span>D</td><td>Type def</td></tr>
+                <tr><td><span class="leader">Space</span>rn</td><td>Rename</td></tr>
+                <tr><td><span class="leader">Space</span>ca</td><td>Code action</td></tr>
+                <tr><td><span class="leader">Space</span>f</td><td>Format</td></tr>
             </table>
         </div>
-        
+
         <!-- LSP Telescope -->
         <div class="category">
-            <h2>🔭 LSP Find</h2>
+            <h2>LSP Find</h2>
             <table>
-                <tr><td><span class="leader">⎵</span>lr</td><td>References</td></tr>
-                <tr><td><span class="leader">⎵</span>ls</td><td>Doc symbols</td></tr>
-                <tr><td><span class="leader">⎵</span>lw</td><td>Workspace sym</td></tr>
-                <tr><td><span class="leader">⎵</span>li</td><td>Implementations</td></tr>
-                <tr><td><span class="leader">⎵</span>ld</td><td>Definitions</td></tr>
-                <tr><td><span class="leader">⎵</span>lt</td><td>Type defs</td></tr>
+                <tr><td><span class="leader">Space</span>lr</td><td>References</td></tr>
+                <tr><td><span class="leader">Space</span>ls</td><td>Doc symbols</td></tr>
+                <tr><td><span class="leader">Space</span>lw</td><td>Workspace sym</td></tr>
+                <tr><td><span class="leader">Space</span>li</td><td>Implementations</td></tr>
+                <tr><td><span class="leader">Space</span>ld</td><td>Definitions</td></tr>
+                <tr><td><span class="leader">Space</span>lt</td><td>Type defs</td></tr>
             </table>
         </div>
-        
+
         <!-- Diagnostics -->
         <div class="category">
-            <h2>⚠️ Diagnostics</h2>
+            <h2>Diagnostics</h2>
             <table>
                 <tr><td>[d</td><td>Previous</td></tr>
                 <tr><td>]d</td><td>Next</td></tr>
-                <tr><td><span class="leader">⎵</span>d</td><td>Float</td></tr>
-                <tr><td><span class="leader">⎵</span>q</td><td>Loclist</td></tr>
-                <tr><td><span class="leader">⎵</span>xx</td><td>Trouble</td></tr>
-                <tr><td><span class="leader">⎵</span>xw</td><td>LSP view</td></tr>
-                <tr><td><span class="leader">⎵</span>xd</td><td>Buf diags</td></tr>
+                <tr><td><span class="leader">Space</span>de</td><td>Float</td></tr>
+                <tr><td><span class="leader">Space</span>dq</td><td>Loclist</td></tr>
             </table>
         </div>
-        
+
+        <!-- Workspace -->
+        <div class="category">
+            <h2>Workspace</h2>
+            <table>
+                <tr><td><span class="leader">Space</span>wa</td><td>Add folder</td></tr>
+                <tr><td><span class="leader">Space</span>wr</td><td>Remove folder</td></tr>
+                <tr><td><span class="leader">Space</span>wl</td><td>List folders</td></tr>
+            </table>
+        </div>
+
         <!-- Git -->
         <div class="category">
-            <h2>🌿 Git</h2>
+            <h2>Git</h2>
             <table>
-                <tr><td><span class="leader">⎵</span>gc</td><td>Commits</td></tr>
-                <tr><td><span class="leader">⎵</span>gb</td><td>Branches</td></tr>
-                <tr><td><span class="leader">⎵</span>gB</td><td>Toggle blame</td></tr>
-                <tr><td><span class="leader">⎵</span>gs</td><td>Status</td></tr>
+                <tr><td><span class="leader">Space</span>gc</td><td>Commits</td></tr>
+                <tr><td><span class="leader">Space</span>gb</td><td>Branches</td></tr>
+                <tr><td><span class="leader">Space</span>gB</td><td>Toggle blame</td></tr>
+                <tr><td><span class="leader">Space</span>gs</td><td>Status</td></tr>
+                <tr><td><span class="leader">Space</span>gd</td><td>Toggle deleted</td></tr>
             </table>
         </div>
-        
+
         <!-- Git Hunks -->
         <div class="category">
-            <h2>📝 Git Hunks</h2>
+            <h2>Git Hunks</h2>
             <table>
                 <tr><td>]h</td><td>Next hunk</td></tr>
                 <tr><td>[h</td><td>Prev hunk</td></tr>
-                <tr><td><span class="leader">⎵</span>hs</td><td>Stage hunk</td></tr>
-                <tr><td><span class="leader">⎵</span>hr</td><td>Reset hunk</td></tr>
-                <tr><td><span class="leader">⎵</span>hS</td><td>Stage buffer</td></tr>
-                <tr><td><span class="leader">⎵</span>hR</td><td>Reset buffer</td></tr>
-                <tr><td><span class="leader">⎵</span>hu</td><td>Undo stage</td></tr>
-                <tr><td><span class="leader">⎵</span>hp</td><td>Preview hunk</td></tr>
-                <tr><td><span class="leader">⎵</span>hb</td><td>Blame line</td></tr>
-                <tr><td><span class="leader">⎵</span>hd</td><td>Diff this</td></tr>
-                <tr><td><span class="leader">⎵</span>hD</td><td>Diff ~</td></tr>
-                <tr><td><span class="leader">⎵</span>gd</td><td>Toggle deleted</td></tr>
+                <tr><td><span class="leader">Space</span>hs</td><td>Stage hunk</td></tr>
+                <tr><td><span class="leader">Space</span>hr</td><td>Reset hunk</td></tr>
+                <tr><td><span class="leader">Space</span>hS</td><td>Stage buffer</td></tr>
+                <tr><td><span class="leader">Space</span>hR</td><td>Reset buffer</td></tr>
+                <tr><td><span class="leader">Space</span>hu</td><td>Undo stage</td></tr>
+                <tr><td><span class="leader">Space</span>hp</td><td>Preview hunk</td></tr>
+                <tr><td><span class="leader">Space</span>hb</td><td>Blame line</td></tr>
+                <tr><td><span class="leader">Space</span>hd</td><td>Diff this</td></tr>
+                <tr><td><span class="leader">Space</span>hD</td><td>Diff ~</td></tr>
                 <tr><td>ih</td><td>Select hunk</td></tr>
             </table>
         </div>
-        
+
         <!-- Buffers -->
         <div class="category">
-            <h2>📑 Buffers</h2>
+            <h2>Buffers</h2>
             <table>
                 <tr><td><span class="key">S-h</span></td><td>Previous</td></tr>
                 <tr><td><span class="key">S-l</span></td><td>Next</td></tr>
-                <tr><td ><span class="leader">⎵</span>c</td><td >Close buf</td></tr>
-                <tr><td class="new"><span class="leader">⎵</span>C</td><td class="new">Force close</td></tr>
-                <tr><td><span class="leader">⎵</span>bp</td><td>Pin</td></tr>
-                <tr><td><span class="leader">⎵</span>bP</td><td>Pick close</td></tr>
-                <tr><td><span class="leader">⎵</span>bo</td><td>Close others</td></tr>
-                <tr><td><span class="leader">⎵</span>br</td><td>Close right</td></tr>
-                <tr><td><span class="leader">⎵</span>bl</td><td>Close left</td></tr>
+                <tr><td><span class="leader">Space</span>c</td><td>Close buf</td></tr>
+                <tr><td><span class="leader">Space</span>C</td><td>Force close</td></tr>
+                <tr><td><span class="leader">Space</span>bp</td><td>Pin</td></tr>
+                <tr><td><span class="leader">Space</span>bP</td><td>Pick close</td></tr>
+                <tr><td><span class="leader">Space</span>bo</td><td>Close others</td></tr>
+                <tr><td><span class="leader">Space</span>br</td><td>Close right</td></tr>
+                <tr><td><span class="leader">Space</span>bl</td><td>Close left</td></tr>
             </table>
         </div>
-        
+
         <!-- Windows -->
         <div class="category">
-            <h2>📐 Windows</h2>
+            <h2>Windows</h2>
             <table>
                 <tr><td><span class="key">C-h</span></td><td>Left</td></tr>
                 <tr><td><span class="key">C-j</span></td><td>Down</td></tr>
                 <tr><td><span class="key">C-k</span></td><td>Up</td></tr>
                 <tr><td><span class="key">C-l</span></td><td>Right</td></tr>
-                <tr><td><span class="leader">⎵</span>wv</td><td>V-split</td></tr>
-                <tr><td><span class="leader">⎵</span>wh</td><td>H-split</td></tr>
-                <tr><td><span class="leader">⎵</span>wx</td><td>Close window</td></tr>
-                <tr><td><span class="leader">⎵</span>we</td><td>Equal</td></tr>
+                <tr><td><span class="key">BS</span></td><td>Left (fix)</td></tr>
+                <tr><td><span class="leader">Space</span>wv</td><td>V-split</td></tr>
+                <tr><td><span class="leader">Space</span>wh</td><td>H-split</td></tr>
+                <tr><td><span class="leader">Space</span>wx</td><td>Close window</td></tr>
+                <tr><td><span class="leader">Space</span>we</td><td>Equal</td></tr>
                 <tr><td><span class="key">C-w</span>+</td><td>Taller</td></tr>
                 <tr><td><span class="key">C-w</span>-</td><td>Shorter</td></tr>
                 <tr><td><span class="key">C-w</span>&gt;</td><td>Wider</td></tr>
                 <tr><td><span class="key">C-w</span>&lt;</td><td>Narrower</td></tr>
                 <tr><td><span class="key">C-w</span>_</td><td>Max height</td></tr>
                 <tr><td><span class="key">C-w</span>|</td><td>Max width</td></tr>
-                <tr><td><span class="key">M-↑</span></td><td>Taller</td></tr>
-                <tr><td><span class="key">M-↓</span></td><td>Shorter</td></tr>
-                <tr><td><span class="key">M-←</span></td><td>Narrower</td></tr>
-                <tr><td><span class="key">M-→</span></td><td>Wider</td></tr>
-                <tr><td><span class="leader">⎵</span>wK</td><td>Taller +5</td></tr>
-                <tr><td><span class="leader">⎵</span>wJ</td><td>Shorter -5</td></tr>
-                <tr><td><span class="leader">⎵</span>wL</td><td>Wider +5</td></tr>
-                <tr><td><span class="leader">⎵</span>wH</td><td>Narrower -5</td></tr>
-                <tr><td><span class="leader">⎵</span>wa</td><td>Add workspace</td></tr>
-                <tr><td><span class="leader">⎵</span>wr</td><td>Rm workspace</td></tr>
-                <tr><td><span class="leader">⎵</span>wl</td><td>List workspace</td></tr>
             </table>
         </div>
-        
+
+        <!-- Window Resize -->
+        <div class="category">
+            <h2>Window Resize</h2>
+            <table>
+                <tr><td><span class="key">M-Up</span></td><td>Taller +2</td></tr>
+                <tr><td><span class="key">M-Down</span></td><td>Shorter -2</td></tr>
+                <tr><td><span class="key">M-Left</span></td><td>Narrower -2</td></tr>
+                <tr><td><span class="key">M-Right</span></td><td>Wider +2</td></tr>
+                <tr><td><span class="leader">Space</span>wK</td><td>Taller +5</td></tr>
+                <tr><td><span class="leader">Space</span>wJ</td><td>Shorter -5</td></tr>
+                <tr><td><span class="leader">Space</span>wL</td><td>Wider +5</td></tr>
+                <tr><td><span class="leader">Space</span>wH</td><td>Narrower -5</td></tr>
+            </table>
+        </div>
+
+        <!-- Scrolling -->
+        <div class="category">
+            <h2>Scroll Viewport</h2>
+            <table>
+                <tr><td><span class="key">M-j</span></td><td>Scroll down 10%</td></tr>
+                <tr><td><span class="key">M-k</span></td><td>Scroll up 10%</td></tr>
+                <tr><td><span class="key">M-h</span></td><td>Scroll left 10%</td></tr>
+                <tr><td><span class="key">M-l</span></td><td>Scroll right 10%</td></tr>
+                <tr><td><span class="key">C-e</span></td><td>Scroll down 1</td></tr>
+                <tr><td><span class="key">C-y</span></td><td>Scroll up 1</td></tr>
+                <tr><td>zz</td><td>Center cursor</td></tr>
+                <tr><td>zt</td><td>Cursor to top</td></tr>
+                <tr><td>zb</td><td>Cursor to bottom</td></tr>
+            </table>
+        </div>
+
         <!-- Debug -->
         <div class="category">
-            <h2>🐛 Debug</h2>
+            <h2>Debug</h2>
             <table>
                 <tr><td>F5</td><td>Continue</td></tr>
                 <tr><td>F10</td><td>Step over</td></tr>
                 <tr><td>F11</td><td>Step into</td></tr>
                 <tr><td>F12</td><td>Step out</td></tr>
-                <tr><td><span class="leader">⎵</span>db</td><td>Breakpoint</td></tr>
-                <tr><td><span class="leader">⎵</span>dB</td><td>Conditional</td></tr>
-                <tr><td><span class="leader">⎵</span>dr</td><td>REPL</td></tr>
-                <tr><td><span class="leader">⎵</span>dl</td><td>Run last</td></tr>
-                <tr><td><span class="leader">⎵</span>du</td><td>UI toggle</td></tr>
-                <tr><td><span class="leader">⎵</span>de</td><td>Eval</td></tr>
-                <tr><td><span class="leader">⎵</span>dn</td><td>Test method</td></tr>
-                <tr><td><span class="leader">⎵</span>df</td><td>Test class</td></tr>
-                <tr><td><span class="leader">⎵</span>ds</td><td>Debug sel (v)</td></tr>
+                <tr><td><span class="leader">Space</span>db</td><td>Breakpoint</td></tr>
+                <tr><td><span class="leader">Space</span>dB</td><td>Conditional</td></tr>
+                <tr><td><span class="leader">Space</span>dr</td><td>REPL</td></tr>
+                <tr><td><span class="leader">Space</span>dl</td><td>Run last</td></tr>
+                <tr><td><span class="leader">Space</span>du</td><td>UI toggle</td></tr>
+                <tr><td><span class="leader">Space</span>de</td><td>Eval</td></tr>
             </table>
         </div>
-        
+
+        <!-- Debug Python/Go -->
+        <div class="category">
+            <h2>Debug Lang</h2>
+            <table>
+                <tr><td colspan="2" style="color: #89b4fa;">Python:</td></tr>
+                <tr><td><span class="leader">Space</span>dn</td><td>Test method</td></tr>
+                <tr><td><span class="leader">Space</span>df</td><td>Test class</td></tr>
+                <tr><td><span class="leader">Space</span>ds</td><td>Debug sel (v)</td></tr>
+                <tr><td colspan="2" style="color: #89b4fa;">Go:</td></tr>
+                <tr><td><span class="leader">Space</span>dt</td><td>Debug test</td></tr>
+                <tr><td><span class="leader">Space</span>dT</td><td>Debug last test</td></tr>
+            </table>
+        </div>
+
         <!-- Terminal -->
         <div class="category">
-            <h2>💻 Terminal</h2>
+            <h2>Terminal</h2>
             <table>
                 <tr><td><span class="key">C-\</span></td><td>Toggle</td></tr>
-                <tr><td><span class="leader">⎵</span>tf</td><td>Float term</td></tr>
-                <tr><td><span class="leader">⎵</span>th</td><td>Horiz term</td></tr>
-                <tr><td><span class="leader">⎵</span>tv</td><td>Vert term</td></tr>
+                <tr><td><span class="leader">Space</span>tf</td><td>Float term</td></tr>
+                <tr><td><span class="leader">Space</span>th</td><td>Horiz term</td></tr>
+                <tr><td><span class="leader">Space</span>tv</td><td>Vert term</td></tr>
                 <tr><td><span class="key">C-q</span></td><td>Exit to normal</td></tr>
                 <tr><td><span class="key">C-\</span><span class="key">C-n</span></td><td>Exit (default)</td></tr>
             </table>
         </div>
-        
+
         <!-- Completion -->
         <div class="category">
-            <h2>✏️ Complete</h2>
+            <h2>Completion</h2>
             <table>
                 <tr><td><span class="key">C-Space</span></td><td>Trigger</td></tr>
-                <tr><td><span class="key">C-b</span></td><td>Scroll ↑</td></tr>
-                <tr><td><span class="key">C-f</span></td><td>Scroll ↓</td></tr>
+                <tr><td><span class="key">C-b</span></td><td>Scroll up</td></tr>
+                <tr><td><span class="key">C-f</span></td><td>Scroll down</td></tr>
                 <tr><td><span class="key">C-e</span></td><td>Abort</td></tr>
                 <tr><td><span class="key">CR</span></td><td>Confirm</td></tr>
                 <tr><td><span class="key">Tab</span></td><td>Next/expand</td></tr>
                 <tr><td><span class="key">S-Tab</span></td><td>Previous</td></tr>
             </table>
         </div>
-        
+
         <!-- Editing -->
         <div class="category">
-            <h2>📝 Edit</h2>
+            <h2>Edit</h2>
             <table>
-                <tr><td>J (v)</td><td>Move ↓</td></tr>
-                <tr><td>K (v)</td><td>Move ↑</td></tr>
-                <tr><td>&lt; (v)</td><td>Indent ←</td></tr>
-                <tr><td>&gt; (v)</td><td>Indent →</td></tr>
+                <tr><td>J (v)</td><td>Move down</td></tr>
+                <tr><td>K (v)</td><td>Move up</td></tr>
+                <tr><td>&lt; (v)</td><td>Indent left</td></tr>
+                <tr><td>&gt; (v)</td><td>Indent right</td></tr>
                 <tr><td>p (v)</td><td>Paste no yank</td></tr>
                 <tr><td>gcc</td><td>Comment line</td></tr>
-                <tr><td>gc (v)</td><td>Comment</td></tr>
+                <tr><td>gc (v)</td><td>Comment sel</td></tr>
             </table>
         </div>
-        
-        <!-- File Explorer -->
+
+        <!-- File Explorer - Yazi -->
         <div class="category">
-            <h2>🗂️ Oil.nvim</h2>
+            <h2>Yazi</h2>
             <table>
-                <tr><td><span class="leader">⎵</span>e</td><td>Open Oil</td></tr>
-                <tr><td>-</td><td>Parent dir</td></tr>
-                <tr><td>g?</td><td>Help</td></tr>
-                <tr><td><span class="key">CR</span></td><td>Select</td></tr>
-                <tr><td><span class="key">C-c</span></td><td>Close</td></tr>
-                <tr><td><span class="key">C-l</span></td><td>Refresh</td></tr>
-                <tr><td><span class="key">C-s</span></td><td>V-split</td></tr>
-                <tr><td><span class="key">C-h</span></td><td>H-split</td></tr>
-                <tr><td><span class="key">C-t</span></td><td>Tab</td></tr>
-                <tr><td><span class="key">C-p</span></td><td>Preview</td></tr>
-                <tr><td>_</td><td>Open cwd</td></tr>
-                <tr><td>`</td><td>CD</td></tr>
-                <tr><td>~</td><td>Tcd</td></tr>
-                <tr><td>gs</td><td>Change sort</td></tr>
-                <tr><td>gx</td><td>Open external</td></tr>
-                <tr><td>g.</td><td>Toggle hidden</td></tr>
-                <tr><td>g\</td><td>Toggle trash</td></tr>
-                <tr><td>:w</td><td>Save changes</td></tr>
+                <tr><td><span class="leader">Space</span>e</td><td>Open at file</td></tr>
+                <tr><td><span class="leader">Space</span>E</td><td>Open at cwd</td></tr>
+                <tr><td>-</td><td>Open (vim style)</td></tr>
+                <tr><td>F1</td><td>Help</td></tr>
             </table>
         </div>
-        
+
+        <!-- File Explorer - NvimTree -->
+        <div class="category">
+            <h2>NvimTree</h2>
+            <table>
+                <tr><td><span class="leader">Space</span>;</td><td>Toggle tree</td></tr>
+                <tr><td><span class="leader">Space</span>:</td><td>Find file</td></tr>
+            </table>
+        </div>
+
         <!-- Folds -->
         <div class="category">
-            <h2>📂 Folds</h2>
+            <h2>Folds</h2>
             <table>
                 <tr><td>za</td><td>Toggle fold</td></tr>
                 <tr><td>zo</td><td>Open fold</td></tr>
@@ -414,9 +448,7 @@
                 <tr><td>zC</td><td>Close all nested</td></tr>
                 <tr><td>zR</td><td>Open ALL folds</td></tr>
                 <tr><td>zM</td><td>Close ALL folds</td></tr>
-                <tr><td>zf</td><td>Create fold</td></tr>
-                <tr><td>zd</td><td>Delete fold</td></tr>
-                <tr><td>zE</td><td>Delete all folds</td></tr>
+                <tr><td>zK</td><td>Peek fold/hover</td></tr>
                 <tr><td>zj</td><td>Next fold</td></tr>
                 <tr><td>zk</td><td>Prev fold</td></tr>
                 <tr><td>[z</td><td>Start of fold</td></tr>
@@ -424,145 +456,286 @@
             </table>
         </div>
 
-        <!-- Quick Actions -->
+        <!-- Treesitter Selection -->
         <div class="category">
-            <h2>⚡ Quick</h2>
+            <h2>Treesitter Sel</h2>
             <table>
-                <tr><td><span class="leader">⎵</span>Q</td><td>Quit all!</td></tr>
-                <tr><td class="new"><span class="leader">⎵</span>w</td><td class="new">Save</td></tr>
-                <tr><td class="new"><span class="leader">⎵</span>W</td><td class="new">Save all</td></tr>
-                <tr><td><span class="leader">⎵</span>yp</td><td>Copy path</td></tr>
-                <tr><td><span class="leader">⎵</span>yr</td><td>Copy rel path</td></tr>
-                <tr><td><span class="leader">⎵</span>mp</td><td>Prettier</td></tr>
-                <tr><td>:w</td><td>Save</td></tr>
-                <tr><td>:q</td><td>Quit</td></tr>
-                <tr><td>:wq</td><td>Save & quit</td></tr>
+                <tr><td><span class="key">C-Space</span></td><td>Init/expand</td></tr>
+                <tr><td><span class="key">C-s</span></td><td>Scope incr</td></tr>
+                <tr><td><span class="key">C-BS</span></td><td>Node decr</td></tr>
             </table>
         </div>
-        
+
+        <!-- Treesitter Text Objects -->
+        <div class="category">
+            <h2>Text Objects</h2>
+            <table>
+                <tr><td>af / if</td><td>Function</td></tr>
+                <tr><td>ac / ic</td><td>Class</td></tr>
+                <tr><td>aa / ia</td><td>Parameter</td></tr>
+                <tr><td>ab / ib</td><td>Block</td></tr>
+                <tr><td>ih</td><td>Git hunk</td></tr>
+            </table>
+        </div>
+
+        <!-- Treesitter Movement -->
+        <div class="category">
+            <h2>Code Movement</h2>
+            <table>
+                <tr><td>]m / [m</td><td>Function start</td></tr>
+                <tr><td>]M / [M</td><td>Function end</td></tr>
+                <tr><td>]] / [[</td><td>Class start</td></tr>
+                <tr><td>][ / []</td><td>Class end</td></tr>
+                <tr><td><span class="leader">Space</span>a</td><td>Swap param next</td></tr>
+                <tr><td><span class="leader">Space</span>A</td><td>Swap param prev</td></tr>
+            </table>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="category">
+            <h2>Quick</h2>
+            <table>
+                <tr><td><span class="leader">Space</span>w</td><td>Save</td></tr>
+                <tr><td><span class="leader">Space</span>W</td><td>Save all</td></tr>
+                <tr><td><span class="leader">Space</span>Q</td><td>Quit all!</td></tr>
+                <tr><td><span class="leader">Space</span>yp</td><td>Copy path</td></tr>
+                <tr><td><span class="leader">Space</span>yr</td><td>Copy rel path</td></tr>
+                <tr><td><span class="leader">Space</span>?</td><td>Window number</td></tr>
+                <tr><td><span class="leader">Space</span>T</td><td>Open TODO</td></tr>
+            </table>
+        </div>
+
         <!-- Commands -->
         <div class="category">
-            <h2>💡 Commands</h2>
+            <h2>Commands</h2>
             <table>
                 <tr><td>:Mason</td><td>LSP manager</td></tr>
                 <tr><td>:Lazy</td><td>Plugin mgr</td></tr>
                 <tr><td>:checkhealth</td><td>Health</td></tr>
-                <tr><td>:ESLintToggle</td><td>Toggle ESLint</td></tr>
-                <tr><td>:ESLintQuiet</td><td>Clear ESLint</td></tr>
-                <tr><td>:Trouble</td><td>Diagnostics</td></tr>
-                <tr><td>:Oil</td><td>File explorer</td></tr>
+                <tr><td>:Yazi</td><td>File explorer</td></tr>
+                <tr><td>:NvimTreeToggle</td><td>Tree explorer</td></tr>
                 <tr><td>:Gitsigns</td><td>Git signs cmd</td></tr>
             </table>
         </div>
 
-        <!-- Dooing (Todo) -->
+        <!-- Claude Code -->
         <div class="category">
-            <h2>✅ Dooing Todo</h2>
+            <h2>Claude AI</h2>
             <table>
-                <tr><td><span class="leader">⎵</span>td</td><td>Toggle todos</td></tr>
-                <tr><td><span class="leader">⎵</span>tD</td><td>Project todos</td></tr>
-                <tr><td>:Dooing</td><td>Open todos</td></tr>
+                <tr><td><span class="leader">Space</span>ac</td><td>Toggle Claude</td></tr>
+                <tr><td><span class="leader">Space</span>af</td><td>Focus Claude</td></tr>
+                <tr><td><span class="leader">Space</span>as</td><td>Send selection</td></tr>
+                <tr><td><span class="leader">Space</span>aa</td><td>Accept diff</td></tr>
+                <tr><td><span class="leader">Space</span>ad</td><td>Deny diff</td></tr>
+                <tr><td><span class="leader">Space</span>am</td><td>Select model</td></tr>
+                <tr><td><span class="leader">Space</span>ab</td><td>Add buffer</td></tr>
+                <tr><td><span class="leader">Space</span>at</td><td>Add from tree</td></tr>
             </table>
-            <table style="margin-top: 5px;">
-                <tr><td colspan="2" style="color: #89b4fa; font-weight: bold;">Default Keys:</td></tr>
-                <tr><td>i</td><td>Insert new</td></tr>
-                <tr><td>d</td><td>Delete todo</td></tr>
-                <tr><td>x</td><td>Toggle done</td></tr>
-                <tr><td>e</td><td>Edit todo</td></tr>
-                <tr><td>?</td><td>Show help</td></tr>
-                <tr><td colspan="2" style="color: #f38ba8; font-size: 0.85em;">Note: Buffer is read-only</td></tr>
+        </div>
+
+        <!-- Codeium -->
+        <div class="category">
+            <h2>Codeium</h2>
+            <table>
+                <tr><td><span class="key">M-o</span></td><td>Accept</td></tr>
+                <tr><td><span class="key">M-]</span></td><td>Next suggestion</td></tr>
+                <tr><td><span class="key">M-[</span></td><td>Prev suggestion</td></tr>
+            </table>
+        </div>
+
+        <!-- Flutter -->
+        <div class="category">
+            <h2>Flutter</h2>
+            <table>
+                <tr><td><span class="leader">Space</span>Fr</td><td>Run</td></tr>
+                <tr><td><span class="leader">Space</span>Fd</td><td>Devices</td></tr>
+                <tr><td><span class="leader">Space</span>Fe</td><td>Emulators</td></tr>
+                <tr><td><span class="leader">Space</span>FR</td><td>Hot Reload</td></tr>
+                <tr><td><span class="leader">Space</span>Fs</td><td>Hot Restart</td></tr>
+                <tr><td><span class="leader">Space</span>Fq</td><td>Quit</td></tr>
+                <tr><td><span class="leader">Space</span>Fo</td><td>Outline</td></tr>
+                <tr><td><span class="leader">Space</span>Fl</td><td>LSP Restart</td></tr>
+                <tr><td><span class="leader">Space</span>Ft</td><td>Commands</td></tr>
             </table>
         </div>
     </div>
-    
+
     <div class="vim-section">
         <h2>Core Vim Motions</h2>
         <div class="container">
             <!-- Movement -->
             <div class="category">
-                <h2>↔️ Movement</h2>
+                <h2>Movement</h2>
                 <table>
-                    <tr><td>h j k l</td><td>← ↓ ↑ →</td></tr>
-                    <tr><td>w W</td><td>Word →</td></tr>
-                    <tr><td>b B</td><td>Word ←</td></tr>
-                    <tr><td>e E</td><td>End word</td></tr>
+                    <tr><td>h j k l</td><td>Left Down Up Right</td></tr>
+                    <tr><td>w W</td><td>Word forward</td></tr>
+                    <tr><td>b B</td><td>Word backward</td></tr>
+                    <tr><td>e E</td><td>End of word</td></tr>
+                    <tr><td>ge gE</td><td>End of prev word</td></tr>
                     <tr><td>0 ^</td><td>Line start</td></tr>
                     <tr><td>$</td><td>Line end</td></tr>
                     <tr><td>gg G</td><td>File start/end</td></tr>
+                    <tr><td>{number}G</td><td>Go to line</td></tr>
                     <tr><td><span class="key">C-u/d</span></td><td>Half page</td></tr>
                     <tr><td><span class="key">C-b/f</span></td><td>Full page</td></tr>
                     <tr><td>%</td><td>Match bracket</td></tr>
                     <tr><td>{ }</td><td>Paragraph</td></tr>
+                    <tr><td>( )</td><td>Sentence</td></tr>
+                    <tr><td>H M L</td><td>Screen top/mid/bot</td></tr>
                 </table>
             </div>
-            
+
             <!-- Operators -->
             <div class="category">
-                <h2>✂️ Operators</h2>
+                <h2>Operators</h2>
                 <table>
                     <tr><td>d</td><td>Delete</td></tr>
                     <tr><td>c</td><td>Change</td></tr>
-                    <tr><td>y</td><td>Yank</td></tr>
-                    <tr><td>p P</td><td>Paste</td></tr>
-                    <tr><td>x</td><td>Delete char</td></tr>
-                    <tr><td>r</td><td>Replace</td></tr>
-                    <tr><td>s</td><td>Substitute</td></tr>
+                    <tr><td>y</td><td>Yank (copy)</td></tr>
+                    <tr><td>p P</td><td>Paste after/before</td></tr>
+                    <tr><td>x X</td><td>Delete char</td></tr>
+                    <tr><td>r</td><td>Replace char</td></tr>
+                    <tr><td>R</td><td>Replace mode</td></tr>
+                    <tr><td>s S</td><td>Substitute</td></tr>
                     <tr><td>u</td><td>Undo</td></tr>
                     <tr><td><span class="key">C-r</span></td><td>Redo</td></tr>
                     <tr><td>.</td><td>Repeat</td></tr>
+                    <tr><td>~</td><td>Toggle case</td></tr>
+                    <tr><td>gu gU</td><td>Lowercase/Upper</td></tr>
+                    <tr><td>&gt;&gt; &lt;&lt;</td><td>Indent line</td></tr>
+                    <tr><td>=</td><td>Auto indent</td></tr>
                 </table>
             </div>
-            
+
             <!-- Text Objects -->
             <div class="category">
-                <h2>📦 Text Objects</h2>
+                <h2>Text Objects</h2>
                 <table>
                     <tr><td>iw aw</td><td>Word</td></tr>
+                    <tr><td>iW aW</td><td>WORD</td></tr>
                     <tr><td>is as</td><td>Sentence</td></tr>
                     <tr><td>ip ap</td><td>Paragraph</td></tr>
-                    <tr><td>i" a"</td><td>Quotes</td></tr>
+                    <tr><td>i" a"</td><td>Double quotes</td></tr>
+                    <tr><td>i' a'</td><td>Single quotes</td></tr>
+                    <tr><td>i` a`</td><td>Backticks</td></tr>
                     <tr><td>i( a(</td><td>Parens</td></tr>
                     <tr><td>i{ a{</td><td>Braces</td></tr>
                     <tr><td>i[ a[</td><td>Brackets</td></tr>
+                    <tr><td>i&lt; a&lt;</td><td>Angle brackets</td></tr>
                     <tr><td>it at</td><td>Tags</td></tr>
-                    <tr><td>ih</td><td>Git hunk</td></tr>
                 </table>
             </div>
-            
+
             <!-- Insert Mode -->
             <div class="category">
-                <h2>📄 Insert</h2>
+                <h2>Insert</h2>
                 <table>
-                    <tr><td>i I</td><td>Insert</td></tr>
-                    <tr><td>a A</td><td>Append</td></tr>
-                    <tr><td>o O</td><td>Open line</td></tr>
-                    <tr><td><span class="key">Esc</span></td><td>Normal</td></tr>
-                    <tr><td><span class="key">C-w</span></td><td>Del word</td></tr>
-                    <tr><td><span class="key">C-u</span></td><td>Del line</td></tr>
+                    <tr><td>i I</td><td>Insert at/start</td></tr>
+                    <tr><td>a A</td><td>Append at/end</td></tr>
+                    <tr><td>o O</td><td>Open line below/above</td></tr>
+                    <tr><td>gi</td><td>Insert at last pos</td></tr>
+                    <tr><td><span class="key">Esc</span></td><td>Normal mode</td></tr>
+                    <tr><td><span class="key">C-[</span></td><td>Normal mode</td></tr>
+                    <tr><td><span class="key">C-c</span></td><td>Normal mode</td></tr>
+                    <tr><td><span class="key">C-w</span></td><td>Delete word</td></tr>
+                    <tr><td><span class="key">C-u</span></td><td>Delete to start</td></tr>
+                    <tr><td><span class="key">C-h</span></td><td>Delete char</td></tr>
+                    <tr><td><span class="key">C-o</span></td><td>One normal cmd</td></tr>
+                    <tr><td><span class="key">C-r</span>{reg}</td><td>Insert register</td></tr>
                 </table>
             </div>
-            
+
             <!-- Visual Mode -->
             <div class="category">
-                <h2>👁️ Visual</h2>
+                <h2>Visual</h2>
                 <table>
-                    <tr><td>v</td><td>Char</td></tr>
+                    <tr><td>v</td><td>Character</td></tr>
                     <tr><td>V</td><td>Line</td></tr>
                     <tr><td><span class="key">C-v</span></td><td>Block</td></tr>
                     <tr><td>gv</td><td>Reselect</td></tr>
                     <tr><td>o O</td><td>Other end</td></tr>
+                    <tr><td>I (block)</td><td>Insert at start</td></tr>
+                    <tr><td>A (block)</td><td>Append at end</td></tr>
                 </table>
             </div>
-            
+
             <!-- Search -->
             <div class="category">
-                <h2>🔄 Search</h2>
+                <h2>Search</h2>
                 <table>
-                    <tr><td>/ ?</td><td>Search</td></tr>
-                    <tr><td>* #</td><td>Word</td></tr>
-                    <tr><td>n N</td><td>Next/prev</td></tr>
-                    <tr><td>:noh</td><td>Clear hl</td></tr>
-                    <tr><td>:%s///g</td><td>Replace</td></tr>
+                    <tr><td>/ ?</td><td>Search fwd/back</td></tr>
+                    <tr><td>* #</td><td>Word fwd/back</td></tr>
+                    <tr><td>n N</td><td>Next/prev match</td></tr>
+                    <tr><td>f F</td><td>Find char</td></tr>
+                    <tr><td>t T</td><td>Till char</td></tr>
+                    <tr><td>;</td><td>Repeat f/t</td></tr>
+                    <tr><td>,</td><td>Reverse f/t</td></tr>
+                    <tr><td>:noh</td><td>Clear highlight</td></tr>
+                    <tr><td>:%s/a/b/g</td><td>Replace all</td></tr>
+                    <tr><td>:%s/a/b/gc</td><td>Replace confirm</td></tr>
+                </table>
+            </div>
+
+            <!-- Marks and Jumps -->
+            <div class="category">
+                <h2>Marks & Jumps</h2>
+                <table>
+                    <tr><td>m{a-z}</td><td>Set mark</td></tr>
+                    <tr><td>'{a-z}</td><td>Jump to mark line</td></tr>
+                    <tr><td>`{a-z}</td><td>Jump to mark pos</td></tr>
+                    <tr><td>''</td><td>Jump back</td></tr>
+                    <tr><td>``</td><td>Jump back exact</td></tr>
+                    <tr><td><span class="key">C-o</span></td><td>Jump list back</td></tr>
+                    <tr><td><span class="key">C-i</span></td><td>Jump list fwd</td></tr>
+                    <tr><td>:marks</td><td>List marks</td></tr>
+                    <tr><td>:jumps</td><td>List jumps</td></tr>
+                </table>
+            </div>
+
+            <!-- Registers -->
+            <div class="category">
+                <h2>Registers</h2>
+                <table>
+                    <tr><td>"{reg}</td><td>Use register</td></tr>
+                    <tr><td>""</td><td>Unnamed (default)</td></tr>
+                    <tr><td>"0</td><td>Yank register</td></tr>
+                    <tr><td>"1-9</td><td>Delete history</td></tr>
+                    <tr><td>"+</td><td>System clipboard</td></tr>
+                    <tr><td>"*</td><td>Selection</td></tr>
+                    <tr><td>"_</td><td>Black hole</td></tr>
+                    <tr><td>"/</td><td>Last search</td></tr>
+                    <tr><td>":</td><td>Last command</td></tr>
+                    <tr><td>"%</td><td>Current file</td></tr>
+                    <tr><td>:reg</td><td>List registers</td></tr>
+                </table>
+            </div>
+
+            <!-- Macros -->
+            <div class="category">
+                <h2>Macros</h2>
+                <table>
+                    <tr><td>q{a-z}</td><td>Record macro</td></tr>
+                    <tr><td>q</td><td>Stop recording</td></tr>
+                    <tr><td>@{a-z}</td><td>Play macro</td></tr>
+                    <tr><td>@@</td><td>Repeat macro</td></tr>
+                    <tr><td>{n}@{a-z}</td><td>Play n times</td></tr>
+                </table>
+            </div>
+
+            <!-- Common Commands -->
+            <div class="category">
+                <h2>Ex Commands</h2>
+                <table>
+                    <tr><td>:w</td><td>Save</td></tr>
+                    <tr><td>:q</td><td>Quit</td></tr>
+                    <tr><td>:wq :x ZZ</td><td>Save & quit</td></tr>
+                    <tr><td>:q!</td><td>Quit no save</td></tr>
+                    <tr><td>:e {file}</td><td>Edit file</td></tr>
+                    <tr><td>:r {file}</td><td>Read file</td></tr>
+                    <tr><td>:!{cmd}</td><td>Shell command</td></tr>
+                    <tr><td>:h {topic}</td><td>Help</td></tr>
+                    <tr><td>:{n}</td><td>Go to line</td></tr>
+                    <tr><td>:set {opt}</td><td>Set option</td></tr>
                 </table>
             </div>
         </div>
