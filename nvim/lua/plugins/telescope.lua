@@ -15,6 +15,7 @@ return {
           "kkharji/sqlite.lua",
         },
       },
+      { "nvim-telescope/telescope-ui-select.nvim" },
     },
     config = function()
       local telescope = require("telescope")
@@ -128,11 +129,15 @@ return {
               "*/__pycache__/*",
             },
           },
+          ["ui-select"] = {
+            require("telescope.themes").get_dropdown({}),
+          },
         },
       })
 
       telescope.load_extension("fzf")
       telescope.load_extension("frecency")
+      telescope.load_extension("ui-select")
 
       local function lsp_supports(method)
         if not method then

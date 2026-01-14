@@ -20,7 +20,54 @@ return {
           },
         },
       })
-      vim.cmd.colorscheme("catppuccin")
+    end,
+  },
+
+  -- Cyberdream colorscheme (use :colorscheme cyberdream to activate)
+  {
+    "scottmckendry/cyberdream.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("cyberdream").setup({
+        transparent = false,
+        italic_comments = true,
+        borderless_telescope = true,
+        overrides = function(colors)
+          return {
+            -- Italic keywords for cursive Victor Mono styling
+            ["@keyword"] = { italic = true },
+            ["@keyword.function"] = { italic = true },
+            ["@keyword.return"] = { italic = true },
+            ["@keyword.operator"] = { italic = true },
+            ["@keyword.conditional"] = { italic = true },
+            ["@keyword.repeat"] = { italic = true },
+            ["@keyword.import"] = { italic = true },
+            ["@keyword.exception"] = { italic = true },
+            ["@boolean"] = { italic = true },
+            ["@constant.builtin"] = { italic = true },
+          }
+        end,
+      })
+    end,
+  },
+
+  -- OneDark Pro colorscheme (active)
+  {
+    "olimorris/onedarkpro.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("onedarkpro").setup({
+        styles = {
+          comments = "italic",
+          keywords = "italic",
+          conditionals = "italic",
+          booleans = "italic",
+          constants = "italic",
+        },
+      })
+      vim.cmd.colorscheme("onedark_dark")
     end,
   },
 
@@ -31,7 +78,7 @@ return {
     config = function()
       require("lualine").setup({
         options = {
-          theme = "catppuccin",
+          theme = "auto",
           section_separators = { left = "", right = "" },
           component_separators = { left = "", right = "" },
         },
