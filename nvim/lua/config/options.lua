@@ -72,3 +72,18 @@ opt.pyxversion = 3
 -- Basic settings, ufo will override these
 opt.foldlevel = 99
 opt.foldlevelstart = 99
+
+-- Disable smartindent when Treesitter indent is available for the filetype
+-- This prevents conflicts between the two indentation systems
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function()
+    local ts_ok, ts_configs = pcall(require, "nvim-treesitter.configs")
+    if ts_ok then
+      local lang = vim.treesitter.language.get_lang(vim.bo.filetype) or vim.bo.filetype
+      local has_parser = pcall(vim.treesitter.language.inspect, lang)
+      if has_parser and ts_configs.is_enabled("indent", lang) then
+        vim.bo.smartindent = false
+      end
+    end
+  end,
+})

@@ -29,6 +29,16 @@ autocmd("BufWritePre", {
   end,
 })
 
+-- Auto format on save for Go files
+autocmd("BufWritePre", {
+  pattern = "*.go",
+  callback = function()
+    if vim.lsp.get_active_clients({ bufnr = 0 })[1] then
+      vim.lsp.buf.format()
+    end
+  end,
+})
+
 -- Set correct filetype for Python files
 autocmd({ "BufRead", "BufNewFile" }, {
   pattern = { "*.py", "*.pyw" },
