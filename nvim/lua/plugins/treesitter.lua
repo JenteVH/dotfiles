@@ -44,6 +44,7 @@ return {
         },
         indent = {
           enable = true,
+          disable = { "dart" },
         },
         autotag = {
           enable = true,
