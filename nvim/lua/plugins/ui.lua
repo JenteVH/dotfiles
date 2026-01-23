@@ -1,4 +1,28 @@
 return {
+  -- Motion plugin
+  {
+    "ggandor/leap.nvim",
+    config = function()
+      vim.keymap.set({'n', 'x', 'o'}, 's', '<Plug>(leap-forward)')
+      vim.keymap.set({'n', 'x', 'o'}, 'S', '<Plug>(leap-backward)')
+      vim.keymap.set({'n', 'x', 'o'}, 'gs', '<Plug>(leap-from-window)')
+      require('leap').opts.safe_labels = {}
+    end,
+  },
+
+  -- Diagnostics list
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {},
+    keys = {
+      { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics" },
+      { "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer diagnostics" },
+      { "<leader>xs", "<cmd>Trouble symbols toggle focus=false<cr>", desc = "Symbols" },
+      { "<leader>xq", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix list" },
+    },
+  },
+
   -- Tree view file explorer
   {
     "nvim-tree/nvim-tree.lua",
@@ -102,34 +126,6 @@ return {
       vim.keymap.set("n", "<leader>tf", "<cmd>ToggleTerm direction=float<CR>", { desc = "Toggle floating terminal" })
       vim.keymap.set("n", "<leader>th", "<cmd>ToggleTerm direction=horizontal<CR>", { desc = "Toggle horizontal terminal" })
       vim.keymap.set("n", "<leader>tv", "<cmd>ToggleTerm direction=vertical<CR>", { desc = "Toggle vertical terminal" })
-    end,
-  },
-
-  -- Noice for better UI
-  {
-    "folke/noice.nvim",
-    event = "VeryLazy",
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify",
-    },
-    config = function()
-      require("noice").setup({
-        lsp = {
-          override = {
-            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-            ["vim.lsp.util.stylize_markdown"] = true,
-            ["cmp.entry.get_documentation"] = true,
-          },
-        },
-        presets = {
-          bottom_search = true,
-          command_palette = true,
-          long_message_to_split = true,
-          inc_rename = false,
-          lsp_doc_border = false,
-        },
-      })
     end,
   },
 

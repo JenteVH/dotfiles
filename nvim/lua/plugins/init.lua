@@ -1,25 +1,56 @@
 return {
-  -- Colorscheme
+  -- Colorscheme + Transparency
   {
     "catppuccin/nvim",
     name = "catppuccin",
+    lazy = false,
     priority = 1000,
+    dependencies = { "xiyaowong/transparent.nvim" },
     config = function()
       require("catppuccin").setup({
         flavour = "mocha",
+        styles = {
+          comments = { "italic" },
+          conditionals = { "italic" },
+          keywords = { "italic" },
+          booleans = { "italic" },
+        },
         integrations = {
           treesitter = true,
-          native_lsp = {
-            enabled = true,
-          },
-          telescope = true,
+          native_lsp = { enabled = true },
+          telescope = { enabled = true },
           which_key = true,
-          indent_blankline = {
-            enabled = true,
-            colored_indent_levels = false,
-          },
+          indent_blankline = { enabled = true },
+          nvimtree = true,
+          gitsigns = true,
+          bufferline = true,
         },
       })
+      vim.cmd.colorscheme("catppuccin")
+
+      require("transparent").setup({
+        groups = {
+          'Normal', 'NormalNC', 'Comment', 'Constant', 'Special', 'Identifier',
+          'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String', 'Function',
+          'Conditional', 'Repeat', 'Operator', 'Structure', 'LineNr', 'NonText',
+          'SignColumn', 'StatusLine', 'StatusLineNC', 'EndOfBuffer',
+        },
+        extra_groups = {
+          "NormalFloat",
+          "FloatBorder",
+          "NvimTreeNormal",
+          "NvimTreeNormalNC",
+          "TelescopeNormal",
+          "TelescopeBorder",
+          "WhichKeyFloat",
+          "BufferLineFill",
+          "BufferLineBackground",
+        },
+      })
+      vim.cmd("TransparentEnable")
+
+      vim.api.nvim_set_hl(0, "CursorLine", { bg = "#24283b" })
+      vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#89b4fa", bold = true })
     end,
   },
 
@@ -52,23 +83,10 @@ return {
     end,
   },
 
-  -- OneDark Pro colorscheme (active)
+  -- OneDark Pro colorscheme
   {
     "olimorris/onedarkpro.nvim",
-    lazy = false,
-    priority = 1000,
-    config = function()
-      require("onedarkpro").setup({
-        styles = {
-          comments = "italic",
-          keywords = "italic",
-          conditionals = "italic",
-          booleans = "italic",
-          constants = "italic",
-        },
-      })
-      vim.cmd.colorscheme("onedark_dark")
-    end,
+    lazy = true,
   },
 
   -- Status line
@@ -78,7 +96,7 @@ return {
     config = function()
       require("lualine").setup({
         options = {
-          theme = "auto",
+          theme = "catppuccin",
           section_separators = { left = "", right = "" },
           component_separators = { left = "", right = "" },
         },

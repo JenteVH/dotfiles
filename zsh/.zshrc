@@ -35,3 +35,6 @@ zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 bindkey '^[[1;5A' up-line-or-beginning-search    # Ctrl+Up
 bindkey '^[[1;5B' down-line-or-beginning-search  # Ctrl+Down
+
+# direnv hook for automatic environment loading
+eval "$(direnv hook zsh)"

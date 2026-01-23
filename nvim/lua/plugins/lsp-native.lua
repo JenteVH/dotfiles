@@ -364,9 +364,45 @@ return {
         on_attach = on_attach,
       }
 
+      -- PHP LSP (Intelephense)
+      vim.lsp.config.intelephense = {
+        cmd = { "intelephense", "--stdio" },
+        filetypes = { "php", "blade" },
+        root_dir = function(fname)
+          return find_root(fname, {
+            "composer.json",
+            "composer.lock",
+            ".php-cs-fixer.php",
+            "phpunit.xml",
+            "phpunit.xml.dist",
+            ".git",
+          })
+        end,
+        capabilities = capabilities,
+        on_attach = on_attach,
+      }
+
+      -- Rust LSP (rust-analyzer)
+      vim.lsp.config.rust_analyzer = {
+        cmd = { "rust-analyzer" },
+        filetypes = { "rust" },
+        root_dir = function(fname)
+          return find_root(fname, { "Cargo.toml", ".git" })
+        end,
+        settings = {
+          ["rust-analyzer"] = {
+            checkOnSave = {
+              command = "clippy",
+            },
+          },
+        },
+        capabilities = capabilities,
+        on_attach = on_attach,
+      }
+
       -- Auto-start LSP for configured filetypes
       vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "python", "lua", "sh", "bash", "yaml", "yml", "json", "jsonc", "html", "htm", "css", "scss", "less", "dockerfile", "javascript", "javascriptreact", "typescript", "typescriptreact", "go", "gomod", "gowork", "gotmpl" },
+        pattern = { "python", "lua", "sh", "bash", "yaml", "yml", "json", "jsonc", "html", "htm", "css", "scss", "less", "dockerfile", "javascript", "javascriptreact", "typescript", "typescriptreact", "go", "gomod", "gowork", "gotmpl", "php", "blade", "rust" },
         callback = function(args)
           local ft = vim.bo[args.buf].filetype
 
@@ -394,6 +430,9 @@ return {
             gomod = { "gopls" },
             gowork = { "gopls" },
             gotmpl = { "gopls" },
+            php = { "intelephense" },
+            blade = { "intelephense" },
+            rust = { "rust_analyzer" },
           }
 
           local servers = ft_to_lsp[ft]

@@ -18,6 +18,7 @@ return {
         ensure_installed = {
           "python",
           "lua",
+          "rust",
           "vim",
           "vimdoc",
           "json",
@@ -35,6 +36,9 @@ return {
           "regex",
           "sql",
           "dart",
+          "php",
+          "php_only",
+          "blade",
         },
         sync_install = false,
         auto_install = true,
@@ -44,7 +48,7 @@ return {
         },
         indent = {
           enable = true,
-          disable = { "dart" },
+          disable = { "dart", "rust" },
         },
         autotag = {
           enable = true,
