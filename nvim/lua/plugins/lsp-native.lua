@@ -54,7 +54,10 @@ return {
       vim.keymap.set("n", "<leader>de", vim.diagnostic.open_float, { desc = "Show diagnostic in float" })
       vim.keymap.set("n", "<leader>dq", vim.diagnostic.setloclist, { desc = "Set diagnostic to loclist" })
 
-      -- LSP attach function for keymaps and dynamic configuration
+      vim.api.nvim_set_hl(0, "LspReferenceText", { bg = "#313244" })
+      vim.api.nvim_set_hl(0, "LspReferenceRead", { bg = "#313244" })
+      vim.api.nvim_set_hl(0, "LspReferenceWrite", { bg = "#313244", underline = true })
+
       local on_attach = function(client, bufnr)
         local function buf_set_keymap(mode, lhs, rhs, desc)
           vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
@@ -78,7 +81,19 @@ return {
           vim.lsp.buf.format({ async = true })
         end, "Format document")
 
-        -- For Pyright, just ensure it's using the right root directory
+        if client.server_capabilities.documentHighlightProvider then
+          local highlight_group = vim.api.nvim_create_augroup("lsp_document_highlight_" .. bufnr, { clear = true })
+          vim.api.nvim_create_autocmd("CursorHold", {
+            group = highlight_group,
+            buffer = bufnr,
+            callback = vim.lsp.buf.document_highlight,
+          })
+          vim.api.nvim_create_autocmd("CursorMoved", {
+            group = highlight_group,
+            buffer = bufnr,
+            callback = vim.lsp.buf.clear_references,
+          })
+        end
       end
 
       -- Python: Pyright configuration
@@ -119,13 +134,7 @@ return {
         settings = {
           python = {
             analysis = {
-              extraPaths = {
-                "/app/inspection",
-                "/app/sales",
-                "/app/asset",
-                "/app/api_gateway",
-                "/app/backend",
-              },
+              extraPaths = {},
               typeCheckingMode = "basic",
               autoSearchPaths = true,
               useLibraryCodeForTypes = true,
