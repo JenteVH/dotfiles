@@ -184,6 +184,7 @@ return {
       
       
       vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Live grep in project" })
+      vim.keymap.set("v", "<leader>fg", builtin.grep_string, { desc = "Grep current selection" })
       
       vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Find buffers" })
       vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Find help" })
