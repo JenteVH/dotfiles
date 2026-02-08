@@ -7,38 +7,6 @@ vim.env.PATH = vim.fn.expand("~/.local/bin") .. ":" .. vim.env.PATH
 opt.number = true
 opt.relativenumber = true
 
--- OSC 52 clipboard support for Docker
-local function copy_to_osc52(lines)
-  local text = table.concat(lines, '\n')
-  local b64 = vim.fn.system('base64 -w0', text)
-  b64 = string.gsub(b64, '\n', '')
-  local osc52 = string.format('\027]52;c;%s\007', b64)
-
-  -- Try multiple methods to send OSC 52
-  if vim.fn.exists('$TMUX') == 1 then
-    -- Wrap in tmux passthrough if inside tmux
-    osc52 = string.format('\027Ptmux;\027%s\027\\', osc52)
-  end
-
-  io.stdout:write(osc52)
-  io.stdout:flush()
-end
-
-vim.g.clipboard = {
-  name = 'OSC 52',
-  copy = {
-    ['+'] = function(lines)
-      copy_to_osc52(lines)
-    end,
-    ['*'] = function(lines)
-      copy_to_osc52(lines)
-    end,
-  },
-  paste = {
-    ['+'] = function() return {} end,
-    ['*'] = function() return {} end,
-  },
-}
 opt.expandtab = true
 opt.shiftwidth = 4
 opt.tabstop = 4

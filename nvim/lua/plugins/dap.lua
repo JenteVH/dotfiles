@@ -1,42 +1,19 @@
 return {
-  -- Debug Adapter Protocol
+  -- DAP UI (separate to ensure proper setup)
   {
-    "mfussenegger/nvim-dap",
+    "rcarriga/nvim-dap-ui",
     dependencies = {
+      "mfussenegger/nvim-dap",
       "nvim-neotest/nvim-nio",
-      "rcarriga/nvim-dap-ui",
-      "theHamsta/nvim-dap-virtual-text",
-      "nvim-telescope/telescope-dap.nvim",
+    },
+    keys = {
+      { "<leader>du", function() require("dapui").toggle() end, desc = "Debug: Toggle UI" },
+      { "<leader>de", function() require("dapui").eval() end, desc = "Debug: Eval", mode = { "n", "v" } },
     },
     config = function()
-      local dap = require("dap")
-      local _ = require("nio")
       local dapui = require("dapui")
+      local dap = require("dap")
 
-      -- Python adapter configuration
-      dap.adapters.python = {
-        type = "executable",
-        command = "python",
-        args = {
-          "-m", "debugpy.adapter"
-        },
-      }
-
-      -- Python configuration
-      dap.configurations.python = {
-        -- 1. Debug current file
-        {
-          type = "python",
-          request = "launch",
-          name = "Launch file",
-          program = "${file}",
-          pythonPath = function()
-            return vim.fn.exepath("python3") or vim.fn.exepath("python") or "python"
-          end,
-        },
-      }
-
-      -- DAP UI setup
       dapui.setup({
         icons = { expanded = "▾", collapsed = "▸" },
         mappings = {
@@ -69,10 +46,6 @@ return {
         },
       })
 
-      -- Virtual text
-      require("nvim-dap-virtual-text").setup()
-
-      -- Auto open/close UI
       dap.listeners.after.event_initialized["dapui_config"] = function()
         dapui.open()
       end
@@ -82,21 +55,77 @@ return {
       dap.listeners.before.event_exited["dapui_config"] = function()
         dapui.close()
       end
+    end,
+  },
 
-      -- Keymaps
-      vim.keymap.set("n", "<F5>", dap.continue, { desc = "Debug: Continue" })
-      vim.keymap.set("n", "<F10>", dap.step_over, { desc = "Debug: Step Over" })
-      vim.keymap.set("n", "<F11>", dap.step_into, { desc = "Debug: Step Into" })
-      vim.keymap.set("n", "<F12>", dap.step_out, { desc = "Debug: Step Out" })
-      vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Debug: Toggle Breakpoint" })
-      vim.keymap.set("n", "<leader>dB", function()
-        dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
-      end, { desc = "Debug: Set Conditional Breakpoint" })
-      vim.keymap.set("n", "<leader>dr", dap.repl.open, { desc = "Debug: Open REPL" })
-      vim.keymap.set("n", "<leader>dl", dap.run_last, { desc = "Debug: Run Last" })
-      vim.keymap.set("n", "<leader>du", dapui.toggle, { desc = "Debug: Toggle UI" })
-      vim.keymap.set("n", "<leader>de", dapui.eval, { desc = "Debug: Eval" })
-      vim.keymap.set("v", "<leader>de", dapui.eval, { desc = "Debug: Eval" })
+  -- Debug Adapter Protocol
+  {
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      "nvim-neotest/nvim-nio",
+      "rcarriga/nvim-dap-ui",
+      "theHamsta/nvim-dap-virtual-text",
+      "nvim-telescope/telescope-dap.nvim",
+    },
+    keys = {
+      { "<F5>", function() require("dap").continue() end, desc = "Debug: Continue" },
+      { "<F10>", function() require("dap").step_over() end, desc = "Debug: Step Over" },
+      { "<F11>", function() require("dap").step_into() end, desc = "Debug: Step Into" },
+      { "<F12>", function() require("dap").step_out() end, desc = "Debug: Step Out" },
+      { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Debug: Toggle Breakpoint" },
+      { "<leader>dB", function() require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, desc = "Debug: Conditional Breakpoint" },
+      { "<leader>dr", function() require("dap").repl.open() end, desc = "Debug: Open REPL" },
+      { "<leader>dl", function() require("dap").run_last() end, desc = "Debug: Run Last" },
+    },
+    config = function()
+      local dap = require("dap")
+
+      dap.adapters.python = {
+        type = "executable",
+        command = "python",
+        args = { "-m", "debugpy.adapter" },
+      }
+
+      dap.adapters.debugpy_remote = function(cb, config)
+        cb({
+          type = "server",
+          host = config.connect.host,
+          port = config.connect.port,
+        })
+      end
+
+      dap.configurations.python = {
+        {
+          type = "python",
+          request = "launch",
+          name = "Launch file",
+          program = "${file}",
+          pythonPath = function()
+            return vim.fn.exepath("python3") or vim.fn.exepath("python") or "python"
+          end,
+        },
+        {
+          type = "debugpy_remote",
+          request = "attach",
+          name = "Attach to Docker",
+          connect = function()
+            return {
+              host = "127.0.0.1",
+              port = tonumber(vim.fn.input("Port: ")) or 5678,
+            }
+          end,
+          pathMappings = {
+            {
+              localRoot = function()
+                return vim.fn.getcwd()
+              end,
+              remoteRoot = "/app",
+            },
+          },
+        },
+      }
+
+      require("nvim-dap-virtual-text").setup()
     end,
   },
 
@@ -106,12 +135,30 @@ return {
     dependencies = { "mfussenegger/nvim-dap" },
     ft = "python",
     config = function()
+      local dap = require("dap")
       local dap_python = require("dap-python")
 
       dap_python.setup(vim.fn.exepath("python3") or vim.fn.exepath("python") or "python")
       dap_python.test_runner = "pytest"
 
-      -- Keymaps for Python debugging
+      table.insert(dap.configurations.python, {
+        type = "python",
+        request = "attach",
+        name = "Attach to Docker",
+        connect = function()
+          return {
+            host = "127.0.0.1",
+            port = tonumber(vim.fn.input("Port: ")) or 5678,
+          }
+        end,
+        pathMappings = {
+          {
+            localRoot = vim.fn.getcwd(),
+            remoteRoot = "/app",
+          },
+        },
+      })
+
       vim.keymap.set("n", "<leader>dn", dap_python.test_method, { desc = "Debug: Test method" })
       vim.keymap.set("n", "<leader>df", dap_python.test_class, { desc = "Debug: Test class" })
       vim.keymap.set("v", "<leader>ds", dap_python.debug_selection, { desc = "Debug: Selection" })

@@ -18,6 +18,7 @@ keymap("n", "<leader>wv", ":vsplit<CR>", { desc = "Split vertically" })
 keymap("n", "<leader>wh", ":split<CR>", { desc = "Split horizontally" })
 keymap("n", "<leader>wx", ":close<CR>", { desc = "Close split" })
 keymap("n", "<leader>we", "<C-w>=", { desc = "Make splits equal" })
+keymap("n", "<leader>wr", "<cmd>wincmd R<CR>", { desc = "Rotate splits" })
 
 -- Resize splits with Alt/Option + arrows (better for macOS)
 keymap("n", "<M-Up>", ":resize +2<CR>", { desc = "Increase window height" })

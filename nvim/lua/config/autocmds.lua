@@ -23,7 +23,7 @@ autocmd("FileType", {
 autocmd("BufWritePre", {
   pattern = "*.py",
   callback = function()
-    if vim.lsp.get_active_clients({ bufnr = 0 })[1] then
+    if vim.lsp.get_clients({ bufnr = 0 })[1] then
       vim.lsp.buf.format()
     end
   end,
@@ -33,7 +33,7 @@ autocmd("BufWritePre", {
 autocmd("BufWritePre", {
   pattern = "*.go",
   callback = function()
-    if vim.lsp.get_active_clients({ bufnr = 0 })[1] then
+    if vim.lsp.get_clients({ bufnr = 0 })[1] then
       vim.lsp.buf.format()
     end
   end,
