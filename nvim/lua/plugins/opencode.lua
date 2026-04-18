@@ -6,7 +6,13 @@ return {
     },
     config = function()
       ---@type opencode.Opts
-      vim.g.opencode_opts = {}
+      vim.g.opencode_opts = {
+        events = {
+          permissions = {
+            edits = { enabled = false },
+          },
+        },
+      }
 
       vim.o.autoread = true
 

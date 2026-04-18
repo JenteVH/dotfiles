@@ -1,42 +1,18 @@
--- Native LSP configuration using vim.lsp.config (Neovim 0.11+)
 return {
   {
     "hrsh7th/cmp-nvim-lsp",
     lazy = true,
   },
   {
-    name = "lsp-native-config",
-    dir = vim.fn.stdpath("config"),
+    "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
+    cmd = { "LspInfo", "LspStart", "LspStop", "LspRestart" },
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
     },
     config = function()
-      -- Get capabilities from nvim-cmp
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-      -- Helper function to find root directory
-      local function find_root(fname, patterns)
-        -- Handle both file paths and buffer numbers
-        local filename = fname
-        if type(fname) == "number" then
-          filename = vim.api.nvim_buf_get_name(fname)
-        end
-
-        local path = vim.fs.dirname(filename)
-        local found = vim.fs.find(patterns, {
-          path = path,
-          upward = true,
-          stop = vim.fn.expand("~"),
-        })[1]
-
-        if found then
-          return vim.fs.dirname(found)
-        end
-        return vim.fn.getcwd()
-      end
-
-      -- Diagnostic configuration
       vim.diagnostic.config({
         virtual_text = {
           prefix = "●",
@@ -48,7 +24,6 @@ return {
         },
       })
 
-      -- Diagnostic keymaps
       vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
       vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
       vim.keymap.set("n", "<leader>de", vim.diagnostic.open_float, { desc = "Show diagnostic in float" })
@@ -63,7 +38,6 @@ return {
           vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
         end
 
-        -- LSP keymaps
         buf_set_keymap("n", "gD", vim.lsp.buf.declaration, "Go to declaration")
         buf_set_keymap("n", "gd", vim.lsp.buf.definition, "Go to definition")
         buf_set_keymap("n", "K", vim.lsp.buf.hover, "Hover documentation")
@@ -80,57 +54,23 @@ return {
         buf_set_keymap("n", "<leader>f", function()
           vim.lsp.buf.format({ async = true })
         end, "Format document")
-
-        if client.server_capabilities.documentHighlightProvider then
-          local highlight_group = vim.api.nvim_create_augroup("lsp_document_highlight_" .. bufnr, { clear = true })
-          vim.api.nvim_create_autocmd("CursorHold", {
-            group = highlight_group,
-            buffer = bufnr,
-            callback = vim.lsp.buf.document_highlight,
-          })
-          vim.api.nvim_create_autocmd("CursorMoved", {
-            group = highlight_group,
-            buffer = bufnr,
-            callback = vim.lsp.buf.clear_references,
-          })
-        end
       end
 
-      -- Python: Pyright configuration
-      vim.lsp.config.pyright = {
-        cmd = { "pyright-langserver", "--stdio" },
-        filetypes = { "python" },
-        root_dir = function(fname)
-          local root = find_root(fname, {
-            "pyrightconfig.json",  -- Prioritize pyrightconfig.json
-            "pyproject.toml",
-            "setup.py",
-            "setup.cfg",
-            "requirements.txt",
-            "Pipfile",
-            ".git",
-          })
-          -- Ensure we return a valid directory
-          if root and vim.fn.isdirectory(root) == 1 then
-            return root
-          end
-          return vim.fn.getcwd()
-        end,
-        on_new_config = function(new_config, new_root_dir)
-          -- Set the working directory for pyright-langserver to the project root
-          new_config.cmd_cwd = new_root_dir
-        end,
-        on_init = function(client)
-          -- Ensure client knows the workspace root
-          if client.config.root_dir then
-            client.config.workspace_folders = {
-              {
-                uri = vim.uri_from_fname(client.config.root_dir),
-                name = vim.fn.fnamemodify(client.config.root_dir, ":t"),
-              }
-            }
-          end
-        end,
+      vim.lsp.config("*", {
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
+
+      vim.lsp.config("pyright", {
+        root_markers = {
+          "pyrightconfig.json",
+          "pyproject.toml",
+          "setup.py",
+          "setup.cfg",
+          "requirements.txt",
+          "Pipfile",
+          ".git",
+        },
         settings = {
           python = {
             analysis = {
@@ -138,32 +78,24 @@ return {
               typeCheckingMode = "basic",
               autoSearchPaths = true,
               useLibraryCodeForTypes = true,
+              autoImportCompletions = true,
               reportMissingImports = true,
             },
           },
         },
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
+      })
 
-      -- Python: Only Pyright is used (pylsp disabled to avoid conflicts)
-
-      -- Lua LSP configuration
-      vim.lsp.config.lua_ls = {
-        cmd = { "lua-language-server" },
-        filetypes = { "lua" },
-        root_dir = function(fname)
-          return find_root(fname, {
-            ".luarc.json",
-            ".luarc.jsonc",
-            ".luacheckrc",
-            ".stylua.toml",
-            "stylua.toml",
-            "selene.toml",
-            "selene.yml",
-            ".git",
-          })
-        end,
+      vim.lsp.config("lua_ls", {
+        root_markers = {
+          ".luarc.json",
+          ".luarc.jsonc",
+          ".luacheckrc",
+          ".stylua.toml",
+          "stylua.toml",
+          "selene.toml",
+          "selene.yml",
+          ".git",
+        },
         settings = {
           Lua = {
             runtime = {
@@ -181,28 +113,14 @@ return {
             },
           },
         },
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
+      })
 
-      -- Bash LSP
-      vim.lsp.config.bashls = {
-        cmd = { "bash-language-server", "start" },
-        filetypes = { "sh", "bash" },
-        root_dir = function(fname)
-          return find_root(fname, { ".git" })
-        end,
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
+      vim.lsp.config("bashls", {
+        root_markers = { ".git" },
+      })
 
-      -- YAML LSP
-      vim.lsp.config.yamlls = {
-        cmd = { "yaml-language-server", "--stdio" },
-        filetypes = { "yaml", "yaml.docker-compose", "yml" },
-        root_dir = function(fname)
-          return find_root(fname, { ".git" })
-        end,
+      vim.lsp.config("yamlls", {
+        root_markers = { ".git" },
         settings = {
           yaml = {
             schemas = {
@@ -211,17 +129,10 @@ return {
             },
           },
         },
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
+      })
 
-      -- JSON LSP
-      vim.lsp.config.jsonls = {
-        cmd = { "vscode-json-language-server", "--stdio" },
-        filetypes = { "json", "jsonc" },
-        root_dir = function(fname)
-          return find_root(fname, { "package.json", ".git" })
-        end,
+      vim.lsp.config("jsonls", {
+        root_markers = { "package.json", ".git" },
         init_options = {
           provideFormatter = true,
         },
@@ -230,17 +141,10 @@ return {
             validate = { enable = true },
           },
         },
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
+      })
 
-      -- HTML LSP
-      vim.lsp.config.html = {
-        cmd = { "vscode-html-language-server", "--stdio" },
-        filetypes = { "html", "htm" },
-        root_dir = function(fname)
-          return find_root(fname, { ".git" })
-        end,
+      vim.lsp.config("html", {
+        root_markers = { ".git" },
         init_options = {
           configurationSection = { "html", "css", "javascript" },
           embeddedLanguages = {
@@ -249,17 +153,10 @@ return {
           },
           provideFormatter = true,
         },
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
+      })
 
-      -- CSS LSP
-      vim.lsp.config.cssls = {
-        cmd = { "vscode-css-language-server", "--stdio" },
-        filetypes = { "css", "scss", "less" },
-        root_dir = function(fname)
-          return find_root(fname, { ".git" })
-        end,
+      vim.lsp.config("cssls", {
+        root_markers = { ".git" },
         settings = {
           css = {
             validate = true,
@@ -271,38 +168,24 @@ return {
             validate = true,
           },
         },
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
+      })
 
-      -- Docker LSP
-      vim.lsp.config.dockerls = {
-        cmd = { "docker-langserver", "--stdio" },
-        filetypes = { "dockerfile" },
-        root_dir = function(fname)
-          return find_root(fname, {
-            "Dockerfile",
-            "dockerfile",
-            "Containerfile",
-            ".git",
-          })
-        end,
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
+      vim.lsp.config("dockerls", {
+        root_markers = {
+          "Dockerfile",
+          "dockerfile",
+          "Containerfile",
+          ".git",
+        },
+      })
 
-      -- TypeScript/JavaScript LSP (vtsls)
-      vim.lsp.config.vtsls = {
-        cmd = { "vtsls", "--stdio" },
-        filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
-        root_dir = function(fname)
-          return find_root(fname, {
-            "package.json",
-            "tsconfig.json",
-            "jsconfig.json",
-            ".git",
-          })
-        end,
+      vim.lsp.config("vtsls", {
+        root_markers = {
+          "package.json",
+          "tsconfig.json",
+          "jsconfig.json",
+          ".git",
+        },
         settings = {
           vtsls = {
             experimental = {
@@ -334,21 +217,14 @@ return {
             },
           },
         },
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
+      })
 
-      -- Go LSP
-      vim.lsp.config.gopls = {
-        cmd = { "gopls" },
-        filetypes = { "go", "gomod", "gowork", "gotmpl" },
-        root_dir = function(fname)
-          return find_root(fname, {
-            "go.work",
-            "go.mod",
-            ".git",
-          })
-        end,
+      vim.lsp.config("gopls", {
+        root_markers = {
+          "go.work",
+          "go.mod",
+          ".git",
+        },
         settings = {
           gopls = {
             analyses = {
@@ -369,35 +245,21 @@ return {
             },
           },
         },
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
+      })
 
-      -- PHP LSP (Intelephense)
-      vim.lsp.config.intelephense = {
-        cmd = { "intelephense", "--stdio" },
-        filetypes = { "php", "blade" },
-        root_dir = function(fname)
-          return find_root(fname, {
-            "composer.json",
-            "composer.lock",
-            ".php-cs-fixer.php",
-            "phpunit.xml",
-            "phpunit.xml.dist",
-            ".git",
-          })
-        end,
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
+      vim.lsp.config("intelephense", {
+        root_markers = {
+          "composer.json",
+          "composer.lock",
+          ".php-cs-fixer.php",
+          "phpunit.xml",
+          "phpunit.xml.dist",
+          ".git",
+        },
+      })
 
-      -- Rust LSP (rust-analyzer)
-      vim.lsp.config.rust_analyzer = {
-        cmd = { "rust-analyzer" },
-        filetypes = { "rust" },
-        root_dir = function(fname)
-          return find_root(fname, { "Cargo.toml", ".git" })
-        end,
+      vim.lsp.config("rust_analyzer", {
+        root_markers = { "Cargo.toml", ".git" },
         settings = {
           ["rust-analyzer"] = {
             checkOnSave = {
@@ -405,62 +267,21 @@ return {
             },
           },
         },
-        capabilities = capabilities,
-        on_attach = on_attach,
-      }
+      })
 
-      -- Auto-start LSP for configured filetypes
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "python", "lua", "sh", "bash", "yaml", "yml", "json", "jsonc", "html", "htm", "css", "scss", "less", "dockerfile", "javascript", "javascriptreact", "typescript", "typescriptreact", "go", "gomod", "gowork", "gotmpl", "php", "blade", "rust" },
-        callback = function(args)
-          local ft = vim.bo[args.buf].filetype
-
-          -- Map filetypes to LSP servers
-          local ft_to_lsp = {
-            python = { "pyright" },  -- Only Pyright (pylsp disabled to avoid conflicts)
-            lua = { "lua_ls" },
-            sh = { "bashls" },
-            bash = { "bashls" },
-            yaml = { "yamlls" },
-            yml = { "yamlls" },
-            json = { "jsonls" },
-            jsonc = { "jsonls" },
-            html = { "html" },
-            htm = { "html" },
-            css = { "cssls" },
-            scss = { "cssls" },
-            less = { "cssls" },
-            dockerfile = { "dockerls" },
-            javascript = { "vtsls" },
-            javascriptreact = { "vtsls" },
-            typescript = { "vtsls" },
-            typescriptreact = { "vtsls" },
-            go = { "gopls" },
-            gomod = { "gopls" },
-            gowork = { "gopls" },
-            gotmpl = { "gopls" },
-            php = { "intelephense" },
-            blade = { "intelephense" },
-            rust = { "rust_analyzer" },
-          }
-
-          local servers = ft_to_lsp[ft]
-          if servers then
-            for _, server in ipairs(servers) do
-              -- Start the LSP server using vim.lsp.start with the config and buffer
-              local config = vim.tbl_deep_extend("force", {}, vim.lsp.config[server])
-              -- Resolve root_dir if it's a function
-              if type(config.root_dir) == "function" then
-                config.root_dir = config.root_dir(vim.api.nvim_buf_get_name(args.buf))
-              end
-              -- Set cmd_cwd to the resolved root_dir so pyright-langserver starts there
-              if config.root_dir then
-                config.cmd_cwd = config.root_dir
-              end
-              vim.lsp.start(config, { bufnr = args.buf })
-            end
-          end
-        end,
+      vim.lsp.enable({
+        "pyright",
+        "lua_ls",
+        "bashls",
+        "yamlls",
+        "jsonls",
+        "html",
+        "cssls",
+        "dockerls",
+        "vtsls",
+        "gopls",
+        "intelephense",
+        "rust_analyzer",
       })
     end,
   },

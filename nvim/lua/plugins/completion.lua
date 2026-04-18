@@ -55,7 +55,6 @@ return {
         }),
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
-          { name = "codeium" },
           { name = "luasnip" },
           { name = "buffer" },
           { name = "path" },
@@ -65,7 +64,7 @@ return {
             mode = "symbol_text",
             maxwidth = 50,
             ellipsis_char = "...",
-            symbol_map = { Codeium = "" },
+            symbol_map = {},
           }),
         },
       })
