@@ -20,6 +20,15 @@ keymap("n", "<leader>wx", ":close<CR>", { desc = "Close split" })
 keymap("n", "<leader>we", "<C-w>=", { desc = "Make splits equal" })
 keymap("n", "<leader>wr", "<cmd>wincmd R<CR>", { desc = "Rotate splits" })
 
+-- Tab management
+keymap("n", "<leader>tn", "<cmd>tabnext<CR>", { desc = "Next tab" })
+keymap("n", "<leader>tp", "<cmd>tabprevious<CR>", { desc = "Previous tab" })
+keymap("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "New tab" })
+keymap("n", "<leader>tc", "<cmd>tabclose<CR>", { desc = "Close tab" })
+for i = 1, 9 do
+  keymap("n", "<leader>t" .. i, i .. "gt", { desc = "Go to tab " .. i })
+end
+
 -- Resize splits with Alt/Option + arrows (better for macOS)
 keymap("n", "<M-Up>", ":resize +2<CR>", { desc = "Increase window height" })
 keymap("n", "<M-Down>", ":resize -2<CR>", { desc = "Decrease window height" })
