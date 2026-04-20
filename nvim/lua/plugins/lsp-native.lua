@@ -258,6 +258,12 @@ return {
         },
       })
 
+      vim.lsp.config("laravel_ls", {
+        root_markers = {
+          "artisan",
+        },
+      })
+
       vim.lsp.config("rust_analyzer", {
         root_markers = { "Cargo.toml", ".git" },
         settings = {
@@ -281,6 +287,7 @@ return {
         "vtsls",
         "gopls",
         "intelephense",
+        "laravel_ls",
         "rust_analyzer",
       })
     end,
