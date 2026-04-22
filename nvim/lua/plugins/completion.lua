@@ -20,6 +20,21 @@ return {
       require("luasnip.loaders.from_vscode").lazy_load()
 
       cmp.setup({
+        enabled = function()
+          local bufnr = vim.api.nvim_get_current_buf()
+          local name = vim.api.nvim_buf_get_name(bufnr)
+          local bt = vim.bo[bufnr].buftype
+
+          if bt == "prompt" or bt == "nofile" then
+            return false
+          end
+
+          if name:match("^//kulala://") then
+            return false
+          end
+
+          return true
+        end,
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)

@@ -115,6 +115,12 @@ keymap("n", "<M-k>", function() scroll_percent("up") end, { desc = "Scroll up 10
 keymap("n", "<M-h>", function() scroll_percent("left") end, { desc = "Scroll left 10%" })
 keymap("n", "<M-l>", function() scroll_percent("right") end, { desc = "Scroll right 10%" })
 
+-- Keep Ctrl-Shift fallbacks for terminals that do not pass Alt cleanly.
+keymap("n", "<C-S-j>", function() scroll_percent("down") end, { desc = "Scroll down 10%" })
+keymap("n", "<C-S-k>", function() scroll_percent("up") end, { desc = "Scroll up 10%" })
+keymap("n", "<C-S-h>", function() scroll_percent("left") end, { desc = "Scroll left 10%" })
+keymap("n", "<C-S-l>", function() scroll_percent("right") end, { desc = "Scroll right 10%" })
+
 -- Debug helper - show current window number
 keymap("n", "<leader>?", function()
   vim.notify("Window " .. vim.fn.winnr() .. " of " .. vim.fn.winnr('$'), vim.log.levels.INFO)

@@ -1,7 +1,7 @@
 local opt = vim.opt
 
--- Add local bin to PATH for custom scripts
-vim.env.PATH = vim.fn.expand("~/.local/bin") .. ":" .. vim.env.PATH
+-- Add local bin and Mason bin to PATH for custom scripts and LSP servers
+vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin:" .. vim.fn.expand("~/.local/bin") .. ":" .. vim.env.PATH
 
 -- General options
 opt.number = true

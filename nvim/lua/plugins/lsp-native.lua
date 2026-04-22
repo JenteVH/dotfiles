@@ -13,6 +13,34 @@ return {
     config = function()
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+      -- Helper function to find root directory
+      local function find_root(fname, patterns)
+        -- Handle both file paths and buffer numbers
+        local filename = fname
+        if type(fname) == "number" then
+          filename = vim.api.nvim_buf_get_name(fname)
+        end
+
+        local path = vim.fs.dirname(filename)
+        local found = vim.fs.find(patterns, {
+          path = path,
+          upward = true,
+          stop = vim.fn.expand("~"),
+        })[1]
+
+        if found then
+          return vim.fs.dirname(found)
+        end
+        return vim.fn.getcwd()
+      end
+
+      -- Custom :LspRestart command
+      vim.api.nvim_create_user_command("LspRestart", function()
+        vim.lsp.stop_client(vim.lsp.get_clients())
+        vim.cmd("edit")
+      end, { desc = "Restart all LSP clients" })
+
+      -- Diagnostic configuration
       vim.diagnostic.config({
         virtual_text = {
           prefix = "●",

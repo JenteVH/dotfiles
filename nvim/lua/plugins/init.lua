@@ -196,10 +196,7 @@ return {
           lualine_a = { "mode" },
           lualine_b = { "branch", "diff", "diagnostics" },
           lualine_c = {
-            {
-              "filename",
-              path = 1,  -- 0 = just filename, 1 = relative path, 2 = absolute path, 3 = absolute with ~
-            }
+            { 'filename', path = 1 }
           },
           lualine_x = {
             "encoding",
@@ -301,6 +298,7 @@ return {
           changedelete = { text = "~" },
           untracked = { text = "┆" },
         },
+        attach_to_untracked = true,
         current_line_blame = true,
         current_line_blame_opts = {
           virt_text = true,
