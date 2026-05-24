@@ -119,6 +119,7 @@ return {
             GitSignsAdd = { fg = colors.green },
             GitSignsChange = { fg = colors.yellow },
             GitSignsDelete = { fg = colors.red },
+            GitSignsCurrentLineBlame = { fg = colors.subtext1, bg = colors.surface0, italic = true },
             DiagnosticVirtualTextError = { fg = colors.red, bg = colors.mantle },
             DiagnosticVirtualTextWarn = { fg = colors.yellow, bg = colors.mantle },
             DiagnosticVirtualTextInfo = { fg = colors.blue, bg = colors.mantle },
@@ -216,7 +217,7 @@ return {
     event = "VeryLazy",
     init = function()
       vim.o.timeout = true
-      vim.o.timeoutlen = 100  -- Very fast response for leader key
+      vim.o.timeoutlen = 200  -- Still fast, but more forgiving for multi-key mappings
     end,
     config = function()
       require("which-key").setup()
@@ -289,14 +290,119 @@ return {
   {
     "lewis6991/gitsigns.nvim",
     config = function()
+      local function git_diff_current_file()
+        local path = vim.api.nvim_buf_get_name(0)
+        if path == "" then
+          vim.notify("No file to diff", vim.log.levels.WARN)
+          return
+        end
+
+        local root_result = vim.system({ "git", "-C", vim.fs.dirname(path), "rev-parse", "--show-toplevel" }, { text = true }):wait()
+        if root_result.code ~= 0 then
+          vim.notify("Not inside a git repository", vim.log.levels.WARN)
+          return
+        end
+
+        local root = vim.trim(root_result.stdout)
+        local relpath = vim.fs.relpath(root, path) or path:gsub("^" .. vim.pesc(root .. "/"), "")
+        local head_result = vim.system({ "git", "-C", root, "show", "HEAD:" .. relpath }, { text = true }):wait()
+        local head_lines = head_result.code == 0 and vim.split(head_result.stdout, "\n", { plain = true }) or {}
+
+        if head_lines[#head_lines] == "" then
+          table.remove(head_lines)
+        end
+
+        local original_win = vim.fn.win_getid()
+        local original_cursor = vim.api.nvim_win_get_cursor(0)
+        vim.cmd("tabedit " .. vim.fn.fnameescape(path))
+        local diff_tab = vim.api.nvim_get_current_tabpage()
+        local current_win = vim.api.nvim_get_current_win()
+        local current_buf = vim.api.nvim_get_current_buf()
+
+        local head_buf = vim.api.nvim_create_buf(false, true)
+        vim.api.nvim_buf_set_name(head_buf, "HEAD:" .. relpath)
+        vim.api.nvim_buf_set_lines(head_buf, 0, -1, false, head_lines)
+        vim.bo[head_buf].buftype = "nofile"
+        vim.bo[head_buf].bufhidden = "wipe"
+        vim.bo[head_buf].buflisted = false
+        vim.bo[head_buf].modifiable = false
+        vim.bo[head_buf].readonly = true
+        vim.bo[head_buf].filetype = vim.bo[current_buf].filetype
+
+        vim.cmd("leftabove vertical new")
+        local head_win = vim.api.nvim_get_current_win()
+        vim.api.nvim_win_set_buf(head_win, head_buf)
+
+        vim.cmd("diffthis")
+        vim.api.nvim_set_current_win(current_win)
+        vim.cmd("diffthis")
+        pcall(vim.api.nvim_win_set_cursor, current_win, original_cursor)
+        vim.cmd("normal! zR")
+        vim.cmd("normal! zz")
+
+        local function cleanup_current_buf_maps()
+          if vim.api.nvim_buf_is_valid(current_buf) then
+            pcall(vim.keymap.del, "n", "q", { buffer = current_buf })
+            pcall(vim.keymap.del, "n", "<Esc>", { buffer = current_buf })
+          end
+        end
+
+        local function close_diff_tab()
+          local cursor = { 1, 0 }
+          if vim.api.nvim_win_is_valid(current_win) then
+            cursor = vim.api.nvim_win_get_cursor(current_win)
+          end
+
+          cleanup_current_buf_maps()
+
+          if vim.api.nvim_tabpage_is_valid(diff_tab) then
+            vim.api.nvim_set_current_tabpage(diff_tab)
+            pcall(vim.cmd, "tabclose")
+          end
+
+          if vim.fn.win_id2win(original_win) ~= 0 then
+            vim.fn.win_gotoid(original_win)
+          elseif vim.api.nvim_buf_is_valid(current_buf) then
+            vim.cmd("buffer " .. current_buf)
+          end
+
+          if vim.api.nvim_get_current_buf() == current_buf then
+            pcall(vim.api.nvim_win_set_cursor, 0, cursor)
+            vim.cmd("normal! zz")
+          end
+        end
+
+        local group = vim.api.nvim_create_augroup("GitDiffTab" .. diff_tab, { clear = true })
+        vim.api.nvim_create_autocmd("TabClosed", {
+          group = group,
+          callback = function()
+            if not vim.api.nvim_tabpage_is_valid(diff_tab) then
+              cleanup_current_buf_maps()
+              pcall(vim.api.nvim_del_augroup_by_id, group)
+            end
+          end,
+          desc = "Clean up git diff tab mappings",
+        })
+
+        vim.keymap.set("n", "q", close_diff_tab, { buffer = head_buf, desc = "Close git diff" })
+        vim.keymap.set("n", "<Esc>", close_diff_tab, { buffer = head_buf, desc = "Close git diff" })
+        vim.keymap.set("n", "q", close_diff_tab, { buffer = current_buf, desc = "Close git diff" })
+        vim.keymap.set("n", "<Esc>", close_diff_tab, { buffer = current_buf, desc = "Close git diff" })
+        vim.keymap.set("n", "]h", "]c", { buffer = head_buf, desc = "Next diff hunk" })
+        vim.keymap.set("n", "[h", "[c", { buffer = head_buf, desc = "Previous diff hunk" })
+      end
+
       require("gitsigns").setup({
+        signcolumn = true,
+        numhl = true,
+        sign_priority = 10,
         signs = {
-          add = { text = "│" },
-          change = { text = "│" },
-          delete = { text = "_" },
-          topdelete = { text = "‾" },
-          changedelete = { text = "~" },
-          untracked = { text = "┆" },
+          add = { text = "▌" },
+          change = { text = "▌" },
+          delete = { text = "▁" },
+          topdelete = { text = "▔" },
+          changedelete = { text = "▌" },
+          untracked = { text = "▌" },
         },
         attach_to_untracked = true,
         current_line_blame = true,
@@ -316,13 +422,13 @@ return {
 
           -- Navigation
           map('n', ']h', function()
-            if vim.wo.diff then return ']h' end
+            if vim.wo.diff then return ']c' end
             vim.schedule(function() gs.next_hunk() end)
             return '<Ignore>'
           end, {expr=true, desc = "Next hunk"})
 
           map('n', '[h', function()
-            if vim.wo.diff then return '[h' end
+            if vim.wo.diff then return '[c' end
             vim.schedule(function() gs.prev_hunk() end)
             return '<Ignore>'
           end, {expr=true, desc = "Previous hunk"})
@@ -335,11 +441,8 @@ return {
           map('n', '<leader>hS', gs.stage_buffer, { desc = "Stage buffer" })
           map('n', '<leader>hu', gs.undo_stage_hunk, { desc = "Undo stage hunk" })
           map('n', '<leader>hR', gs.reset_buffer, { desc = "Reset buffer" })
-          map('n', '<leader>hp', gs.preview_hunk, { desc = "Preview hunk" })
           map('n', '<leader>hb', function() gs.blame_line{full=true} end, { desc = "Blame line" })
-          map('n', '<leader>hd', gs.diffthis, { desc = "Diff this" })
-          map('n', '<leader>hD', function() gs.diffthis('~') end, { desc = "Diff this ~" })
-          map('n', '<leader>gd', gs.toggle_deleted, { desc = "Toggle deleted" })
+          map('n', '<leader>gd', git_diff_current_file, { desc = "Git diff current file" })
 
           -- Text object
           map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = "Select hunk" })

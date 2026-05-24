@@ -43,8 +43,10 @@ return {
       -- Diagnostic configuration
       vim.diagnostic.config({
         virtual_text = {
+          current_line = true,
           prefix = "●",
         },
+        underline = true,
         severity_sort = true,
         float = {
           source = "always",
@@ -60,6 +62,32 @@ return {
       vim.api.nvim_set_hl(0, "LspReferenceText", { bg = "#313244" })
       vim.api.nvim_set_hl(0, "LspReferenceRead", { bg = "#313244" })
       vim.api.nvim_set_hl(0, "LspReferenceWrite", { bg = "#313244", underline = true })
+
+      local function apply_source_action(kind)
+        vim.lsp.buf.code_action({
+          apply = true,
+          context = {
+            only = { kind },
+          },
+        })
+      end
+
+      local function add_missing_imports()
+        local source_import_actions = {
+          go = "source.organizeImports",
+          javascript = "source.addMissingImports.ts",
+          javascriptreact = "source.addMissingImports.ts",
+          typescript = "source.addMissingImports.ts",
+          typescriptreact = "source.addMissingImports.ts",
+        }
+
+        local action = source_import_actions[vim.bo.filetype]
+        if action then
+          apply_source_action(action)
+        else
+          vim.lsp.buf.code_action()
+        end
+      end
 
       local on_attach = function(client, bufnr)
         local function buf_set_keymap(mode, lhs, rhs, desc)
@@ -78,6 +106,10 @@ return {
         buf_set_keymap("n", "<leader>D", vim.lsp.buf.type_definition, "Type definition")
         buf_set_keymap("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
         buf_set_keymap({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code action")
+        buf_set_keymap("n", "<leader>lI", add_missing_imports, "Add missing imports")
+        buf_set_keymap("n", "<leader>lO", function()
+          apply_source_action("source.organizeImports")
+        end, "Organize imports")
         buf_set_keymap("n", "gr", vim.lsp.buf.references, "Find references")
         buf_set_keymap("n", "<leader>f", function()
           vim.lsp.buf.format({ async = true })
@@ -89,7 +121,16 @@ return {
         on_attach = on_attach,
       })
 
+      local pyright_on_attach = vim.lsp.config.pyright and vim.lsp.config.pyright.on_attach
+
       vim.lsp.config("pyright", {
+        capabilities = capabilities,
+        on_attach = function(client, bufnr)
+          if pyright_on_attach then
+            pyright_on_attach(client, bufnr)
+          end
+          on_attach(client, bufnr)
+        end,
         root_markers = {
           "pyrightconfig.json",
           "pyproject.toml",
@@ -223,6 +264,12 @@ return {
             },
           },
           typescript = {
+            suggest = {
+              autoImports = true,
+            },
+            preferences = {
+              includePackageJsonAutoImports = "on",
+            },
             inlayHints = {
               includeInlayParameterNameHints = "all",
               includeInlayParameterNameHintsWhenArgumentMatchesName = false,
@@ -234,6 +281,9 @@ return {
             },
           },
           javascript = {
+            suggest = {
+              autoImports = true,
+            },
             inlayHints = {
               includeInlayParameterNameHints = "all",
               includeInlayParameterNameHintsWhenArgumentMatchesName = false,
@@ -275,18 +325,44 @@ return {
         },
       })
 
-      vim.lsp.config("intelephense", {
-        root_markers = {
-          "composer.json",
-          "composer.lock",
-          ".php-cs-fixer.php",
-          "phpunit.xml",
-          "phpunit.xml.dist",
-          ".git",
-        },
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "php",
+        callback = function(args)
+          local root_dir = vim.fs.root(args.buf, { ".git" })
+            or vim.fs.root(args.buf, { "composer.json", "composer.lock", ".php-cs-fixer.php", "phpunit.xml", "phpunit.xml.dist" })
+
+          if not root_dir then
+            return
+          end
+
+          vim.lsp.start({
+            name = "intelephense-manual",
+            cmd = { "intelephense", "--stdio" },
+            root_dir = root_dir,
+            capabilities = vim.lsp.protocol.make_client_capabilities(),
+            on_attach = on_attach,
+            settings = {
+              intelephense = {
+                files = {
+                  exclude = {
+                    "**/.git/**",
+                    "**/.svn/**",
+                    "**/.hg/**",
+                    "**/CVS/**",
+                    "**/.DS_Store/**",
+                    "**/node_modules/**",
+                    "**/bower_components/**",
+                    "**/vendor/hinscha/**",
+                  },
+                },
+              },
+            },
+          })
+        end,
       })
 
       vim.lsp.config("laravel_ls", {
+        workspace_required = true,
         root_markers = {
           "artisan",
         },
@@ -314,7 +390,6 @@ return {
         "dockerls",
         "vtsls",
         "gopls",
-        "intelephense",
         "laravel_ls",
         "rust_analyzer",
       })

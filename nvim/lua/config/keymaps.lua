@@ -5,10 +5,10 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- Better window navigation
-keymap("n", "<C-h>", "<C-w>h", { desc = "Navigate left" })
-keymap("n", "<C-j>", "<C-w>j", { desc = "Navigate down" })
-keymap("n", "<C-k>", "<C-w>k", { desc = "Navigate up" })
-keymap("n", "<C-l>", "<C-w>l", { desc = "Navigate right" })
+keymap({ "n", "x" }, "<C-h>", "<Esc><C-w>h", { desc = "Navigate left" })
+keymap({ "n", "x" }, "<C-j>", "<Esc><C-w>j", { desc = "Navigate down" })
+keymap({ "n", "x" }, "<C-k>", "<Esc><C-w>k", { desc = "Navigate up" })
+keymap({ "n", "x" }, "<C-l>", "<Esc><C-w>l", { desc = "Navigate right" })
 
 -- Fix for terminals that send backspace for C-h
 keymap("n", "<BS>", "<C-w>h", { desc = "Navigate left (backspace fix)" })
@@ -52,6 +52,63 @@ keymap("v", ">", ">gv", { desc = "Indent right" })
 -- Better paste
 keymap("v", "p", '"_dP', { desc = "Paste without yanking" })
 
+-- Wrap selected text
+local function wrap_selection(left, right)
+  local visual_mode = vim.api.nvim_get_mode().mode
+  local start_pos = vim.fn.getpos("v")
+  local end_pos = vim.fn.getpos(".")
+  local start_row = start_pos[2] - 1
+  local start_col = start_pos[3] - 1
+  local end_row = end_pos[2] - 1
+  local end_col = end_pos[3] - 1
+
+  if start_row > end_row or (start_row == end_row and start_col > end_col) then
+    start_row, end_row = end_row, start_row
+    start_col, end_col = end_col, start_col
+  end
+
+  vim.cmd("normal! \27")
+
+  if visual_mode == "V" then
+    start_col = 0
+    end_col = #(vim.api.nvim_buf_get_lines(0, end_row, end_row + 1, false)[1] or "")
+  elseif visual_mode == "\22" then
+    for row = end_row, start_row, -1 do
+      local line = vim.api.nvim_buf_get_lines(0, row, row + 1, false)[1] or ""
+      local row_start_col = math.min(start_col, #line)
+      local row_end_col = math.min(end_col + 1, #line)
+      local selected = vim.api.nvim_buf_get_text(0, row, row_start_col, row, row_end_col, {})
+      selected[1] = left .. selected[1] .. right
+      vim.api.nvim_buf_set_text(0, row, row_start_col, row, row_end_col, selected)
+    end
+    return
+  else
+    local end_line = vim.api.nvim_buf_get_lines(0, end_row, end_row + 1, false)[1] or ""
+    end_col = math.min(end_col + 1, #end_line)
+  end
+
+  local selected = vim.api.nvim_buf_get_text(0, start_row, start_col, end_row, end_col, {})
+  selected[1] = left .. selected[1]
+  selected[#selected] = selected[#selected] .. right
+  vim.api.nvim_buf_set_text(0, start_row, start_col, end_row, end_col, selected)
+end
+
+local wrappers = {
+  { '<leader>s"', '"', '"', "double quotes" },
+  { "<leader>s'", "'", "'", "single quotes" },
+  { "<leader>s`", "`", "`", "backticks" },
+  { "<leader>s{", "{", "}", "curly braces" },
+  { "<leader>s[", "[", "]", "square brackets" },
+  { "<leader>s(", "(", ")", "parentheses" },
+  { "<leader>s<lt>", "<", ">", "angle brackets" },
+}
+
+for _, wrapper in ipairs(wrappers) do
+  keymap("x", wrapper[1], function()
+    wrap_selection(wrapper[2], wrapper[3])
+  end, { desc = "Wrap selection in " .. wrapper[4] })
+end
+
 -- Quick quit
 keymap("n", "<leader>Q", ":qa!<CR>", { desc = "Quit all without saving" })
 
@@ -62,8 +119,9 @@ keymap("n", "<leader>yp", function() vim.fn.setreg("+", vim.fn.expand("%:p")) en
 keymap("n", "<leader>yr", function() vim.fn.setreg("+", vim.fn.expand("%")) end, { desc = "Copy relative path" })
 
 -- Buffer management
-keymap("n", "<leader>c", ":bdelete<CR>", { desc = "Close buffer" })
-keymap("n", "<leader>C", ":bdelete!<CR>", { desc = "Force close buffer" })
+keymap("n", "<leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })
+keymap("n", "<leader>C", function() Snacks.bufdelete({ force = true }) end, { desc = "Force close buffer" })
+keymap("n", "<leader>cbo", ":BufferLineCloseOthers<CR>", { desc = "Close other buffers" })
 
 -- Save file
 keymap("n", "<leader>w", ":w<CR>", { desc = "Save file" })

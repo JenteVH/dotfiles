@@ -32,6 +32,8 @@ opt.smartcase = true
 opt.completeopt = "menuone,noselect"
 opt.pumheight = 10
 opt.hidden = true  -- Allow hidden buffers (don't force save when switching)
+opt.ttimeoutlen = 150  -- Give Alt/Meta key sequences enough time to arrive
+opt.autoread = true  -- Reload files changed outside Neovim, e.g. from LazyGit
 
 -- Python specific
 opt.pyxversion = 3

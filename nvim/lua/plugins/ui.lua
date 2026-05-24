@@ -57,6 +57,9 @@ return {
             quit_on_open = false,
             resize_window = true,
           },
+          change_dir = {
+            restrict_above_cwd = true,
+          },
         },
       })
 
@@ -91,6 +94,8 @@ return {
       -- Keymaps
       vim.keymap.set("n", "<S-l>", ":BufferLineCycleNext<CR>", { desc = "Next buffer" })
       vim.keymap.set("n", "<S-h>", ":BufferLineCyclePrev<CR>", { desc = "Previous buffer" })
+      vim.keymap.set("n", "<leader>bL", ":BufferLineMoveNext<CR>", { desc = "Move buffer right" })
+      vim.keymap.set("n", "<leader>bH", ":BufferLineMovePrev<CR>", { desc = "Move buffer left" })
       vim.keymap.set("n", "<leader>bp", ":BufferLineTogglePin<CR>", { desc = "Pin buffer" })
       vim.keymap.set("n", "<leader>bP", ":BufferLinePickClose<CR>", { desc = "Pick buffer to close" })
       vim.keymap.set("n", "<leader>bo", ":BufferLineCloseOthers<CR>", { desc = "Close other buffers" })

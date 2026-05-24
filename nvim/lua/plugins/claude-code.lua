@@ -5,7 +5,12 @@ return {
     dependencies = {
       "folke/snacks.nvim",
     },
-    config = true, -- Use default configuration
+    opts = function()
+      return {
+        auto_start = #vim.api.nvim_list_uis() > 0,
+      }
+    end,
+    config = true,
     keys = {
       { "<leader>a", group = "Claude AI" },
       { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
