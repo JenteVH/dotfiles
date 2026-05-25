@@ -112,7 +112,30 @@ end
 -- Quick quit
 keymap("n", "<leader>Q", ":qa!<CR>", { desc = "Quit all without saving" })
 
--- Format is handled by LSP config (lua/plugins/lsp.lua)
+-- Format buffer: LSP first, then filetype-specific fallback
+keymap("n", "<leader>f", function()
+  local clients = vim.lsp.get_clients({ bufnr = 0, dynamic_registration = false })
+  local formatters = vim.iter(clients):filter(function(c)
+    return c.supports_method("textDocument/formatting")
+  end):totable()
+
+  if #formatters > 0 then
+    vim.lsp.buf.format({ async = true })
+    return
+  end
+
+  local ft = vim.bo.filetype
+  if ft == "json" then
+    local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    local result = vim.fn.system("python3 -m json.tool", lines)
+    if vim.v.shell_error == 0 then
+      local formatted = vim.split(result, "\n", { trimempty = true })
+      vim.api.nvim_buf_set_lines(0, 0, -1, false, formatted)
+    end
+  else
+    vim.notify("No formatter available for " .. ft, vim.log.levels.WARN)
+  end
+end, { desc = "Format document" })
 
 -- Copy file path
 keymap("n", "<leader>yp", function() vim.fn.setreg("+", vim.fn.expand("%:p")) end, { desc = "Copy full path" })

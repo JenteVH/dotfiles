@@ -63,3 +63,30 @@ autocmd({ "BufRead", "BufNewFile" }, {
     vim.bo.filetype = "python"
   end,
 })
+
+-- Detect JSON content in text files
+autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.txt",
+  group = augroup("json_detect", { clear = true }),
+  callback = function()
+    local line = vim.fn.getline(1)
+    if line:match("^%s*[%[%{]") then
+      vim.bo.filetype = "json"
+    end
+  end,
+})
+
+-- Format JSON via python when jsonls isn't active
+autocmd("BufWritePre", {
+  pattern = "*.json",
+  callback = function()
+    if not vim.lsp.get_clients({ bufnr = 0, name = "jsonls" })[1] then
+      local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+      local result = vim.fn.system("python3 -m json.tool", lines)
+      if vim.v.shell_error == 0 then
+        local formatted = vim.split(result, "\n", { trimempty = true })
+        vim.api.nvim_buf_set_lines(0, 0, -1, false, formatted)
+      end
+    end
+  end,
+})

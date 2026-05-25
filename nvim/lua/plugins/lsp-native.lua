@@ -111,9 +111,6 @@ return {
           apply_source_action("source.organizeImports")
         end, "Organize imports")
         buf_set_keymap("n", "gr", vim.lsp.buf.references, "Find references")
-        buf_set_keymap("n", "<leader>f", function()
-          vim.lsp.buf.format({ async = true })
-        end, "Format document")
       end
 
       vim.lsp.config("*", {
