@@ -127,10 +127,39 @@ return {
         },
       })
 
-      -- Keymaps
-      vim.keymap.set("n", "<leader>tf", "<cmd>ToggleTerm direction=float<CR>", { desc = "Toggle floating terminal" })
-      vim.keymap.set("n", "<leader>th", "<cmd>ToggleTerm direction=horizontal<CR>", { desc = "Toggle horizontal terminal" })
-      vim.keymap.set("n", "<leader>tv", "<cmd>ToggleTerm direction=vertical<CR>", { desc = "Toggle vertical terminal" })
+      local function focus_editor_window()
+        local current_win = vim.api.nvim_get_current_win()
+        local current_buf = vim.api.nvim_win_get_buf(current_win)
+        if vim.bo[current_buf].buftype ~= "terminal" then
+          return
+        end
+
+        for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+          local buf = vim.api.nvim_win_get_buf(win)
+          local win_config = vim.api.nvim_win_get_config(win)
+          if vim.bo[buf].buftype ~= "terminal" and not (win_config.relative and win_config.relative ~= "") then
+            vim.api.nvim_set_current_win(win)
+            return
+          end
+        end
+      end
+
+      local function toggle_terminal(direction)
+        return function()
+          if direction ~= "float" then
+            focus_editor_window()
+          end
+
+          vim.cmd(vim.v.count1 .. "ToggleTerm direction=" .. direction)
+        end
+      end
+
+      -- Prefix with a count to open another terminal, e.g. 2<leader>th.
+      vim.keymap.set("n", "<leader>tf", toggle_terminal("float"), { desc = "Toggle floating terminal" })
+      vim.keymap.set("n", "<leader>th", toggle_terminal("horizontal"), { desc = "Toggle horizontal terminal" })
+      vim.keymap.set("n", "<leader>tv", toggle_terminal("vertical"), { desc = "Toggle vertical terminal" })
+      vim.keymap.set("n", "<leader>ts", "<cmd>TermSelect<CR>", { desc = "Select terminal" })
+      vim.keymap.set("n", "<leader>ta", "<cmd>ToggleTermToggleAll<CR>", { desc = "Toggle all terminals" })
     end,
   },
 

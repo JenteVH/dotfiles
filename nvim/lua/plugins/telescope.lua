@@ -11,6 +11,7 @@ return {
       },
       {
         "nvim-telescope/telescope-frecency.nvim",
+        version = "^1.0.0",
         dependencies = {
           "kkharji/sqlite.lua",
         },
