@@ -1,0 +1,337 @@
+// -*- mode: jsonc -*-
+[
+{
+    "layer": "top",
+    "position": "top",
+    "height": 34,
+    "spacing": 0,
+    "output": ["DP-3", "HDMI-A-2", "HDMI-A-3"],
+
+    // Module layout
+    "modules-left": [
+        "custom/workspaces",
+        "wlr/taskbar",
+        "hyprland/submap",
+        "custom/media"
+    ],
+    "modules-center": [
+        "hyprland/window"
+    ],
+    "modules-right": [
+        "tray",
+        "custom/nixos-update",
+        "custom/profile-update",
+        "bluetooth",
+        "network",
+        "pulseaudio",
+        "cpu",
+        "memory",
+        "disk",
+        "custom/temps",
+        "hyprland/language",
+        "clock",
+        "custom/power"
+    ],
+
+    // Custom fast workspaces - direct IPC listener, no blocking queries
+    "custom/workspaces": {
+        "exec": "WAYBAR_OUTPUT_NAME=\"$WAYBAR_OUTPUT_NAME\" ~/.config/waybar/scripts/workspaces.py",
+        "return-type": "json"
+    },
+
+    // Hyprland Workspaces (disabled - has ~100ms delay due to blocking IPC calls)
+    "hyprland/workspaces-disabled": {
+        "disable-scroll": false,
+        "all-outputs": false,
+        "active-only": false,
+        "show-special": false,
+        "warp-on-scroll": false,
+        "format": "{icon}",
+        "format-icons": {
+            "1": "1",
+            "2": "2",
+            "3": "3",
+            "4": "4",
+            "5": "5",
+            "6": "6",
+            "7": "7",
+            "8": "8",
+            "9": "9",
+            "10": "10",
+            "11": "1",
+            "12": "2",
+            "13": "3",
+            "14": "4",
+            "15": "5",
+            "16": "6",
+            "17": "7",
+            "18": "8",
+            "19": "9",
+            "20": "10",
+            "21": "1",
+            "22": "2",
+            "23": "3",
+            "24": "4",
+            "25": "5",
+            "26": "6",
+            "27": "7",
+            "28": "8",
+            "29": "9",
+            "30": "10",
+            "31": "1",
+            "32": "2",
+            "33": "3",
+            "34": "4",
+            "35": "5",
+            "36": "6",
+            "37": "7",
+            "38": "8",
+            "39": "9",
+            "40": "10",
+            "urgent": "",
+            "default": ""
+        }
+    },
+
+    // Hyprland Window Title
+    "hyprland/window": {
+        "format": "{}",
+        "max-length": 60,
+        "separate-outputs": true
+    },
+
+    // Hyprland Submap (keybind modes)
+    "hyprland/submap": {
+        "format": "<span style=\"italic\">  {}</span>",
+        "tooltip": false
+    },
+
+    // Hyprland Language/Keyboard Layout
+    "hyprland/language": {
+        "format": " {}",
+        "format-en": "EN",
+        "format-us": "US",
+        "keyboard-name": "at-translated-set-2-keyboard"
+    },
+
+    // System Tray
+    "tray": {
+        "icon-size": 18,
+        "spacing": 8,
+        "show-passive-items": true
+    },
+
+    // Clock & Calendar
+    "clock": {
+        "interval": 1,
+        "format": "{:%H:%M:%S}",
+        "format-alt": "{:%Y-%m-%d %H:%M}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "year",
+            "mode-mon-col": 3,
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "format": {
+                "months": "<span color='#ffead3'><b>{}</b></span>",
+                "days": "<span color='#ecc6d9'><b>{}</b></span>",
+                "weeks": "<span color='#99ffdd'><b>W{}</b></span>",
+                "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+                "today": "<span color='#ff6699'><b><u>{}</u></b></span>"
+            }
+        },
+        "actions": {
+            "on-click-right": "mode",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        }
+    },
+
+    // CPU Usage
+    "cpu": {
+        "interval": 2,
+        "format": " CPU {usage}%",
+        "tooltip": true,
+        "on-click": "kitty --class btop btop"
+    },
+
+    // Memory Usage
+    "memory": {
+        "interval": 2,
+        "format": " RAM {percentage}%",
+        "tooltip-format": "RAM: {used:0.1f}GB / {total:0.1f}GB\nSwap: {swapUsed:0.1f}GB / {swapTotal:0.1f}GB",
+        "on-click": "kitty --class btop btop"
+    },
+
+    // Disk Usage
+    "disk": {
+        "interval": 30,
+        "format": " Disk {percentage_used}%",
+        "path": "/",
+        "tooltip-format": "Used: {used} / {total}\nFree: {free} ({percentage_free}%)",
+        "on-click": "kitty --class baobab baobab"
+    },
+
+    // Temperature (custom multi-sensor)
+    "custom/temps": {
+        "exec": "~/.config/waybar/scripts/temperatures.sh",
+        "return-type": "json",
+        "interval": 3,
+        "tooltip": true
+    },
+
+    // Network
+    "network": {
+        "interval": 2,
+        "format-wifi": " {signalStrength}%",
+        "format-ethernet": "󰈀 {ipaddr}",
+        "format-linked": "󰈀 {ifname} (No IP)",
+        "format-disconnected": "󰌙 Disconnected",
+        "tooltip-format": "{ifname} via {gwaddr}\n {essid} ({signalStrength}%)\nIP: {ipaddr}\nUp: {bandwidthUpBytes} Down: {bandwidthDownBytes}",
+        "tooltip-format-ethernet": "{ifname}\nIP: {ipaddr}\nUp: {bandwidthUpBytes} Down: {bandwidthDownBytes}",
+        "on-click": "kitty --class nmtui nmtui"
+    },
+
+    // Bluetooth
+    "bluetooth": {
+        "format": " {status}",
+        "format-connected": " {num_connections}",
+        "format-disabled": "",
+        "tooltip-format": "{controller_alias}\t{controller_address}",
+        "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+        "on-click": "blueman-manager"
+    },
+
+    // PulseAudio
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": " {volume}%",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-bluetooth-muted": "  {volume}%",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "scroll-step": 5,
+        "on-click": "pavucontrol",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "tooltip-format": "{desc}\nVolume: {volume}%"
+    },
+
+    // Media Player
+    "custom/media": {
+        "format": "{icon} {text}",
+        "return-type": "json",
+        "max-length": 40,
+        "format-icons": {
+            "spotify": "",
+            "default": "🎵"
+        },
+        "escape": true,
+        "exec": "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F 2>/dev/null",
+        "on-click": "playerctl play-pause",
+        "on-scroll-up": "playerctl next",
+        "on-scroll-down": "playerctl previous"
+    },
+
+    // NixOS System Updates
+    "custom/nixos-update": {
+        "format": "󱄅",
+        "tooltip": true,
+        "tooltip-format": "NixOS system update",
+        "on-click": "kitty --hold --class updates sh -c 'sudo nix-env --delete-generations +3 -p /nix/var/nix/profiles/system && sudo nix-collect-garbage && sudo nixos-rebuild switch --flake /etc/nixos#nixos'"
+    },
+
+    // User Profile Updates
+    "custom/profile-update": {
+        "format": "",
+        "tooltip": true,
+        "tooltip-format": "Update user profile packages",
+        "on-click": "kitty --hold --class updates sh -c 'nix profile upgrade \".*\"'"
+    },
+
+    // Taskbar - shows all running applications
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 18,
+        "icon-theme": "Papirus-Dark",
+        "tooltip-format": "{title}",
+        "on-click": "activate",
+        "on-click-middle": "close",
+        "ignore-list": [],
+        "app_ids-mapping": {
+            "firefoxdeveloperedition": "firefox-developer-edition"
+        },
+        "rewrite": {
+            "Firefox Web Browser": "Firefox",
+            "Foot Server": "Terminal"
+        }
+    },
+
+    // Power Menu
+    "custom/power": {
+        "format": "⏻",
+        "tooltip": false,
+        "on-click": "~/.config/waybar/scripts/power-menu.sh"
+    }
+},
+
+{
+    "layer": "top",
+    "position": "top",
+    "height": 34,
+    "spacing": 0,
+    "output": ["DP-2"],
+
+    "modules-left": [
+        "custom/workspaces",
+        "wlr/taskbar"
+    ],
+    "modules-center": [
+        "hyprland/window"
+    ],
+    "modules-right": [
+        "clock"
+    ],
+
+    "custom/workspaces": {
+        "exec": "WAYBAR_OUTPUT_NAME=\"$WAYBAR_OUTPUT_NAME\" ~/.config/waybar/scripts/workspaces.py",
+        "return-type": "json"
+    },
+
+    "hyprland/window": {
+        "format": "{}",
+        "max-length": 40,
+        "separate-outputs": true
+    },
+
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 18,
+        "icon-theme": "Papirus-Dark",
+        "tooltip-format": "{title}",
+        "on-click": "activate",
+        "on-click-middle": "close",
+        "ignore-list": [],
+        "app_ids-mapping": {
+            "firefoxdeveloperedition": "firefox-developer-edition"
+        },
+        "rewrite": {
+            "Firefox Web Browser": "Firefox",
+            "Foot Server": "Terminal"
+        }
+    },
+
+    "clock": {
+        "interval": 1,
+        "format": "{:%H:%M:%S}",
+        "format-alt": "{:%Y-%m-%d %H:%M}"
+    }
+}
+]
