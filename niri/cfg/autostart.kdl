@@ -1,0 +1,14 @@
+// ────────────── Startup Applications ──────────────
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Miscellaneous#spawn-sh-at-startup
+
+    // polkit agent must be a niri child (→ seat0 session) with an X display; niri's
+    // xwayland-satellite serves :0. The user-manager service can't (wrong session +
+    // no DISPLAY) → it crash-looped → pkexec returned exit 127. Wait for :0 then launch.
+    spawn-sh-at-startup "until [ -e /tmp/.X11-unix/X0 ]; do sleep 0.3; done; exec env DISPLAY=:0 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+    spawn-sh-at-startup "systemctl --user start noctalia-shell.service"
+    spawn-at-startup "xwayland-satellite" ":0"
+    // Wallpaper is rendered by noctalia-shell from ~/Pictures/Wallpapers (pick via:
+    //   qs -c noctalia-shell ipc call wallpaper toggle ).
+    // Old swaybg solid-color fallback retired so it can't occlude noctalia's wallpaper layer.
+    // To restore a solid-color fallback: uncomment the line below.
+    // spawn-at-startup "swaybg" "-i" "/dev/null" "-c" "#1e1e2e"

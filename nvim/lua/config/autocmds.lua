@@ -36,12 +36,23 @@ autocmd("FileType", {
   end,
 })
 
--- Auto format on save for Python files
+autocmd("FileType", {
+  pattern = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+  callback = function()
+    vim.opt_local.expandtab = true
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.tabstop = 2
+    vim.opt_local.softtabstop = 2
+  end,
+})
+
+-- Auto format on save for Python files (black via conform, from the project venv)
 autocmd("BufWritePre", {
   pattern = "*.py",
-  callback = function()
-    if vim.lsp.get_clients({ bufnr = 0 })[1] then
-      vim.lsp.buf.format()
+  callback = function(args)
+    local ok, conform = pcall(require, "conform")
+    if ok then
+      conform.format({ bufnr = args.buf, timeout_ms = 3000 })
     end
   end,
 })

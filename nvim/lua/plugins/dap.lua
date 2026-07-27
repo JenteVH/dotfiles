@@ -94,6 +94,64 @@ return {
         })
       end
 
+      -- C/C++ debugger: lldb-dap ships with the Arch `lldb` package.
+      -- Falls back to the VSCode-style codelldb adapter if present.
+      dap.adapters.lldb = {
+        type = "executable",
+        command = vim.fn.exepath("lldb-dap") or "lldb-dap",
+        name = "lldb",
+      }
+      dap.adapters.codelldb = {
+        type = "server",
+        port = "${port}",
+        executable = {
+          command = vim.fn.exepath("codelldb") or "codelldb",
+          args = { "--port", "${port}" },
+        },
+      }
+
+      dap.configurations.cpp = {
+        {
+          name = "Launch (lldb)",
+          type = "lldb",
+          request = "launch",
+          program = function()
+            return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/build/", "file")
+          end,
+          cwd = "${workspaceFolder}",
+          stopOnEntry = false,
+          args = {},
+          runInTerminal = false,
+          env = {},
+        },
+        {
+          name = "Launch with args (lldb)",
+          type = "lldb",
+          request = "launch",
+          program = function()
+            return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/build/", "file")
+          end,
+          cwd = "${workspaceFolder}",
+          args = function()
+            local args = vim.fn.input("Arguments: ")
+            return vim.split(args, " +", { trimempty = true })
+          end,
+          runInTerminal = false,
+        },
+        {
+          name = "Attach (lldb, pid)",
+          type = "lldb",
+          request = "attach",
+          pid = function()
+            return tonumber(vim.fn.input("PID: "))
+          end,
+          cwd = "${workspaceFolder}",
+        },
+      }
+      -- Share the same configurations for C and Objective-C.
+      dap.configurations.c = dap.configurations.cpp
+      dap.configurations.objc = dap.configurations.cpp
+
       dap.configurations.python = {
         {
           type = "python",

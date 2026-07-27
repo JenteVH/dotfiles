@@ -112,8 +112,14 @@ end
 -- Quick quit
 keymap("n", "<leader>Q", ":qa!<CR>", { desc = "Quit all without saving" })
 
--- Format buffer: LSP first, then filetype-specific fallback
+-- Format buffer: conform (black, ...) first, then LSP, then filetype-specific fallback
 keymap("n", "<leader>f", function()
+  local conform_ok, conform = pcall(require, "conform")
+  if conform_ok and #conform.list_formatters(0) > 0 then
+    conform.format({ async = true })
+    return
+  end
+
   local clients = vim.lsp.get_clients({ bufnr = 0, dynamic_registration = false })
   local formatters = vim.iter(clients):filter(function(c)
     return c.supports_method("textDocument/formatting")

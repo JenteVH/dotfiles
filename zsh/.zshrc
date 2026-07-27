@@ -1,40 +1,51 @@
-# Add ~/.local/bin to PATH
-export PATH="$HOME/.local/bin:$PATH"
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
-# JetBrains Toolbox
-export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/scripts"
+source /usr/share/cachyos-zsh-config/cachyos-config.zsh
 
-# Initialize Starship prompt
-eval "$(starship init zsh)"
+# Disable zsh command autocorrection prompts.
+unsetopt correct
+unsetopt correct_all
 
-# NVM (Node Version Manager)
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+if [[ "${DOCKER_HOST:-}" == "unix://${XDG_RUNTIME_DIR:-/run/user/$UID}/podman/podman.sock" ]]; then
+  unset DOCKER_HOST
+fi
 
-# History settings
-HISTSIZE=10000
-SAVEHIST=10000
-HISTFILE=~/.zsh_history
-setopt SHARE_HISTORY
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_SPACE
-
-# Better completion
-autoload -Uz compinit && compinit
-
-# Key bindings for autosuggestions
-bindkey '^[[1;5C' forward-word        # Ctrl+Right (accept word from suggestion)
-bindkey '^[[1;5D' backward-kill-word  # Ctrl+Left (delete previous word)
-bindkey '^[f' forward-word            # Alt+F
-bindkey '^[b' backward-word           # Alt+B
-
-# Cycle through history with Ctrl+Up/Down based on what's typed
-autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
-bindkey '^[[1;5A' up-line-or-beginning-search    # Ctrl+Up
-bindkey '^[[1;5B' down-line-or-beginning-search  # Ctrl+Down
-
-# direnv hook for automatic environment loading
+# direnv
 eval "$(direnv hook zsh)"
+
+if [[ -d "$HOME/.lando/bin" && ":$PATH:" != *":$HOME/.lando/bin:"* ]]; then
+  export PATH="$HOME/.lando/bin:$PATH"
+fi
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Default editor (used by lazysql external editor, git, etc.)
+export EDITOR=nvim
+export VISUAL=nvim
+
+# Local binaries (e.g. self-built lazysql in ~/Documents/OSS) take precedence
+if [[ -d "$HOME/go/bin" && ":$PATH:" != *":$HOME/go/bin:"* ]]; then
+  export PATH="$HOME/go/bin:$PATH"
+fi
+
+# pipx / pip --user binaries (conan, etc.)
+if [[ -d "$HOME/.local/bin" && ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+
+if [[ -d "$HOME/.cargo/bin" && ":$PATH:" != *":$HOME/.cargo/bin:"* ]]; then
+  export PATH="$HOME/.cargo/bin:$PATH"
+fi
+
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+export ANDROID_HOME="$HOME/Android/Sdk"
+export PATH="$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools"
+
+# Machine-local secrets and overrides (not version-controlled)
+[[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local

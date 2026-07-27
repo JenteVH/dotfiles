@@ -34,8 +34,13 @@ opt.pumheight = 10
 opt.hidden = true  -- Allow hidden buffers (don't force save when switching)
 opt.ttimeoutlen = 150  -- Give Alt/Meta key sequences enough time to arrive
 opt.autoread = true  -- Reload files changed outside Neovim, e.g. from LazyGit
+opt.clipboard = "unnamedplus"  -- Yank/delete/paste use the system clipboard
 
 -- Python specific
+local python3 = vim.fn.exepath("python3")
+if python3 ~= "" then
+  vim.g.python3_host_prog = python3
+end
 opt.pyxversion = 3
 
 -- Folding (configured by nvim-ufo plugin)

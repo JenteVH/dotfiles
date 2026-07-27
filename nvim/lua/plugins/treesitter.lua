@@ -2,6 +2,7 @@ return {
   -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "master",
     build = ":TSUpdate",
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
@@ -52,6 +53,8 @@ return {
           "php",
           "php_only",
           "blade",
+          "cpp",
+          "c",
         },
         sync_install = false,
         auto_install = true,

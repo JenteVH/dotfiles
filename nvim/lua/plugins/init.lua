@@ -27,27 +27,6 @@ local palette = {
   crust = "#0b0f16",
 }
 
-local function mode_theme(accent)
-  return {
-    a = { bg = accent, fg = palette.crust, gui = "bold" },
-    b = { bg = palette.surface0, fg = palette.text },
-    c = { bg = palette.mantle, fg = palette.subtext1 },
-  }
-end
-
-local lualine_theme = {
-  normal = mode_theme(palette.teal),
-  insert = mode_theme(palette.blue),
-  visual = mode_theme(palette.mauve),
-  replace = mode_theme(palette.red),
-  command = mode_theme(palette.peach),
-  inactive = {
-    a = { bg = palette.crust, fg = palette.overlay0, gui = "bold" },
-    b = { bg = palette.crust, fg = palette.overlay0 },
-    c = { bg = palette.crust, fg = palette.overlay1 },
-  },
-}
-
 return {
   -- Colorscheme
   {
@@ -57,7 +36,7 @@ return {
     priority = 1000,
     config = function()
       require("catppuccin").setup({
-        flavour = "mocha",
+        flavour = "latte",
         transparent_background = false,
         color_overrides = {
           mocha = palette,
@@ -112,10 +91,6 @@ return {
             BufferLineSeparatorSelected = { fg = colors.crust, bg = colors.base },
             BufferLineModifiedSelected = { fg = colors.peach, bg = colors.base },
             BufferLineCloseButtonSelected = { fg = colors.red, bg = colors.base },
-            DiffAdd = { bg = "#142b24" },
-            DiffChange = { bg = "#1c2740" },
-            DiffDelete = { bg = "#31171d" },
-            DiffText = { bg = "#243759" },
             GitSignsAdd = { fg = colors.green },
             GitSignsChange = { fg = colors.yellow },
             GitSignsDelete = { fg = colors.red },
@@ -143,7 +118,34 @@ return {
           bufferline = true,
         },
       })
-      vim.cmd.colorscheme("catppuccin")
+    end,
+  },
+
+  -- Rosé Pine colorscheme
+  {
+    "rose-pine/neovim",
+    name = "rose-pine",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("rose-pine").setup({
+        variant = "dawn",
+        palette = {
+          dawn = {
+            text = "#3f3b57",
+            muted = "#746f82",
+            subtle = "#6d6984",
+            love = "#a2596e",
+            gold = "#ad711d",
+            rose = "#ac5f5c",
+            pine = "#245e76",
+            foam = "#4d858f",
+            iris = "#826e98",
+            leaf = "#62817b",
+          },
+        },
+      })
+      vim.cmd.colorscheme("rose-pine-dawn")
     end,
   },
 
@@ -189,7 +191,7 @@ return {
     config = function()
       require("lualine").setup({
         options = {
-          theme = lualine_theme,
+          theme = "auto",
           section_separators = { left = "", right = "" },
           component_separators = { left = "", right = "" },
         },

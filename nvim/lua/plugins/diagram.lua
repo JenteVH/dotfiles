@@ -1,7 +1,12 @@
+local function has_ui()
+  return #vim.api.nvim_list_uis() > 0
+end
+
 return {
   {
     "3rd/image.nvim",
     lazy = true,
+    cond = has_ui,
     opts = {
       backend = "kitty",
       processor = "magick_cli",
@@ -9,6 +14,7 @@ return {
   },
   {
     "3rd/diagram.nvim",
+    cond = has_ui,
     ft = { "markdown", "mermaid" },
     dependencies = { "3rd/image.nvim" },
     init = function()

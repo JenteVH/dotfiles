@@ -110,7 +110,13 @@ return {
     version = "*",
     config = function()
       require("toggleterm").setup({
-        size = 20,
+        size = function(term)
+          if term.direction == "vertical" then
+            return 80
+          end
+
+          return 20
+        end,
         open_mapping = [[<c-\>]],
         hide_numbers = true,
         shade_terminals = true,

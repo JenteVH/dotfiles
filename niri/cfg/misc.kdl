@@ -1,0 +1,33 @@
+    prefer-no-csd
+    screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+    environment {
+        ELECTRON_OZONE_PLATFORM_HINT "auto"
+        NIXOS_OZONE_WL "1"
+        QT_QPA_PLATFORM "wayland"
+        QT_QPA_PLATFORMTHEME "gtk3"
+        QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+        XDG_CURRENT_DESKTOP "niri"
+        XDG_SESSION_TYPE "wayland"
+    }
+
+    cursor {
+        xcursor-theme "capitaine-cursors"
+        xcursor-size 24
+    }
+
+    debug {
+        honor-xdg-activation-with-invalid-serial
+        // Workaround: amdgpu hardware cursor plane shows black/invisible on DP-1
+        disable-cursor-plane
+    }
+
+    hotkey-overlay {
+       skip-at-startup
+    }
+
+    gestures {
+        hot-corners {
+            off
+        }
+    }

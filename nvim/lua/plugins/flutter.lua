@@ -1,7 +1,10 @@
 return {
   {
     "akinsho/flutter-tools.nvim",
-    lazy = false,
+    ft = "dart",
+    cond = function()
+      return vim.fn.executable("flutter") == 1 or vim.fn.executable("fvm") == 1
+    end,
     dependencies = {
       "nvim-lua/plenary.nvim",
       "stevearc/dressing.nvim", -- optional for vim.ui.select
@@ -12,6 +15,10 @@ return {
 
       -- LSP attach function (reuse the same pattern from lsp-native.lua)
       local on_attach = function(client, bufnr)
+        if client:supports_method("textDocument/documentColor") then
+          vim.lsp.document_color.enable(true, { bufnr = bufnr }, { style = "■" })
+        end
+
         local function buf_set_keymap(mode, lhs, rhs, desc)
           vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
         end
@@ -81,14 +88,6 @@ return {
           auto_open = false, -- Don't auto-open outline
         },
         lsp = {
-          color = {
-            enabled = true, -- Show colors in the editor
-            background = false, -- Don't highlight background
-            background_color = nil,
-            foreground = false,
-            virtual_text = true, -- Show color as virtual text
-            virtual_text_str = "■", -- Character for virtual text
-          },
           on_attach = on_attach,
           capabilities = capabilities,
           settings = {

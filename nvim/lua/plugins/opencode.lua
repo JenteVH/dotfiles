@@ -148,23 +148,42 @@ return {
         return table.concat(target_sections, "\n")
       end
 
-      local function fallback_edit_prompt(port, request_id, message)
+      local function permit_permission(url, request_id, reply)
+        if not url then
+          vim.notify("Failed to reply to opencode permission: missing server URL", vim.log.levels.ERROR, {
+            title = "opencode",
+          })
+          return
+        end
+
+        require("opencode.server").new(url)
+          :next(function(server)
+            return server:permit(request_id, reply)
+          end)
+          :catch(function(msg)
+            if msg then
+              vim.notify(msg, vim.log.levels.ERROR, { title = "opencode" })
+            end
+          end)
+      end
+
+      local function fallback_edit_prompt(url, request_id, message)
         vim.notify(message, vim.log.levels.WARN, { title = "opencode" })
 
         vim.ui.select({ "Once", "Reject" }, {
           prompt = "Permit opencode edit without a diff preview?: ",
         }, function(choice)
           if choice then
-            require("opencode.cli.client").permit(port, request_id, choice:lower())
+            permit_permission(url, request_id, choice:lower())
           end
         end)
       end
 
-      local function set_diff_keymaps(bufnr, port, request_id)
+      local function set_diff_keymaps(bufnr, url, request_id)
         vim.keymap.set("n", "dp", function()
           if current_edit_request_id then
             current_edit_request_id = nil
-            require("opencode.cli.client").permit(port, request_id, "reject")
+            permit_permission(url, request_id, "reject")
           end
           return "dp"
         end, { buffer = bufnr, desc = "Accept opencode edit hunk", expr = true })
@@ -172,25 +191,25 @@ return {
         vim.keymap.set("n", "do", function()
           if current_edit_request_id then
             current_edit_request_id = nil
-            require("opencode.cli.client").permit(port, request_id, "reject")
+            permit_permission(url, request_id, "reject")
           end
           return "do"
         end, { buffer = bufnr, desc = "Reject opencode edit hunk", expr = true })
 
         vim.keymap.set("n", "da", function()
-          require("opencode.cli.client").permit(port, request_id, "once")
+          permit_permission(url, request_id, "once")
         end, { buffer = bufnr, desc = "Accept opencode edit" })
 
         vim.keymap.set("n", "dr", function()
-          require("opencode.cli.client").permit(port, request_id, "reject")
+          permit_permission(url, request_id, "reject")
         end, { buffer = bufnr, desc = "Reject opencode edit" })
 
         vim.keymap.set("n", "<leader>oa", function()
-          require("opencode.cli.client").permit(port, request_id, "once")
+          permit_permission(url, request_id, "once")
         end, { buffer = bufnr, desc = "Accept opencode edit" })
 
         vim.keymap.set("n", "<leader>or", function()
-          require("opencode.cli.client").permit(port, request_id, "reject")
+          permit_permission(url, request_id, "reject")
         end, { buffer = bufnr, desc = "Reject opencode edit" })
 
         vim.keymap.set("n", "q", function()
@@ -202,13 +221,13 @@ return {
         end, { buffer = bufnr, desc = "Close opencode edit diff" })
       end
 
-      local function open_edit_diff(port, event)
+      local function open_edit_diff(url, event)
         local metadata = event.properties.metadata or {}
         local filepath = metadata.filepath
         local diff = metadata.diff
 
         if not filepath or not diff then
-          fallback_edit_prompt(port, event.properties.id, "Failed to render opencode edit preview: missing diff metadata")
+          fallback_edit_prompt(url, event.properties.id, "Failed to render opencode edit preview: missing diff metadata")
           return
         end
 
@@ -221,13 +240,13 @@ return {
 
         local file_patch = extract_file_patch(diff, filepath)
         if not file_patch then
-          fallback_edit_prompt(port, event.properties.id, "Failed to isolate the requested file from the opencode edit diff")
+          fallback_edit_prompt(url, event.properties.id, "Failed to isolate the requested file from the opencode edit diff")
           return
         end
 
         local patch_filepath = vim.fn.tempname() .. ".patch"
         if vim.fn.writefile(vim.split(file_patch, "\n", { plain = true }), patch_filepath) ~= 0 then
-          fallback_edit_prompt(port, event.properties.id, "Failed to write a temporary patch for the opencode edit preview")
+          fallback_edit_prompt(url, event.properties.id, "Failed to write a temporary patch for the opencode edit preview")
           return
         end
 
@@ -238,7 +257,7 @@ return {
           source_filepath = vim.fn.tempname()
           if vim.fn.writefile({}, source_filepath) ~= 0 then
             cleanup_diff_state()
-            fallback_edit_prompt(port, event.properties.id, "Failed to prepare a temporary file for the opencode edit preview")
+            fallback_edit_prompt(url, event.properties.id, "Failed to prepare a temporary file for the opencode edit preview")
             return
           end
 
@@ -252,14 +271,14 @@ return {
         if result.code ~= 0 or not vim.uv.fs_stat(patched_filepath) then
           local stderr = result.stderr and result.stderr ~= "" and result.stderr or "patch could not render the proposed edit"
           cleanup_diff_state()
-          fallback_edit_prompt(port, event.properties.id, "Failed to render opencode edit preview: " .. stderr)
+          fallback_edit_prompt(url, event.properties.id, "Failed to render opencode edit preview: " .. stderr)
           return
         end
 
         local ok = pcall(vim.cmd, "tabedit " .. vim.fn.fnameescape(filepath))
         if not ok then
           cleanup_diff_state()
-          fallback_edit_prompt(port, event.properties.id, "Failed to open the target file for the opencode edit preview")
+          fallback_edit_prompt(url, event.properties.id, "Failed to open the target file for the opencode edit preview")
           return
         end
 
@@ -270,7 +289,7 @@ return {
         if not ok then
           pcall(vim.cmd, "tabclose")
           cleanup_diff_state()
-          fallback_edit_prompt(port, event.properties.id, "Failed to open the opencode edit diff preview")
+          fallback_edit_prompt(url, event.properties.id, "Failed to open the opencode edit diff preview")
           return
         end
 
@@ -279,8 +298,8 @@ return {
         current_edit_request_id = event.properties.id
         diff_tabpage = tabpage
 
-        set_diff_keymaps(original_buf, port, event.properties.id)
-        set_diff_keymaps(patched_buf, port, event.properties.id)
+        set_diff_keymaps(original_buf, url, event.properties.id)
+        set_diff_keymaps(patched_buf, url, event.properties.id)
       end
 
       local function has_opencode_terminal_buffer()
@@ -346,7 +365,6 @@ return {
         vim.bo[opencode_terminal_bufnr].swapfile = false
 
         open_opencode_terminal_split()
-        require("opencode.terminal").setup(vim.api.nvim_get_current_win())
 
         vim.fn.jobstart("opencode --port", {
           term = true,
@@ -454,35 +472,20 @@ return {
         pattern = { "OpencodeEvent:permission.asked", "OpencodeEvent:permission.replied" },
         callback = function(args)
           local event = args.data.event
-          local port = args.data.port
-          local idle_delay_ms = require("opencode.config").opts.events.permissions.idle_delay_ms
+          local url = args.data.url
 
           if event.type == "permission.asked" then
             if is_opencode_terminal_focused() then
               return
             end
 
-            vim.notify("`opencode` requested permission - awaiting idle...", vim.log.levels.INFO, {
-              title = "opencode",
-              timeout = idle_delay_ms,
-            })
-
-            require("opencode.util").on_user_idle(idle_delay_ms, function()
-              if replied_permission_request_ids[event.properties.id] then
-                return
-              end
-
-              if is_opencode_terminal_focused() then
-                return
-              end
-
-              if event.properties.permission == "edit" then
-                open_edit_diff(port, event)
-                return
-              end
-
+            if replied_permission_request_ids[event.properties.id] then
               return
-            end)
+            end
+
+            if event.properties.permission == "edit" then
+              open_edit_diff(url, event)
+            end
           elseif event.type == "permission.replied" then
             replied_permission_request_ids[event.properties.requestID] = true
 
@@ -507,8 +510,9 @@ return {
       })
 
       vim.keymap.set({ "n", "x" }, "<leader>oa", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "Ask OpenCode" })
+      vim.keymap.set("n", "<leader>ou", function() vim.fn.jobstart({ "ollama", "run", "opencode" }, { style = "floating" }) end, { desc = "Launch OpenCode with Ollama" })
       vim.keymap.set({ "n", "x" }, "<leader>ox", function() require("opencode").select() end, { desc = "OpenCode actions" })
-      vim.keymap.set("n", "<leader>ot", function() require("opencode").toggle() end, { desc = "Toggle OpenCode" })
+      vim.keymap.set("n", "<leader>ot", toggle_opencode_terminal, { desc = "Toggle OpenCode" })
 
       vim.keymap.set({ "n", "x" }, "go", function() return require("opencode").operator("@this ") end, { desc = "Add range to OpenCode", expr = true })
       vim.keymap.set("n", "goo", function() return require("opencode").operator("@this ") .. "_" end, { desc = "Add line to OpenCode", expr = true })

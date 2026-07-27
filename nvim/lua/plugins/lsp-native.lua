@@ -34,10 +34,52 @@ return {
         return vim.fn.getcwd()
       end
 
-      -- Custom :LspRestart command
+      -- Custom :LspRestart command.
+      -- vim.lsp.stop_client() is async, so we must wait until each client has
+      -- fully exited before reattaching; otherwise vim.lsp.start() reuses the
+      -- dying client and the buffer ends up with no LSP. Reattach by re-firing
+      -- FileType, which both vim.lsp.enable() (group nvim.lsp.enable) and the
+      -- manual PHP/Intelephense autocmd listen on.
       vim.api.nvim_create_user_command("LspRestart", function()
-        vim.lsp.stop_client(vim.lsp.get_clients())
-        vim.cmd("edit")
+        local clients = vim.lsp.get_clients()
+        if #clients == 0 then
+          vim.notify("LspRestart: no active LSP clients", vim.log.levels.INFO)
+          return
+        end
+
+        -- Remember the buffers each client served, then force-stop it.
+        local pending = {} -- client_id -> attached buffers
+        for _, client in ipairs(clients) do
+          pending[client.id] = vim.lsp.get_buffers_by_client_id(client.id)
+          vim.lsp.stop_client(client.id, true) -- force = fast exit
+        end
+
+        -- Poll until clients have exited (removed from the registry), then
+        -- re-trigger auto-attach for their buffers with a fresh client.
+        local timer = assert((vim.uv or vim.loop).new_timer())
+        local ticks = 0
+        timer:start(
+          150,
+          100,
+          vim.schedule_wrap(function()
+            ticks = ticks + 1
+            local give_up = ticks > 50 -- ~5s safety cap
+            for id, bufs in pairs(pending) do
+              if give_up or vim.lsp.get_client_by_id(id) == nil then
+                for _, buf in ipairs(bufs) do
+                  if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_is_loaded(buf) then
+                    vim.api.nvim_exec_autocmds("FileType", { buffer = buf, modeline = false })
+                  end
+                end
+                pending[id] = nil
+              end
+            end
+            if next(pending) == nil and not timer:is_closing() then
+              timer:stop()
+              timer:close()
+            end
+          end)
+        )
       end, { desc = "Restart all LSP clients" })
 
       -- Diagnostic configuration
@@ -58,10 +100,6 @@ return {
       vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
       vim.keymap.set("n", "<leader>de", vim.diagnostic.open_float, { desc = "Show diagnostic in float" })
       vim.keymap.set("n", "<leader>dq", vim.diagnostic.setloclist, { desc = "Set diagnostic to loclist" })
-
-      vim.api.nvim_set_hl(0, "LspReferenceText", { bg = "#313244" })
-      vim.api.nvim_set_hl(0, "LspReferenceRead", { bg = "#313244" })
-      vim.api.nvim_set_hl(0, "LspReferenceWrite", { bg = "#313244", underline = true })
 
       local function apply_source_action(kind)
         vim.lsp.buf.code_action({
@@ -336,7 +374,7 @@ return {
             name = "intelephense-manual",
             cmd = { "intelephense", "--stdio" },
             root_dir = root_dir,
-            capabilities = vim.lsp.protocol.make_client_capabilities(),
+            capabilities = capabilities,
             on_attach = on_attach,
             settings = {
               intelephense = {
@@ -376,6 +414,30 @@ return {
         },
       })
 
+      vim.lsp.config("clangd", {
+        root_markers = {
+          "compile_commands.json",
+          "compile_flags.txt",
+          ".clang-tidy",
+          ".git",
+        },
+        cmd = {
+          "clangd",
+          "--background-index",
+          "--clang-tidy",
+          "--header-insertion=iwyu",
+          "--completion-style=detailed",
+          "--function-arg-placeholders",
+          "--pch-storage=memory",
+          "--inlay-hints",
+        },
+        init_options = {
+          usePlaceholders = true,
+          completeUnimported = true,
+          clangdFileStatus = true,
+        },
+      })
+
       vim.lsp.enable({
         "pyright",
         "lua_ls",
@@ -389,6 +451,7 @@ return {
         "gopls",
         "laravel_ls",
         "rust_analyzer",
+        "clangd",
       })
     end,
   },
