@@ -1,1 +1,3 @@
 plugins/
+gvfs.private
+gvfs_automounts.private

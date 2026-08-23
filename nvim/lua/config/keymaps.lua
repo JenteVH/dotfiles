@@ -145,7 +145,14 @@ end, { desc = "Format document" })
 
 -- Copy file path
 keymap("n", "<leader>yp", function() vim.fn.setreg("+", vim.fn.expand("%:p")) end, { desc = "Copy full path" })
-keymap("n", "<leader>yr", function() vim.fn.setreg("+", vim.fn.expand("%")) end, { desc = "Copy relative path" })
+keymap("n", "<leader>yr", function()
+  local path = vim.api.nvim_buf_get_name(0)
+  if path == "" then
+    vim.fn.setreg("+", "")
+    return
+  end
+  vim.fn.setreg("+", vim.fs.relpath(vim.uv.cwd(), path) or path)
+end, { desc = "Copy relative path" })
 
 -- Buffer management
 keymap("n", "<leader>c", function() Snacks.bufdelete() end, { desc = "Close buffer" })

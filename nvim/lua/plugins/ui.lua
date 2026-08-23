@@ -150,20 +150,32 @@ return {
         end
       end
 
-      local function toggle_terminal(direction)
+      local function toggle_terminal(direction, id)
         return function()
           if direction ~= "float" then
             focus_editor_window()
           end
 
-          vim.cmd(vim.v.count1 .. "ToggleTerm direction=" .. direction)
+          vim.cmd(id .. "ToggleTerm direction=" .. direction)
         end
       end
 
-      -- Prefix with a count to open another terminal, e.g. 2<leader>th.
-      vim.keymap.set("n", "<leader>tf", toggle_terminal("float"), { desc = "Toggle floating terminal" })
-      vim.keymap.set("n", "<leader>th", toggle_terminal("horizontal"), { desc = "Toggle horizontal terminal" })
-      vim.keymap.set("n", "<leader>tv", toggle_terminal("vertical"), { desc = "Toggle vertical terminal" })
+      local terminal_kinds = {
+        { key = "f", direction = "float", name = "floating" },
+        { key = "h", direction = "horizontal", name = "horizontal" },
+        { key = "v", direction = "vertical", name = "vertical" },
+      }
+
+      for _, kind in ipairs(terminal_kinds) do
+        vim.keymap.set("n", "<leader>t" .. kind.key, toggle_terminal(kind.direction, 1), {
+          desc = "Toggle " .. kind.name .. " terminal",
+        })
+        for i = 1, 9 do
+          vim.keymap.set("n", "<leader>t" .. kind.key .. i, toggle_terminal(kind.direction, i), {
+            desc = "Toggle " .. kind.name .. " terminal " .. i,
+          })
+        end
+      end
       vim.keymap.set("n", "<leader>ts", "<cmd>TermSelect<CR>", { desc = "Select terminal" })
       vim.keymap.set("n", "<leader>ta", "<cmd>ToggleTermToggleAll<CR>", { desc = "Toggle all terminals" })
     end,

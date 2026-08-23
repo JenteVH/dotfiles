@@ -403,11 +403,20 @@ return {
         },
       })
 
+      local rust_analyzer_on_attach = vim.lsp.config.rust_analyzer and vim.lsp.config.rust_analyzer.on_attach
+
       vim.lsp.config("rust_analyzer", {
-        root_markers = { "Cargo.toml", ".git" },
+        on_attach = function(client, bufnr)
+          if rust_analyzer_on_attach then
+            rust_analyzer_on_attach(client, bufnr)
+          end
+          on_attach(client, bufnr)
+        end,
+        root_markers = { { "Cargo.toml" }, { ".git" } },
         settings = {
           ["rust-analyzer"] = {
-            checkOnSave = {
+            checkOnSave = true,
+            check = {
               command = "clippy",
             },
           },

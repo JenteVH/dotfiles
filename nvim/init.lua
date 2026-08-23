@@ -37,4 +37,5 @@ else
       notify = false,
     },
   })
+  require("config.keyboard_layout").setup()
 end

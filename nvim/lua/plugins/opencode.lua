@@ -510,7 +510,7 @@ return {
       })
 
       vim.keymap.set({ "n", "x" }, "<leader>oa", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "Ask OpenCode" })
-      vim.keymap.set("n", "<leader>ou", function() vim.fn.jobstart({ "ollama", "run", "opencode" }, { style = "floating" }) end, { desc = "Launch OpenCode with Ollama" })
+      vim.keymap.set("n", "<leader>ou", function() vim.fn.jobstart({ "ollama", "run", "opencode" }, { style = "floating" }) end, { desc = "Start Ollama opencode model" })
       vim.keymap.set({ "n", "x" }, "<leader>ox", function() require("opencode").select() end, { desc = "OpenCode actions" })
       vim.keymap.set("n", "<leader>ot", toggle_opencode_terminal, { desc = "Toggle OpenCode" })
 

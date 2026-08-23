@@ -3,3 +3,5 @@ require("relative-motions"):setup({
 	show_motion = true,
 	only_motions = false,
 })
+
+require("gvfs"):setup({})

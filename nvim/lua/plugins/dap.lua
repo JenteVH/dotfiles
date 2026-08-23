@@ -8,7 +8,8 @@ return {
     },
     keys = {
       { "<leader>du", function() require("dapui").toggle() end, desc = "Debug: Toggle UI" },
-      { "<leader>de", function() require("dapui").eval() end, desc = "Debug: Eval", mode = { "n", "v" } },
+      { "<leader>dE", function() require("dapui").eval() end, desc = "Debug: Eval", mode = "n" },
+      { "<leader>de", function() require("dapui").eval() end, desc = "Debug: Eval", mode = "v" },
     },
     config = function()
       local dapui = require("dapui")

@@ -26,3 +26,12 @@ max_height = 900
 edit = [
   { run = 'nvim "$@"', block = true, for = "unix" },
 ]
+
+[plugin]
+prepend_preloaders = [
+  { url = "/run/user/1000/gvfs/**/*", run = "noop" },
+]
+prepend_previewers = [
+  { url = "*/", run = "folder" },
+  { url = "/run/user/1000/gvfs/**/*", run = "noop" },
+]

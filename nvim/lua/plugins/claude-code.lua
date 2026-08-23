@@ -126,7 +126,6 @@ return {
       end, { desc = "Deny/reject the current diff changes" })
     end,
     keys = {
-      { "<leader>a", group = "Claude AI" },
       { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
       { "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
       { "<leader>as", "<cmd>ClaudeCodeSend<cr>", mode = "v", desc = "Send selection to Claude" },

@@ -36,7 +36,7 @@ return {
     priority = 1000,
     config = function()
       require("catppuccin").setup({
-        flavour = "latte",
+        flavour = "macchiato",
         transparent_background = false,
         color_overrides = {
           mocha = palette,
@@ -45,6 +45,8 @@ return {
           return {
             Normal = { fg = colors.text, bg = colors.base },
             NormalNC = { fg = colors.text, bg = colors.base },
+            Cursor = { fg = colors.crust, bg = colors.rosewater, bold = true },
+            TermCursor = { fg = colors.crust, bg = colors.rosewater, bold = true },
             SignColumn = { bg = colors.base },
             CursorLine = { bg = colors.surface0 },
             CursorLineNr = { fg = colors.teal, bold = true },
@@ -118,6 +120,7 @@ return {
           bufferline = true,
         },
       })
+      vim.cmd.colorscheme("catppuccin-macchiato")
     end,
   },
 
@@ -125,7 +128,7 @@ return {
   {
     "rose-pine/neovim",
     name = "rose-pine",
-    lazy = false,
+    lazy = true,
     priority = 1000,
     config = function()
       require("rose-pine").setup({
@@ -143,6 +146,11 @@ return {
             iris = "#826e98",
             leaf = "#62817b",
           },
+        },
+        highlight_groups = {
+          IlluminatedWordText = { bg = "#d6d2d3" },
+          IlluminatedWordRead = { bg = "#d6d2d3" },
+          IlluminatedWordWrite = { bg = "#d6d2d3" },
         },
       })
       vim.cmd.colorscheme("rose-pine-dawn")
@@ -342,6 +350,10 @@ return {
         vim.cmd("normal! zR")
         vim.cmd("normal! zz")
 
+        local view = vim.fn.winsaveview()
+        view.topfill = vim.fn.diff_filler(view.topline)
+        vim.fn.winrestview(view)
+
         local function cleanup_current_buf_maps()
           if vim.api.nvim_buf_is_valid(current_buf) then
             pcall(vim.keymap.del, "n", "q", { buffer = current_buf })
@@ -448,6 +460,7 @@ return {
 
           -- Text object
           map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = "Select hunk" })
+          require("config.keyboard_layout").attach_buffer(bufnr)
         end,
       })
     end,

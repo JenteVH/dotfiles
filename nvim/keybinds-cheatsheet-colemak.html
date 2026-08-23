@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Colemak UNEI keybinding cheat sheet for this Neovim configuration">
+  <link rel="icon" href="data:,">
+  <title>Neovim Colemak Keybindings</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --base: #11111b;
+      --mantle: #181825;
+      --surface: #1e1e2e;
+      --surface-high: #313244;
+      --line: #45475a;
+      --text: #cdd6f4;
+      --muted: #a6adc8;
+      --green: #a6e3a1;
+      --blue: #89b4fa;
+      --yellow: #f9e2af;
+      --peach: #fab387;
+      --pink: #f5c2e7;
+      --red: #f38ba8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(137, 180, 250, 0.1), transparent 28rem),
+        radial-gradient(circle at 90% 8%, rgba(166, 227, 161, 0.08), transparent 25rem),
+        var(--base);
+      color: var(--text);
+      font-family: "SFMono-Regular", "Cascadia Code", "Roboto Mono", Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    a {
+      color: var(--blue);
+    }
+
+    a:focus-visible,
+    a:hover {
+      color: var(--green);
+    }
+
+    .page {
+      width: min(1800px, 100%);
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .hero-copy,
+    .keyboard-card,
+    .card,
+    .notice {
+      border: 1px solid var(--line);
+      background: rgba(30, 30, 46, 0.94);
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.18);
+    }
+
+    .hero-copy,
+    .keyboard-card {
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--green);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--blue);
+      font-size: clamp(1.8rem, 4vw, 3.25rem);
+      line-height: 1;
+      letter-spacing: -0.06em;
+    }
+
+    .subtitle {
+      max-width: 70ch;
+      margin: 14px 0 18px;
+      color: var(--muted);
+      font-family: system-ui, sans-serif;
+      font-size: 0.98rem;
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill,
+    kbd,
+    .mode {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface-high);
+      color: var(--yellow);
+      font: inherit;
+      font-weight: 700;
+    }
+
+    .pill {
+      padding: 7px 10px;
+    }
+
+    kbd {
+      display: inline-block;
+      min-width: 1.7em;
+      padding: 1px 5px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .keyboard-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 118px;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .keyboard-layout {
+      margin: 0;
+      overflow-x: auto;
+      color: var(--muted);
+      font-size: clamp(0.72rem, 1.4vw, 0.95rem);
+      line-height: 1.65;
+      white-space: pre;
+    }
+
+    .diamond {
+      display: grid;
+      grid-template-columns: repeat(3, 34px);
+      grid-template-rows: repeat(3, 34px);
+      place-items: center;
+      justify-content: center;
+    }
+
+    .diamond kbd:nth-child(1) {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .diamond kbd:nth-child(2) {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .diamond kbd:nth-child(3) {
+      grid-column: 2;
+      grid-row: 3;
+    }
+
+    .diamond kbd:nth-child(4) {
+      grid-column: 3;
+      grid-row: 2;
+    }
+
+    .diamond-label {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      color: var(--muted);
+      font-size: 0.65rem;
+      transform: translateY(-24px);
+    }
+
+    .jumpbar {
+      position: sticky;
+      z-index: 5;
+      top: 0;
+      display: flex;
+      gap: 7px;
+      margin-bottom: 14px;
+      padding: 9px;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(17, 17, 27, 0.92);
+      backdrop-filter: blur(12px);
+    }
+
+    .jumpbar a {
+      flex: 0 0 auto;
+      padding: 4px 8px;
+      border-radius: 5px;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .jumpbar a:hover {
+      background: var(--surface-high);
+      color: var(--green);
+    }
+
+    .notice {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding: 12px 14px;
+      border-left: 4px solid var(--peach);
+      border-radius: 8px;
+      color: var(--muted);
+    }
+
+    .notice strong {
+      color: var(--peach);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin: 22px 0 9px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      color: var(--blue);
+      font-size: 1.05rem;
+    }
+
+    .section-title span {
+      color: var(--muted);
+      font-family: system-ui, sans-serif;
+      font-size: 0.78rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 9px;
+    }
+
+    .card {
+      min-width: 0;
+      border-radius: 8px;
+      padding: 10px;
+      break-inside: avoid;
+    }
+
+    .card h3 {
+      margin: 0 0 7px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--line);
+      color: var(--green);
+      font-size: 0.88rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 3px 4px;
+      border-bottom: 1px solid rgba(69, 71, 90, 0.55);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    td:first-child {
+      width: 44%;
+      color: var(--yellow);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    td:last-child {
+      color: var(--muted);
+      font-family: system-ui, sans-serif;
+      font-size: 0.78rem;
+    }
+
+    .mode {
+      display: inline-block;
+      min-width: 1.55em;
+      margin-right: 4px;
+      padding: 0 4px;
+      color: var(--pink);
+      font-size: 0.65rem;
+      text-align: center;
+    }
+
+    .leader {
+      color: var(--red);
+    }
+
+    .footer {
+      margin-top: 18px;
+      padding: 12px;
+      color: var(--muted);
+      font-family: system-ui, sans-serif;
+      font-size: 0.76rem;
+      text-align: center;
+    }
+
+    @media (max-width: 820px) {
+      .page {
+        padding: 10px;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .keyboard-card {
+        grid-template-columns: 1fr;
+      }
+
+      .diamond {
+        margin: 0 auto;
+      }
+
+      .jumpbar {
+        margin-inline: -10px;
+        border-radius: 0;
+      }
+    }
+
+    @media (max-width: 520px) {
+      body {
+        font-size: 12px;
+      }
+
+      .hero-copy,
+      .keyboard-card {
+        padding: 14px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      td:first-child {
+        width: 48%;
+        white-space: normal;
+      }
+    }
+
+    @media print {
+      :root {
+        color-scheme: light;
+        --base: #ffffff;
+        --mantle: #ffffff;
+        --surface: #ffffff;
+        --surface-high: #f2f2f2;
+        --line: #cccccc;
+        --text: #111111;
+        --muted: #444444;
+        --green: #176b3a;
+        --blue: #1e4f91;
+        --yellow: #5f4300;
+        --peach: #914b00;
+        --pink: #772f68;
+        --red: #9b2335;
+      }
+
+      body {
+        background: white;
+        font-size: 9px;
+      }
+
+      .page {
+        width: 100%;
+        padding: 0;
+      }
+
+      .jumpbar {
+        display: none;
+      }
+
+      .hero {
+        grid-template-columns: 1.2fr 0.8fr;
+      }
+
+      .hero-copy,
+      .keyboard-card,
+      .card,
+      .notice {
+        box-shadow: none;
+      }
+
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <section class="hero-copy">
+        <p class="eyebrow">Full Colemak UNEI layer</p>
+        <h1>Neovim Colemak Keybindings</h1>
+        <p class="subtitle">The active Colemak layout moves navigation to the UNEI diamond and relocates the Vim actions those keys normally own. Leader sequences keep the same letters shown below.</p>
+        <div class="quick-actions">
+          <span class="pill"><span class="leader">Space</span> uk: toggle layout</span>
+          <span class="pill">:KeyboardLayout colemak</span>
+          <span class="pill">:KeyboardLayout qwerty</span>
+          <a class="pill" href="keybinds-cheatsheet.html">Open QWERTY sheet</a>
+        </div>
+      </section>
+      <section class="keyboard-card" aria-label="Colemak keyboard and navigation diamond">
+        <pre class="keyboard-layout">` 1 2 3 4 5  6 7 8 9 0 - =
+  q w f p g  j l u y ; [ ] \
+  a r s t d  h n e i o '
+  z x c v b  k m , . /</pre>
+        <div class="diamond" aria-label="u up, n left, e down, i right">
+          <kbd>U</kbd>
+          <kbd>N</kbd>
+          <kbd>E</kbd>
+          <kbd>I</kbd>
+          <span class="diamond-label">MOVE</span>
+        </div>
+      </section>
+    </header>
+
+    <nav class="jumpbar" aria-label="Cheat sheet sections">
+      <a href="#core">Core</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#code">Code</a>
+      <a href="#git">Git</a>
+      <a href="#tools">Tools</a>
+      <a href="#inside">Inside plugins</a>
+    </nav>
+
+    <aside class="notice">
+      <strong>Modes</strong>
+      <span><span class="mode">N</span>Normal <span class="mode">VIS</span>Visual <span class="mode">O</span>Operator <span class="mode">INS</span>Insert <span class="mode">CMD</span>Command <span class="mode">TERM</span>Terminal. Counts still work, for example <kbd>5u</kbd> and <kbd>3e</kbd>.</span>
+    </aside>
+
+    <aside class="notice">
+      <strong>Insert</strong>
+      <span><kbd>i</kbd> never enters Insert mode in Colemak; it moves right. Use <kbd>s</kbd> to insert, <kbd>S</kbd> to insert at the first non-blank character, and <kbd>t</kbd>/<kbd>T</kbd> to append.</span>
+    </aside>
+
+    <div class="section-title" id="core">
+      <h2>Colemak Core</h2>
+      <span>Keys changed by the layout layer</span>
+    </div>
+    <section class="grid">
+      <article class="card">
+        <h3>Movement</h3>
+        <table>
+          <tr><td><span class="mode">N/VIS/O</span>u / n / e / i</td><td>Up / left / down / right</td></tr>
+          <tr><td><span class="mode">N</span>Alt-n/u/e/i</td><td>Scroll viewport left / up / down / right by 10%</td></tr>
+          <tr><td><span class="mode">N/VIS</span>j / h</td><td>Scroll up / down by the scroll option</td></tr>
+          <tr><td><span class="mode">N/VIS</span>B</td><td>Last visible line in the window</td></tr>
+          <tr><td><span class="mode">N/VIS</span>gH / gL</td><td>First / last visible line in the window</td></tr>
+          <tr><td><span class="mode">N</span>( / )</td><td>Jump list back / forward</td></tr>
+          <tr><td><span class="mode">N</span>g( / g)</td><td>Previous / next sentence</td></tr>
+          <tr><td><span class="mode">N</span>{ / }</td><td>Previous / next paragraph</td></tr>
+          <tr><td><span class="mode">N</span>gg / G</td><td>First / last line</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Words And Lines</h3>
+        <table>
+          <tr><td>l / y</td><td>Previous / next word</td></tr>
+          <tr><td>Ctrl-l / Ctrl-y</td><td>Previous / next WORD</td></tr>
+          <tr><td>gN / gI</td><td>Previous / next WORD end</td></tr>
+          <tr><td>L / Y</td><td>First non-blank / line end</td></tr>
+          <tr><td>0 / $</td><td>Physical line start / end</td></tr>
+          <tr><td>f / F</td><td>Find character forward / backward</td></tr>
+          <tr><td>p / P</td><td>Till character forward / backward</td></tr>
+          <tr><td>; / ,</td><td>Repeat character search / reverse</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Insert And Change</h3>
+        <table>
+          <tr><td><span class="mode">N</span>s / S</td><td>Insert / insert at first non-blank</td></tr>
+          <tr><td><span class="mode">N</span>gS</td><td>Insert at column one</td></tr>
+          <tr><td><span class="mode">N</span>t / T</td><td>Append / append at line end</td></tr>
+          <tr><td><span class="mode">N</span>w / W</td><td>Change / change to line end</td></tr>
+          <tr><td><span class="mode">N</span>ww</td><td>Change whole line</td></tr>
+          <tr><td>d / dd</td><td>Delete motion / delete line</td></tr>
+          <tr><td>x / X</td><td>Delete character / cut line</td></tr>
+          <tr><td><span class="mode">N</span>r / R</td><td>Replace character / replace mode</td></tr>
+          <tr><td>J</td><td>Join lines</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Copy, Paste, Undo</h3>
+        <table>
+          <tr><td>c / cc</td><td>Copy motion / copy line</td></tr>
+          <tr><td>C</td><td>Copy to line end</td></tr>
+          <tr><td>v / V</td><td>Paste after / before</td></tr>
+          <tr><td>gv / gV</td><td>Paste and leave cursor after</td></tr>
+          <tr><td>z / Z</td><td>Undo / redo</td></tr>
+          <tr><td>gz</td><td>Restore latest changed line</td></tr>
+          <tr><td>.</td><td>Repeat latest change</td></tr>
+          <tr><td>"{register}</td><td>Use a register</td></tr>
+          <tr><td>q{register} / @{register}</td><td>Record / replay macro</td></tr>
+          <tr><td>Q</td><td>Replay macro in register q</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Visual And Text Objects</h3>
+        <table>
+          <tr><td><span class="mode">N</span>a / A</td><td>Visual / visual-line mode</td></tr>
+          <tr><td><span class="mode">N</span>Ctrl-v</td><td>Visual block mode</td></tr>
+          <tr><td><span class="mode">N</span>ga</td><td>Reselect last visual selection</td></tr>
+          <tr><td><span class="mode">VIS</span>U / E</td><td>Move selection up / down</td></tr>
+          <tr><td><span class="mode">VIS</span>&lt; / &gt;</td><td>Indent and keep selection</td></tr>
+          <tr><td><span class="mode">VIS</span>v</td><td>Paste without yanking replacement</td></tr>
+          <tr><td><span class="mode">VIS/O</span>r / t</td><td>Inner / around text-object prefix</td></tr>
+          <tr><td><span class="mode">VIS</span>R</td><td>Replace selected characters</td></tr>
+          <tr><td>drw / dtw</td><td>Delete inner / around word</td></tr>
+          <tr><td><span class="mode">VIS/O</span>rn / tn</td><td>Select or shrink / select or expand syntax node</td></tr>
+          <tr><td>rh</td><td>Inner Git hunk</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Search And Leap</h3>
+        <table>
+          <tr><td>/ / ?</td><td>Search forward / backward</td></tr>
+          <tr><td>k / K</td><td>Next / previous search result</td></tr>
+          <tr><td>* / #</td><td>Word under cursor forward / backward</td></tr>
+          <tr><td>gsi / gsn</td><td>Leap forward / backward</td></tr>
+          <tr><td>gs</td><td>Leap from another window</td></tr>
+          <tr><td>gK / gh</td><td>LSP hover or keyword lookup</td></tr>
+          <tr><td>gQ</td><td>Original Ex mode</td></tr>
+          <tr><td>gX</td><td>Original backward character delete</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Folds On B</h3>
+        <table>
+          <tr><td>bf / bF</td><td>Create fold / counted fold</td></tr>
+          <tr><td>ba / bA</td><td>Toggle fold / recursively</td></tr>
+          <tr><td>bo / bO</td><td>Open fold / recursively</td></tr>
+          <tr><td>bc / bC</td><td>Close fold / recursively</td></tr>
+          <tr><td>bd / bD / bE</td><td>Delete fold / recursive / all</td></tr>
+          <tr><td>bR / bM</td><td>Open all / close all</td></tr>
+          <tr><td>br / bm</td><td>Fold less / more</td></tr>
+          <tr><td>be / bu</td><td>Next / previous fold</td></tr>
+          <tr><td>bn / bN / bi</td><td>Disable / enable / toggle folds</td></tr>
+          <tr><td>bx / bX</td><td>Recompute folds; bx also reveals cursor</td></tr>
+          <tr><td>bs / bK</td><td>Reveal cursor / peek fold, hover, or keyword lookup</td></tr>
+          <tr><td>[b / ]b</td><td>Start / end of fold</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Insert And Command Movement</h3>
+        <table>
+          <tr><td><span class="mode">INS</span>Alt-n/u/e/i</td><td>Left / up / down / right</td></tr>
+          <tr><td><span class="mode">CMD</span>Alt-n/i</td><td>Cursor left / right</td></tr>
+          <tr><td><span class="mode">CMD</span>Alt-u/e</td><td>Older / newer matching history</td></tr>
+          <tr><td><span class="mode">INS/CMD</span>Alt-N/U/E/I</td><td>Repeat the corresponding action five times</td></tr>
+          <tr><td><span class="mode">INS</span>Esc / Ctrl-[</td><td>Return to Normal mode</td></tr>
+          <tr><td><span class="mode">INS</span>Ctrl-w</td><td>Delete previous word</td></tr>
+          <tr><td><span class="mode">INS</span>Ctrl-u</td><td>Delete to line start</td></tr>
+          <tr><td><span class="mode">INS</span>Ctrl-o</td><td>Run one Normal command</td></tr>
+          <tr><td><span class="mode">INS</span>Ctrl-r {reg}</td><td>Insert register contents</td></tr>
+        </table>
+      </article>
+    </section>
+
+    <div class="section-title" id="workflow">
+      <h2>Daily Workflow</h2>
+      <span>Leader is Space; these sequences keep their configured letters</span>
+    </div>
+    <section class="grid">
+      <article class="card">
+        <h3>Files And Telescope</h3>
+        <table>
+          <tr><td><span class="leader">Space</span> ff</td><td>Find files</td></tr>
+          <tr><td><span class="leader">Space</span> fg</td><td>Live grep; selection in Visual mode</td></tr>
+          <tr><td><span class="leader">Space</span> fb</td><td>Buffers</td></tr>
+          <tr><td><span class="leader">Space</span> fo</td><td>Recent files in working directory</td></tr>
+          <tr><td><span class="leader">Space</span> fh</td><td>Help tags</td></tr>
+          <tr><td><span class="leader">Space</span> fc</td><td>Commands</td></tr>
+          <tr><td><span class="leader">Space</span> fk</td><td>Configured keymaps</td></tr>
+          <tr><td><span class="leader">Space</span> fd</td><td>Diagnostics</td></tr>
+          <tr><td><span class="leader">Space</span> fr</td><td>Resume picker</td></tr>
+          <tr><td><span class="leader">Space</span> ; / :</td><td>Toggle tree / find file in tree</td></tr>
+          <tr><td><span class="leader">Space</span> e / E</td><td>Yazi at file / working directory</td></tr>
+          <tr><td>-</td><td>Open Yazi at current file</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Save, Close, Paths</h3>
+        <table>
+          <tr><td><span class="leader">Space</span> w / W</td><td>Save file / save all</td></tr>
+          <tr><td><span class="leader">Space</span> c / C</td><td>Close buffer / force close</td></tr>
+          <tr><td><span class="leader">Space</span> cbo</td><td>Close other buffers</td></tr>
+          <tr><td><span class="leader">Space</span> Q</td><td>Quit all without saving</td></tr>
+          <tr><td><span class="leader">Space</span> f</td><td>Format document</td></tr>
+          <tr><td><span class="leader">Space</span> yp</td><td>Copy absolute path</td></tr>
+          <tr><td><span class="leader">Space</span> yr</td><td>Copy path relative to cwd, or absolute when outside it</td></tr>
+          <tr><td><span class="leader">Space</span> ?</td><td>Show current window number</td></tr>
+          <tr><td><span class="leader">Space</span> T</td><td>Open TODO file</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Windows</h3>
+        <table>
+          <tr><td><span class="mode">N/VIS</span>Ctrl-n/u/e/i</td><td>Window left / up / down / right; Ctrl-i is also Tab</td></tr>
+          <tr><td>Ctrl-w n/u/e/i</td><td>Window left / up / down / right</td></tr>
+          <tr><td>Ctrl-w N/U/E/I</td><td>Move window left / up / down / right</td></tr>
+          <tr><td><span class="leader">Space</span> wv / wh</td><td>Vertical / horizontal split</td></tr>
+          <tr><td><span class="leader">Space</span> wx</td><td>Close split</td></tr>
+          <tr><td><span class="leader">Space</span> we</td><td>Equalize splits</td></tr>
+          <tr><td><span class="leader">Space</span> wr</td><td>Rotate splits outside LSP buffers</td></tr>
+          <tr><td><span class="leader">Space</span> wN / wI</td><td>Decrease / increase width</td></tr>
+          <tr><td><span class="leader">Space</span> wU / wE</td><td>Increase / decrease height</td></tr>
+          <tr><td>Alt-arrows</td><td>Resize by two cells</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Buffers And Tabs</h3>
+        <table>
+          <tr><td>N / I</td><td>Previous / next buffer</td></tr>
+          <tr><td><span class="leader">Space</span> bn / bi</td><td>Previous / next buffer</td></tr>
+          <tr><td><span class="leader">Space</span> bN / bI</td><td>Move buffer left / right</td></tr>
+          <tr><td><span class="leader">Space</span> bH / bL</td><td>QWERTY aliases for moving buffer left / right</td></tr>
+          <tr><td><span class="leader">Space</span> bp</td><td>Toggle pin</td></tr>
+          <tr><td><span class="leader">Space</span> bP</td><td>Pick buffer to close</td></tr>
+          <tr><td><span class="leader">Space</span> bo</td><td>Close other buffers</td></tr>
+          <tr><td><span class="leader">Space</span> bl / br</td><td>Close buffers left / right</td></tr>
+          <tr><td><span class="leader">Space</span> tn / tp</td><td>Next / previous tab</td></tr>
+          <tr><td><span class="leader">Space</span> to / tc</td><td>Open / close tab</td></tr>
+          <tr><td><span class="leader">Space</span> t1..t9</td><td>Go to tab 1 through 9</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Harpoon And Wrapping</h3>
+        <table>
+          <tr><td><span class="leader">Space</span> a</td><td>Add file to Harpoon</td></tr>
+          <tr><td><span class="leader">Space</span> 1..4</td><td>Select Harpoon entry</td></tr>
+          <tr><td>Ctrl-Shift-P/N</td><td>Previous / next Harpoon entry</td></tr>
+          <tr><td><span class="leader">Space</span> s"</td><td>Wrap selection in double quotes</td></tr>
+          <tr><td><span class="leader">Space</span> s'</td><td>Wrap selection in single quotes</td></tr>
+          <tr><td><span class="leader">Space</span> s`</td><td>Wrap selection in backticks</td></tr>
+          <tr><td><span class="leader">Space</span> s{ / s[</td><td>Wrap in braces / brackets</td></tr>
+          <tr><td><span class="leader">Space</span> s( / s&lt;</td><td>Wrap in parentheses / angles</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Comments And References</h3>
+        <table>
+          <tr><td>gc / gb</td><td>Linewise / blockwise comment operator</td></tr>
+          <tr><td>gcc / gbc</td><td>Comment current line / block</td></tr>
+          <tr><td>gco / gcO</td><td>Commented line below / above</td></tr>
+          <tr><td>gcA</td><td>Append comment at line end</td></tr>
+          <tr><td>]] / [[</td><td>Next / previous illuminated reference</td></tr>
+          <tr><td>Alt-p</td><td>Previous reference; use ]] for next in Colemak</td></tr>
+          <tr><td>Alt-i</td><td>Reference text object in Visual/Operator mode</td></tr>
+        </table>
+      </article>
+    </section>
+
+    <div class="section-title" id="code">
+      <h2>Code Intelligence</h2>
+      <span>LSP, diagnostics, completion, and selection</span>
+    </div>
+    <section class="grid">
+      <article class="card">
+        <h3>LSP Buffer</h3>
+        <table>
+          <tr><td>gD / gd</td><td>Declaration / definition</td></tr>
+          <tr><td>gi / gr</td><td>Implementation / references</td></tr>
+          <tr><td>gK / gh</td><td>Hover documentation</td></tr>
+          <tr><td><span class="leader">Space</span> D</td><td>Type definition</td></tr>
+          <tr><td><span class="leader">Space</span> rn</td><td>Rename</td></tr>
+          <tr><td><span class="leader">Space</span> ca</td><td>Code action</td></tr>
+          <tr><td><span class="leader">Space</span> lI</td><td>Add imports in JS/TS; organize Go imports; otherwise code actions</td></tr>
+          <tr><td><span class="leader">Space</span> lO</td><td>Organize imports</td></tr>
+          <tr><td><span class="leader">Space</span> wa/wr/wl</td><td>Add / remove / list workspace folders; wr overrides split rotation</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>LSP Find</h3>
+        <table>
+          <tr><td><span class="leader">Space</span> lr</td><td>References</td></tr>
+          <tr><td><span class="leader">Space</span> ls</td><td>Document symbols</td></tr>
+          <tr><td><span class="leader">Space</span> lw</td><td>Workspace symbols</td></tr>
+          <tr><td><span class="leader">Space</span> li</td><td>Implementations, or definitions if unsupported</td></tr>
+          <tr><td><span class="leader">Space</span> ld</td><td>Definitions</td></tr>
+          <tr><td><span class="leader">Space</span> lt</td><td>Type definitions, or definitions if unsupported</td></tr>
+          <tr><td>grn / gra</td><td>Native rename / code action</td></tr>
+          <tr><td>grr / gri / grt</td><td>Native refs / implementation / type</td></tr>
+          <tr><td>grx / gO</td><td>Code lens / document symbols</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Diagnostics And Trouble</h3>
+        <table>
+          <tr><td>[d / ]d</td><td>Previous / next diagnostic</td></tr>
+          <tr><td>[D / ]D</td><td>First / last diagnostic</td></tr>
+          <tr><td><span class="leader">Space</span> de</td><td>Diagnostic float in Normal mode</td></tr>
+          <tr><td><span class="leader">Space</span> dq</td><td>Diagnostics location list</td></tr>
+          <tr><td>Ctrl-w d</td><td>Diagnostic float</td></tr>
+          <tr><td><span class="leader">Space</span> xx</td><td>All diagnostics</td></tr>
+          <tr><td><span class="leader">Space</span> xX</td><td>Current-buffer diagnostics</td></tr>
+          <tr><td><span class="leader">Space</span> xs</td><td>Symbols</td></tr>
+          <tr><td><span class="leader">Space</span> xq</td><td>Quickfix list</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Completion</h3>
+        <table>
+          <tr><td><span class="mode">INS</span>Ctrl-Space / Ctrl-@</td><td>Open completion</td></tr>
+          <tr><td><span class="mode">INS</span>Ctrl-n / Down</td><td>Next completion item</td></tr>
+          <tr><td><span class="mode">INS</span>Ctrl-p / Up</td><td>Previous completion item</td></tr>
+          <tr><td><span class="mode">INS</span>Enter</td><td>Confirm selected item or autopairs newline</td></tr>
+          <tr><td><span class="mode">INS</span>Tab / Shift-Tab</td><td>Completion or snippet forward / back</td></tr>
+          <tr><td><span class="mode">INS</span>Ctrl-b / Ctrl-f</td><td>Scroll documentation</td></tr>
+          <tr><td><span class="mode">INS</span>Ctrl-e</td><td>Abort completion</td></tr>
+          <tr><td><span class="mode">INS</span>Alt-]</td><td>Request Minuet completion</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Incremental Selection</h3>
+        <table>
+          <tr><td><span class="mode">N</span>Ctrl-Space</td><td>Start selection</td></tr>
+          <tr><td><span class="mode">VIS</span>Ctrl-Space</td><td>Expand to named node</td></tr>
+          <tr><td><span class="mode">VIS</span>Ctrl-s</td><td>Expand to scope</td></tr>
+          <tr><td><span class="mode">VIS</span>Ctrl-BS / BS</td><td>Shrink selection</td></tr>
+          <tr><td><span class="mode">VIS</span>Alt-BS / Alt-Del</td><td>Shrink selection alternatives</td></tr>
+          <tr><td><span class="mode">VIS/O</span>rn / tn</td><td>Select or shrink / select or expand syntax node</td></tr>
+        </table>
+      </article>
+    </section>
+
+    <div class="section-title" id="git">
+      <h2>Git And Debug</h2>
+      <span>Repository, hunks, and DAP</span>
+    </div>
+    <section class="grid">
+      <article class="card">
+        <h3>Git Pickers And LazyGit</h3>
+        <table>
+          <tr><td><span class="leader">Space</span> gc</td><td>Git commits</td></tr>
+          <tr><td><span class="leader">Space</span> gb</td><td>Git branches</td></tr>
+          <tr><td><span class="leader">Space</span> gs</td><td>Git status</td></tr>
+          <tr><td><span class="leader">Space</span> gB</td><td>Toggle current-line blame</td></tr>
+          <tr><td><span class="leader">Space</span> gg</td><td>LazyGit at repository root</td></tr>
+          <tr><td><span class="leader">Space</span> gl</td><td>LazyGit log</td></tr>
+          <tr><td><span class="leader">Space</span> gf</td><td>Current-file Git log</td></tr>
+          <tr><td>gdp / gdo</td><td>Diff put / get</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Gitsigns Hunks</h3>
+        <table>
+          <tr><td>]h / [h</td><td>Next / previous hunk</td></tr>
+          <tr><td><span class="leader">Space</span> hs / hr</td><td>Stage / reset hunk</td></tr>
+          <tr><td><span class="leader">Space</span> hS</td><td>Stage buffer</td></tr>
+          <tr><td><span class="leader">Space</span> hu</td><td>Undo staged hunk</td></tr>
+          <tr><td><span class="leader">Space</span> hR</td><td>Reset buffer</td></tr>
+          <tr><td><span class="leader">Space</span> hb</td><td>Full blame for line</td></tr>
+          <tr><td><span class="leader">Space</span> gd</td><td>Current-file Git diff tab</td></tr>
+          <tr><td>rh</td><td>Git hunk text object</td></tr>
+          <tr><td>q / Esc in diff</td><td>Close custom diff tab</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Debugger</h3>
+        <table>
+          <tr><td>F5 / F10</td><td>Continue / step over</td></tr>
+          <tr><td>F11 / F12</td><td>Step into / step out</td></tr>
+          <tr><td><span class="leader">Space</span> db</td><td>Toggle breakpoint</td></tr>
+          <tr><td><span class="leader">Space</span> dB</td><td>Conditional breakpoint</td></tr>
+          <tr><td><span class="leader">Space</span> dr</td><td>Open REPL</td></tr>
+          <tr><td><span class="leader">Space</span> dl</td><td>Run last configuration</td></tr>
+          <tr><td><span class="leader">Space</span> du</td><td>Toggle DAP UI</td></tr>
+          <tr><td><span class="leader">Space</span> dE</td><td>Evaluate expression in Normal mode</td></tr>
+          <tr><td><span class="leader">Space</span> de</td><td>Evaluate selection in Visual mode</td></tr>
+          <tr><td><span class="leader">Space</span> dn / df</td><td>Python method / class test</td></tr>
+          <tr><td><span class="leader">Space</span> dt / dT</td><td>Go test / last test</td></tr>
+        </table>
+      </article>
+    </section>
+
+    <div class="section-title" id="tools">
+      <h2>Tools And AI</h2>
+      <span>Terminals, agents, HTTP, Flutter, and TODO</span>
+    </div>
+    <section class="grid">
+      <article class="card">
+        <h3>Terminal</h3>
+        <table>
+          <tr><td><span class="leader">Space</span> tf/th/tv</td><td>Float / horizontal / vertical terminal</td></tr>
+          <tr><td><span class="leader">Space</span> tf1..9</td><td>Numbered floating terminal</td></tr>
+          <tr><td><span class="leader">Space</span> th1..9</td><td>Numbered horizontal terminal</td></tr>
+          <tr><td><span class="leader">Space</span> tv1..9</td><td>Numbered vertical terminal</td></tr>
+          <tr><td><span class="leader">Space</span> ts / ta</td><td>Select / toggle all terminals; TODO buffers override both</td></tr>
+          <tr><td><span class="mode">N/INS/TERM</span>Ctrl-\</td><td>Toggle the ToggleTerm view; terminal mode only in ToggleTerm buffers</td></tr>
+          <tr><td><span class="mode">TERM</span>Ctrl-q</td><td>Leave terminal mode; hides Codex in its terminal</td></tr>
+          <tr><td><span class="mode">TERM</span>Ctrl-n/u/e/i</td><td>Leave terminal and navigate left / up / down / right; Ctrl-i is Tab</td></tr>
+          <tr><td><span class="mode">TERM</span>Ctrl-h/j/k/l</td><td>Leave terminal and navigate windows</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Claude</h3>
+        <table>
+          <tr><td><span class="leader">Space</span> ac / af</td><td>Toggle / focus Claude</td></tr>
+          <tr><td><span class="leader">Space</span> as</td><td>Send visual selection</td></tr>
+          <tr><td><span class="leader">Space</span> aa / ad</td><td>Accept / deny diff</td></tr>
+          <tr><td><span class="leader">Space</span> am</td><td>Select model</td></tr>
+          <tr><td><span class="leader">Space</span> ab / at</td><td>Add buffer / add from tree</td></tr>
+          <tr><td><span class="leader">Space</span> ap</td><td>Toggle upper / right layout</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Codex</h3>
+        <table>
+          <tr><td><span class="leader">Space</span> kt/kf/kq</td><td>Toggle / focus / hide Codex</td></tr>
+          <tr><td><span class="leader">Space</span> ka</td><td>Prompt or ask about selection</td></tr>
+          <tr><td><span class="leader">Space</span> kb / kB</td><td>Add / ask about buffer</td></tr>
+          <tr><td><span class="leader">Space</span> kl</td><td>Add current line</td></tr>
+          <tr><td><span class="leader">Space</span> ks</td><td>Add selection</td></tr>
+          <tr><td><span class="leader">Space</span> kp</td><td>Toggle Codex layout</td></tr>
+          <tr><td>gC / gCC</td><td>Add motion / current line as context</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>OpenCode And Minuet</h3>
+        <table>
+          <tr><td><span class="leader">Space</span> oa</td><td>Ask about context; accept edit inside OpenCode diffs</td></tr>
+          <tr><td><span class="leader">Space</span> or</td><td>Reject edit inside OpenCode diffs</td></tr>
+          <tr><td><span class="leader">Space</span> ou</td><td>Start ollama run opencode in the background</td></tr>
+          <tr><td><span class="leader">Space</span> ox</td><td>Open actions</td></tr>
+          <tr><td><span class="leader">Space</span> ot</td><td>Toggle OpenCode terminal</td></tr>
+          <tr><td>go / goo</td><td>Add motion / current line as context</td></tr>
+          <tr><td><span class="leader">Space</span> np/na/nd</td><td>Duet predict / apply / dismiss</td></tr>
+          <tr><td><span class="leader">Space</span> nm</td><td>Select OpenRouter Qwen model</td></tr>
+          <tr><td><span class="mode">INS</span>Alt-z/a/x</td><td>Duet predict / apply / dismiss</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Flutter, Conditional</h3>
+        <table>
+          <tr><td>Availability</td><td>Inactive now; requires a working flutter executable</td></tr>
+          <tr><td><span class="leader">Space</span> Fr</td><td>Run</td></tr>
+          <tr><td><span class="leader">Space</span> Fd / Fe</td><td>Devices / emulators</td></tr>
+          <tr><td><span class="leader">Space</span> FR / Fs</td><td>Hot reload / restart</td></tr>
+          <tr><td><span class="leader">Space</span> Fq</td><td>Quit Flutter</td></tr>
+          <tr><td><span class="leader">Space</span> Fo</td><td>Toggle outline</td></tr>
+          <tr><td><span class="leader">Space</span> Fl</td><td>Restart Flutter LSP</td></tr>
+          <tr><td><span class="leader">Space</span> Ft</td><td>Global command picker after Flutter loads once</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>HTTP And TODO, Conditional</h3>
+        <table>
+          <tr><td>HTTP availability</td><td>Kulala keys appear after opening an HTTP or REST buffer</td></tr>
+          <tr><td><span class="leader">Space</span> rs / ra</td><td>Send request / all requests</td></tr>
+          <tr><td><span class="leader">Space</span> rr</td><td>Replay last request</td></tr>
+          <tr><td><span class="leader">Space</span> ro / rb</td><td>Open Kulala / scratchpad</td></tr>
+          <tr><td><span class="leader">Space</span> rc / rC</td><td>Copy / import cURL</td></tr>
+          <tr><td><span class="leader">Space</span> rn / rp</td><td>Next / previous request</td></tr>
+          <tr><td><span class="leader">Space</span> re / ri</td><td>Environment / inspect</td></tr>
+          <tr><td><span class="leader">Space</span> T</td><td>Open TODO file</td></tr>
+          <tr><td><span class="leader">Space</span> tt/td/tp</td><td>Toggle / done / pending in TODO</td></tr>
+          <tr><td><span class="leader">Space</span> ts / ta</td><td>Add subtask / archive completed in TODO buffers</td></tr>
+          <tr><td><span class="leader">Space</span> tk/tj</td><td>Move TODO up / down</td></tr>
+        </table>
+      </article>
+    </section>
+
+    <div class="section-title" id="inside">
+      <h2>Inside Plugin Windows</h2>
+      <span>Buffer-local mappings can intentionally override the global Colemak layer</span>
+    </div>
+    <section class="grid">
+      <article class="card">
+        <h3>Telescope</h3>
+        <table>
+          <tr><td><span class="mode">INS</span>Ctrl-j / Ctrl-k</td><td>Next / previous selection</td></tr>
+          <tr><td><span class="mode">INS</span>Ctrl-n / Ctrl-p</td><td>Next / previous prompt history</td></tr>
+          <tr><td>Enter</td><td>Select result</td></tr>
+          <tr><td>Ctrl-x/v/t</td><td>Open horizontal / vertical / tab</td></tr>
+          <tr><td>Ctrl-q</td><td>Send results to quickfix</td></tr>
+          <tr><td><span class="mode">INS</span>Ctrl-s</td><td>Open horizontal split</td></tr>
+          <tr><td>Ctrl-u / Ctrl-d</td><td>Scroll preview; overrides global window navigation</td></tr>
+          <tr><td>Tab / Shift-Tab</td><td>Toggle selection and move</td></tr>
+          <tr><td>q / Esc</td><td>Close in Normal mode</td></tr>
+          <tr><td>dd</td><td>Delete buffer in buffer picker</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>NvimTree Colemak</h3>
+        <table>
+          <tr><td>n / i</td><td>Close directory / open node</td></tr>
+          <tr><td>u / e</td><td>Move up / down</td></tr>
+          <tr><td>gU / gE</td><td>Rename full path / basename</td></tr>
+          <tr><td>Enter / o</td><td>Open node</td></tr>
+          <tr><td>Ctrl-v/x/t</td><td>Open vertical / horizontal / tab</td></tr>
+          <tr><td>Ctrl-e</td><td>Open in place; overrides global window-down key</td></tr>
+          <tr><td>a / r</td><td>Create / rename</td></tr>
+          <tr><td>d / D</td><td>Delete / trash</td></tr>
+          <tr><td>c / x / p</td><td>Copy / cut / paste</td></tr>
+          <tr><td>H / I</td><td>Toggle dotfiles / ignored files</td></tr>
+          <tr><td>R / W</td><td>Refresh / collapse all</td></tr>
+          <tr><td>q / g?</td><td>Close / help</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>DAP UI Colemak</h3>
+        <table>
+          <tr><td>n/u/e/i</td><td>Move left / up / down / right</td></tr>
+          <tr><td>gE</td><td>Edit DAP item</td></tr>
+          <tr><td>Enter</td><td>Expand or collapse item</td></tr>
+          <tr><td>o / d</td><td>Open / remove</td></tr>
+          <tr><td>r / t</td><td>Send to REPL / toggle</td></tr>
+          <tr><td>w</td><td>Add value to watches</td></tr>
+          <tr><td>q / Esc</td><td>Close floating UI</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Yazi</h3>
+        <table>
+          <tr><td>Ctrl-v/x/t</td><td>Open vertical / horizontal / tab</td></tr>
+          <tr><td>Ctrl-s</td><td>Grep selection or containing directory</td></tr>
+          <tr><td>Ctrl-g</td><td>Replace is unavailable until grug-far.nvim is installed</td></tr>
+          <tr><td>Tab</td><td>Cycle open buffers</td></tr>
+          <tr><td>Ctrl-y</td><td>Copy relative paths</td></tr>
+          <tr><td>Ctrl-q</td><td>Send selection to quickfix</td></tr>
+          <tr><td>Ctrl-\</td><td>Change Neovim working directory</td></tr>
+          <tr><td>Ctrl-o</td><td>Open and choose target window</td></tr>
+          <tr><td>F1</td><td>Help</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Trouble</h3>
+        <table>
+          <tr><td>Enter / o</td><td>Jump / jump and close</td></tr>
+          <tr><td>Ctrl-s / Ctrl-v</td><td>Horizontal / vertical split</td></tr>
+          <tr><td>} / ]]</td><td>Next item</td></tr>
+          <tr><td>{ / [[</td><td>Previous item</td></tr>
+          <tr><td>p / P</td><td>Preview / toggle preview</td></tr>
+          <tr><td>dd</td><td>Delete item</td></tr>
+          <tr><td>gb / s</td><td>Buffer filter / severity</td></tr>
+          <tr><td>q / Esc</td><td>Close / cancel</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Kulala Response</h3>
+        <table>
+          <tr><td>H / B / A</td><td>Headers / body / both</td></tr>
+          <tr><td>V / O / S / R</td><td>Verbose / script / stats / report</td></tr>
+          <tr><td>] / [</td><td>Next / previous response</td></tr>
+          <tr><td>Enter / Shift-Enter</td><td>Act / send WebSocket message</td></tr>
+          <tr><td>Ctrl-c</td><td>Interrupt request</td></tr>
+          <tr><td>?</td><td>Help</td></tr>
+          <tr><td>q</td><td>Close response UI</td></tr>
+        </table>
+      </article>
+    </section>
+
+    <footer class="footer">
+      Layout state is persisted by <code>lua/config/keyboard_layout.lua</code>. This sheet applies to regular Neovim; the VSCode-Neovim profile keeps its QWERTY mappings.
+    </footer>
+  </main>
+</body>
+</html>
