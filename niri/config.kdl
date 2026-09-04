@@ -9,3 +9,11 @@ include "./cfg/display.kdl"
 include "./cfg/layout.kdl"
 include "./cfg/rules.kdl"
 include "./cfg/misc.kdl"
+
+environment {
+    DISPLAY ":0"
+}
+
+debug {
+    render-drm-device "/dev/dri/renderD129"
+}

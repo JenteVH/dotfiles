@@ -276,6 +276,7 @@
                 <tr><td class="action">Files / grep / buffers</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>ff fg fb</td></tr>
                 <tr><td class="action">Help / commands / oldfiles</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>fh fc fo</td></tr>
                 <tr><td class="action">Keymaps / diagnostics / resume</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>fk fd fr</td></tr>
+                <tr><td class="action">Recent projects</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>fp</td></tr>
                 <tr><td class="action">Grep selection (visual)</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>fg</td></tr>
                 <tr><td class="action">Git commits / branches / status</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>gc gb gs</td></tr>
                 <tr><td class="action">LSP refs / doc / ws symbols</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>lr ls lw</td></tr>
@@ -314,8 +315,27 @@
                 <tr><td class="action">Toggle blame</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>gB</td></tr>
                 <tr><td class="action">Diff file tab (close: q)</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>gd</td></tr>
                 <tr><td class="action">Hunk text object</td><td class="std">&mdash;</td><td class="cfg">ih (rh)</td></tr>
-                <tr><td class="action">LazyGit / log / file log</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>gg gl gf</td></tr>
+                <tr><td class="action">Neogit status</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>gg</td></tr>
                 <tr><td class="action">Diff put / get</td><td class="std">dp do</td><td class="cfg">gdp gdo</td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>Neogit (status buffer)</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Help / close</td><td class="std">&mdash;</td><td class="cfg">? q</td></tr>
+                <tr><td class="action">Expand/collapse diff</td><td class="std">&mdash;</td><td class="cfg"><span class="key">Tab</span></td></tr>
+                <tr><td class="action">Stage / unstage / discard</td><td class="std">&mdash;</td><td class="cfg">s u x</td></tr>
+                <tr><td class="action">Select lines to stage</td><td class="std">&mdash;</td><td class="cfg">V</td></tr>
+                <tr><td class="action">Commit (ZZ ok / ZQ abort)</td><td class="std">&mdash;</td><td class="cfg">cc</td></tr>
+                <tr><td class="action">Push / push upstream</td><td class="std">&mdash;</td><td class="cfg">Pp Pu</td></tr>
+                <tr><td class="action">Pull / fetch</td><td class="std">&mdash;</td><td class="cfg">Fp Ff</td></tr>
+                <tr><td class="action">Checkout / create branch</td><td class="std">&mdash;</td><td class="cfg">bb bc</td></tr>
+                <tr><td class="action">Log</td><td class="std">&mdash;</td><td class="cfg">Ll</td></tr>
+                <tr><td class="action">Stash / pop stash</td><td class="std">&mdash;</td><td class="cfg">Zz Zp</td></tr>
+                <tr><td class="action">Rebase / merge popups</td><td class="std">&mdash;</td><td class="cfg">Rb Mi</td></tr>
+                <tr><td class="action">Git command output</td><td class="std">&mdash;</td><td class="cfg">$</td></tr>
             </table>
         </div>
 
@@ -357,29 +377,6 @@
         </div>
 
         <div class="category">
-            <h2>Codex</h2>
-            <table>
-                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
-                <tr><td class="action">Toggle / focus / hide</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>kt kf kq</td></tr>
-                <tr><td class="action">Ask / ask selection</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>ka</td></tr>
-                <tr><td class="action">Add buffer / ask buffer</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>kb kB</td></tr>
-                <tr><td class="action">Add line / selection</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>kl ks</td></tr>
-                <tr><td class="action">Split direction</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>kp</td></tr>
-                <tr><td class="action">Add range / line (operator)</td><td class="std">&mdash;</td><td class="cfg">gC gCC</td></tr>
-            </table>
-        </div>
-
-        <div class="category">
-            <h2>AI Completion (Minuet)</h2>
-            <table>
-                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
-                <tr><td class="action">Predict / apply / dismiss</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>np na nd</td></tr>
-                <tr><td class="action">Select model</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>nm</td></tr>
-                <tr><td class="action">Insert: predict / apply / dismiss</td><td class="std">&mdash;</td><td class="cfg"><span class="key">M-z</span> <span class="key">M-a</span> <span class="key">M-x</span></td></tr>
-            </table>
-        </div>
-
-        <div class="category">
             <h2>Terminals</h2>
             <table>
                 <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
@@ -392,23 +389,12 @@
         </div>
 
         <div class="category">
-            <h2>Harpoon</h2>
-            <table>
-                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
-                <tr><td class="action">Add / menu</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>a e</td></tr>
-                <tr><td class="action">File 1-4</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>1 2 3 4</td></tr>
-                <tr><td class="action">Prev / next</td><td class="std">&mdash;</td><td class="cfg"><span class="key">C-S-P</span> <span class="key">C-S-N</span></td></tr>
-            </table>
-        </div>
-
-        <div class="category">
             <h2>Completion (insert)</h2>
             <table>
                 <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
                 <tr><td class="action">Trigger / abort</td><td class="std">&mdash;</td><td class="cfg"><span class="key">C-Space</span> <span class="key">C-e</span></td></tr>
                 <tr><td class="action">Scroll docs up / down</td><td class="std">&mdash;</td><td class="cfg"><span class="key">C-b</span> <span class="key">C-f</span></td></tr>
                 <tr><td class="action">Confirm / next / prev</td><td class="std">&mdash;</td><td class="cfg"><span class="key">CR</span> <span class="key">Tab</span> <span class="key">S-Tab</span></td></tr>
-                <tr><td class="action">Minuet-only source</td><td class="std">&mdash;</td><td class="cfg"><span class="key">M-]</span></td></tr>
             </table>
         </div>
 
@@ -417,11 +403,7 @@
             <table>
                 <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
                 <tr><td class="action">Diagram at cursor</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>md</td></tr>
-                <tr><td class="action">PlatformIO menu</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>p</td></tr>
                 <tr><td class="action">HTTP requests (kulala)</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>r...</td></tr>
-                <tr><td class="action">Flutter run / devices / emulators</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>Fr Fd Fe</td></tr>
-                <tr><td class="action">Flutter reload / restart / quit</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>FR Fs Fq</td></tr>
-                <tr><td class="action">Flutter outline / LSP / commands</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>Fo Fl Ft</td></tr>
                 <tr><td class="action">Toggle QWERTY / Colemak</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>uk</td></tr>
             </table>
         </div>

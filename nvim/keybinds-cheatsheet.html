@@ -182,6 +182,7 @@
                 <tr><td><span class="leader">Space</span>fk</td><td>Keymaps</td></tr>
                 <tr><td><span class="leader">Space</span>fd</td><td>Diagnostics</td></tr>
                 <tr><td><span class="leader">Space</span>fr</td><td>Resume last</td></tr>
+                <tr><td><span class="leader">Space</span>fp</td><td>Projects</td></tr>
             </table>
         </div>
 
@@ -254,11 +255,12 @@
         <div class="category">
             <h2>Git</h2>
             <table>
+                <tr><td><span class="leader">Space</span>gg</td><td>Neogit</td></tr>
                 <tr><td><span class="leader">Space</span>gc</td><td>Commits</td></tr>
                 <tr><td><span class="leader">Space</span>gb</td><td>Branches</td></tr>
                 <tr><td><span class="leader">Space</span>gB</td><td>Toggle blame</td></tr>
                 <tr><td><span class="leader">Space</span>gs</td><td>Status</td></tr>
-                <tr><td><span class="leader">Space</span>gd</td><td>Toggle deleted</td></tr>
+                <tr><td><span class="leader">Space</span>gd</td><td>Diff current file</td></tr>
             </table>
         </div>
 
@@ -273,11 +275,28 @@
                 <tr><td><span class="leader">Space</span>hS</td><td>Stage buffer</td></tr>
                 <tr><td><span class="leader">Space</span>hR</td><td>Reset buffer</td></tr>
                 <tr><td><span class="leader">Space</span>hu</td><td>Undo stage</td></tr>
-                <tr><td><span class="leader">Space</span>hp</td><td>Preview hunk</td></tr>
                 <tr><td><span class="leader">Space</span>hb</td><td>Blame line</td></tr>
-                <tr><td><span class="leader">Space</span>hd</td><td>Diff this</td></tr>
-                <tr><td><span class="leader">Space</span>hD</td><td>Diff ~</td></tr>
                 <tr><td>ih</td><td>Select hunk</td></tr>
+            </table>
+        </div>
+
+        <!-- Neogit (status buffer) -->
+        <div class="category">
+            <h2>Neogit</h2>
+            <table>
+                <tr><td>?</td><td>Help</td></tr>
+                <tr><td><span class="key">Tab</span></td><td>Expand/collapse diff</td></tr>
+                <tr><td>s / u / x</td><td>Stage / unstage / discard</td></tr>
+                <tr><td>V</td><td>Select lines to stage</td></tr>
+                <tr><td>cc</td><td>Commit (ZZ ok, ZQ abort)</td></tr>
+                <tr><td>Pp / Pu</td><td>Push / push upstream</td></tr>
+                <tr><td>Fp / Ff</td><td>Pull / fetch</td></tr>
+                <tr><td>bb / bc</td><td>Checkout / create branch</td></tr>
+                <tr><td>Ll</td><td>Log</td></tr>
+                <tr><td>Zz / Zp</td><td>Stash / pop stash</td></tr>
+                <tr><td>Rb / Mi</td><td>Rebase / merge popups</td></tr>
+                <tr><td>$</td><td>Git command output</td></tr>
+                <tr><td>q</td><td>Close Neogit</td></tr>
             </table>
         </div>
 
@@ -535,34 +554,6 @@
                 <tr><td><span class="leader">Space</span>am</td><td>Select model</td></tr>
                 <tr><td><span class="leader">Space</span>ab</td><td>Add buffer</td></tr>
                 <tr><td><span class="leader">Space</span>at</td><td>Add from tree</td></tr>
-            </table>
-        </div>
-
-        <!-- Completion -->
-        <div class="category">
-            <h2>Completion</h2>
-            <table>
-                <tr><td><span class="key">C-Space</span></td><td>Show suggestions</td></tr>
-                <tr><td><span class="key">Tab</span></td><td>Next suggestion / snippet field</td></tr>
-                <tr><td><span class="key">S-Tab</span></td><td>Previous suggestion / snippet field</td></tr>
-                <tr><td><span class="key">Enter</span></td><td>Accept selected suggestion</td></tr>
-                <tr><td><span class="key">M-]</span></td><td>Request Minuet AI completion</td></tr>
-            </table>
-        </div>
-
-        <!-- Flutter -->
-        <div class="category">
-            <h2>Flutter</h2>
-            <table>
-                <tr><td><span class="leader">Space</span>Fr</td><td>Run</td></tr>
-                <tr><td><span class="leader">Space</span>Fd</td><td>Devices</td></tr>
-                <tr><td><span class="leader">Space</span>Fe</td><td>Emulators</td></tr>
-                <tr><td><span class="leader">Space</span>FR</td><td>Hot Reload</td></tr>
-                <tr><td><span class="leader">Space</span>Fs</td><td>Hot Restart</td></tr>
-                <tr><td><span class="leader">Space</span>Fq</td><td>Quit</td></tr>
-                <tr><td><span class="leader">Space</span>Fo</td><td>Outline</td></tr>
-                <tr><td><span class="leader">Space</span>Fl</td><td>LSP Restart</td></tr>
-                <tr><td><span class="leader">Space</span>Ft</td><td>Commands</td></tr>
             </table>
         </div>
     </div>

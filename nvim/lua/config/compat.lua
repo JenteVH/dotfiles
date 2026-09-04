@@ -1,5 +1,9 @@
 -- Compatibility shims for plugins that lag behind current Neovim APIs.
 
+-- Silence deprecation notices: they pile up from third-party plugins and can
+-- only be fixed upstream, so the warnings are pure noise.
+vim.deprecate = function() end
+
 local function unwrap_ts_node(node)
   if type(node) ~= "table" then
     return node

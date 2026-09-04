@@ -618,6 +618,7 @@
           <tr><td><span class="leader">Space</span> fk</td><td>Configured keymaps</td></tr>
           <tr><td><span class="leader">Space</span> fd</td><td>Diagnostics</td></tr>
           <tr><td><span class="leader">Space</span> fr</td><td>Resume picker</td></tr>
+          <tr><td><span class="leader">Space</span> fp</td><td>Recent projects</td></tr>
           <tr><td><span class="leader">Space</span> ; / :</td><td>Toggle tree / find file in tree</td></tr>
           <tr><td><span class="leader">Space</span> e / E</td><td>Yazi at file / working directory</td></tr>
           <tr><td>-</td><td>Open Yazi at current file</td></tr>
@@ -673,11 +674,8 @@
       </article>
 
       <article class="card">
-        <h3>Harpoon And Wrapping</h3>
+        <h3>Surround Wrapping</h3>
         <table>
-          <tr><td><span class="leader">Space</span> a</td><td>Add file to Harpoon</td></tr>
-          <tr><td><span class="leader">Space</span> 1..4</td><td>Select Harpoon entry</td></tr>
-          <tr><td>Ctrl-Shift-P/N</td><td>Previous / next Harpoon entry</td></tr>
           <tr><td><span class="leader">Space</span> s"</td><td>Wrap selection in double quotes</td></tr>
           <tr><td><span class="leader">Space</span> s'</td><td>Wrap selection in single quotes</td></tr>
           <tr><td><span class="leader">Space</span> s`</td><td>Wrap selection in backticks</td></tr>
@@ -760,7 +758,6 @@
           <tr><td><span class="mode">INS</span>Tab / Shift-Tab</td><td>Completion or snippet forward / back</td></tr>
           <tr><td><span class="mode">INS</span>Ctrl-b / Ctrl-f</td><td>Scroll documentation</td></tr>
           <tr><td><span class="mode">INS</span>Ctrl-e</td><td>Abort completion</td></tr>
-          <tr><td><span class="mode">INS</span>Alt-]</td><td>Request Minuet completion</td></tr>
         </table>
       </article>
 
@@ -783,16 +780,33 @@
     </div>
     <section class="grid">
       <article class="card">
-        <h3>Git Pickers And LazyGit</h3>
+        <h3>Git Pickers And Neogit</h3>
         <table>
           <tr><td><span class="leader">Space</span> gc</td><td>Git commits</td></tr>
           <tr><td><span class="leader">Space</span> gb</td><td>Git branches</td></tr>
           <tr><td><span class="leader">Space</span> gs</td><td>Git status</td></tr>
           <tr><td><span class="leader">Space</span> gB</td><td>Toggle current-line blame</td></tr>
-          <tr><td><span class="leader">Space</span> gg</td><td>LazyGit at repository root</td></tr>
-          <tr><td><span class="leader">Space</span> gl</td><td>LazyGit log</td></tr>
-          <tr><td><span class="leader">Space</span> gf</td><td>Current-file Git log</td></tr>
+          <tr><td><span class="leader">Space</span> gg</td><td>Neogit status</td></tr>
           <tr><td>gdp / gdo</td><td>Diff put / get</td></tr>
+        </table>
+      </article>
+
+      <article class="card">
+        <h3>Neogit Status Buffer</h3>
+        <table>
+          <tr><td>?</td><td>Help / all keybindings</td></tr>
+          <tr><td>Tab</td><td>Expand / collapse file diff</td></tr>
+          <tr><td>s / u / x</td><td>Stage / unstage / discard (file or hunk)</td></tr>
+          <tr><td>V</td><td>Visual-select lines to stage</td></tr>
+          <tr><td>cc</td><td>Commit (ZZ confirm, ZQ abort)</td></tr>
+          <tr><td>Pp / Pu</td><td>Push / push to upstream</td></tr>
+          <tr><td>Fp / Ff</td><td>Pull / fetch</td></tr>
+          <tr><td>bb / bc</td><td>Checkout / create branch</td></tr>
+          <tr><td>Ll</td><td>Log / history</td></tr>
+          <tr><td>Zz / Zp</td><td>Stash / pop stash</td></tr>
+          <tr><td>Rb / Mi</td><td>Rebase / merge popups</td></tr>
+          <tr><td>$</td><td>Git command output log</td></tr>
+          <tr><td>q</td><td>Close Neogit</td></tr>
         </table>
       </article>
 
@@ -831,7 +845,7 @@
 
     <div class="section-title" id="tools">
       <h2>Tools And AI</h2>
-      <span>Terminals, agents, HTTP, Flutter, and TODO</span>
+      <span>Terminals, agents, HTTP, and TODO</span>
     </div>
     <section class="grid">
       <article class="card">
@@ -843,7 +857,7 @@
           <tr><td><span class="leader">Space</span> tv1..9</td><td>Numbered vertical terminal</td></tr>
           <tr><td><span class="leader">Space</span> ts / ta</td><td>Select / toggle all terminals; TODO buffers override both</td></tr>
           <tr><td><span class="mode">N/INS/TERM</span>Ctrl-\</td><td>Toggle the ToggleTerm view; terminal mode only in ToggleTerm buffers</td></tr>
-          <tr><td><span class="mode">TERM</span>Ctrl-q</td><td>Leave terminal mode; hides Codex in its terminal</td></tr>
+          <tr><td><span class="mode">TERM</span>Ctrl-q</td><td>Leave terminal mode</td></tr>
           <tr><td><span class="mode">TERM</span>Ctrl-n/u/e/i</td><td>Leave terminal and navigate left / up / down / right; Ctrl-i is Tab</td></tr>
           <tr><td><span class="mode">TERM</span>Ctrl-h/j/k/l</td><td>Leave terminal and navigate windows</td></tr>
         </table>
@@ -862,20 +876,7 @@
       </article>
 
       <article class="card">
-        <h3>Codex</h3>
-        <table>
-          <tr><td><span class="leader">Space</span> kt/kf/kq</td><td>Toggle / focus / hide Codex</td></tr>
-          <tr><td><span class="leader">Space</span> ka</td><td>Prompt or ask about selection</td></tr>
-          <tr><td><span class="leader">Space</span> kb / kB</td><td>Add / ask about buffer</td></tr>
-          <tr><td><span class="leader">Space</span> kl</td><td>Add current line</td></tr>
-          <tr><td><span class="leader">Space</span> ks</td><td>Add selection</td></tr>
-          <tr><td><span class="leader">Space</span> kp</td><td>Toggle Codex layout</td></tr>
-          <tr><td>gC / gCC</td><td>Add motion / current line as context</td></tr>
-        </table>
-      </article>
-
-      <article class="card">
-        <h3>OpenCode And Minuet</h3>
+        <h3>OpenCode</h3>
         <table>
           <tr><td><span class="leader">Space</span> oa</td><td>Ask about context; accept edit inside OpenCode diffs</td></tr>
           <tr><td><span class="leader">Space</span> or</td><td>Reject edit inside OpenCode diffs</td></tr>
@@ -883,23 +884,6 @@
           <tr><td><span class="leader">Space</span> ox</td><td>Open actions</td></tr>
           <tr><td><span class="leader">Space</span> ot</td><td>Toggle OpenCode terminal</td></tr>
           <tr><td>go / goo</td><td>Add motion / current line as context</td></tr>
-          <tr><td><span class="leader">Space</span> np/na/nd</td><td>Duet predict / apply / dismiss</td></tr>
-          <tr><td><span class="leader">Space</span> nm</td><td>Select OpenRouter Qwen model</td></tr>
-          <tr><td><span class="mode">INS</span>Alt-z/a/x</td><td>Duet predict / apply / dismiss</td></tr>
-        </table>
-      </article>
-
-      <article class="card">
-        <h3>Flutter, Conditional</h3>
-        <table>
-          <tr><td>Availability</td><td>Inactive now; requires a working flutter executable</td></tr>
-          <tr><td><span class="leader">Space</span> Fr</td><td>Run</td></tr>
-          <tr><td><span class="leader">Space</span> Fd / Fe</td><td>Devices / emulators</td></tr>
-          <tr><td><span class="leader">Space</span> FR / Fs</td><td>Hot reload / restart</td></tr>
-          <tr><td><span class="leader">Space</span> Fq</td><td>Quit Flutter</td></tr>
-          <tr><td><span class="leader">Space</span> Fo</td><td>Toggle outline</td></tr>
-          <tr><td><span class="leader">Space</span> Fl</td><td>Restart Flutter LSP</td></tr>
-          <tr><td><span class="leader">Space</span> Ft</td><td>Global command picker after Flutter loads once</td></tr>
         </table>
       </article>
 
@@ -1017,7 +1001,7 @@
     </section>
 
     <footer class="footer">
-      Layout state is persisted by <code>lua/config/keyboard_layout.lua</code>. This sheet applies to regular Neovim; the VSCode-Neovim profile keeps its QWERTY mappings.
+      Layout state is persisted by <code>lua/config/keyboard_layout.lua</code>. This sheet applies to regular Neovim.
     </footer>
   </main>
 </body>

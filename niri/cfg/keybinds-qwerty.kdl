@@ -3,7 +3,7 @@ binds {
     Mod+Q { spawn "kitty"; }
     Mod+Shift+Q { quit; }
     Mod+C { close-window; }
-    Mod+D { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
+    Mod+D { spawn-sh "noctalia-shell ipc call launcher toggle"; }
     Mod+Grave { toggle-overview; }
 
     // ─── Keymap Toggle ───
@@ -130,6 +130,6 @@ binds {
     Alt+Print      { screenshot-window; }
 
     // ─── Lock+Suspend / Exit / Power ───
-    Mod+Ctrl+P  { spawn-sh "qs -c noctalia-shell ipc call sessionMenu lockAndSuspend"; }
+    Mod+Ctrl+P  { spawn-sh "noctalia-shell ipc call sessionMenu lockAndSuspend"; }
     Mod+Shift+P { power-off-monitors; }
 }

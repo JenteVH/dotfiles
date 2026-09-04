@@ -33,25 +33,6 @@ return {
       vim.api.nvim_set_hl(0, "CmpPmenu", { bg = cmp_bg, fg = normal.fg })
       vim.api.nvim_set_hl(0, "CmpBorder", { bg = cmp_bg, fg = normal.fg })
 
-      local function compare_ai_first(entry1, entry2)
-        local entry1_is_ai = entry1.source.name == "minuet"
-        local entry2_is_ai = entry2.source.name == "minuet"
-
-        if entry1_is_ai ~= entry2_is_ai then
-          return entry1_is_ai
-        end
-      end
-
-      local function complete_with_minuet()
-        cmp.complete({
-          config = {
-            sources = cmp.config.sources({
-              { name = "minuet" },
-            }),
-          },
-        })
-      end
-
       cmp.setup({
         preselect = cmp.PreselectMode.None,
         completion = {
@@ -91,7 +72,6 @@ return {
           ["<C-e>"] = cmp.mapping.abort(),
           ["<C-Space>"] = cmp.mapping.complete(),
           ["<C-@>"] = cmp.mapping.complete(),
-          ["<M-]>"] = cmp.mapping(complete_with_minuet, { "i" }),
           ["<CR>"] = cmp.mapping(function(fallback)
             local view = cmp.core.view
             if view:visible() and view:get_selected_entry() then
@@ -120,7 +100,6 @@ return {
           end, { "i", "s" }),
         }),
         sources = {
-          { name = "minuet", priority = 1000 },
           {
             name = "nvim_lsp",
             priority = 750,
@@ -137,7 +116,6 @@ return {
         sorting = {
           priority_weight = 2,
           comparators = {
-            compare_ai_first,
             cmp.config.compare.offset,
             cmp.config.compare.exact,
             cmp.config.compare.score,

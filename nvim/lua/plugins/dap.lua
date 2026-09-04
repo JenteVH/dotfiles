@@ -153,6 +153,40 @@ return {
       dap.configurations.c = dap.configurations.cpp
       dap.configurations.objc = dap.configurations.cpp
 
+      dap.configurations.rust = {
+        {
+          name = "Launch (cargo)",
+          type = "codelldb",
+          request = "launch",
+          cargo = {
+            args = { "build" },
+          },
+          cwd = "${workspaceFolder}",
+          stopOnEntry = false,
+        },
+        {
+          name = "Launch editor (cargo)",
+          type = "codelldb",
+          request = "launch",
+          cargo = {
+            args = { "build", "--features", "editor", "--bin", "editor" },
+            filter = { name = "editor", kind = "bin" },
+          },
+          args = { "." },
+          cwd = "${workspaceFolder}",
+          stopOnEntry = false,
+        },
+        {
+          name = "Attach (codelldb, pid)",
+          type = "codelldb",
+          request = "attach",
+          pid = function()
+            return tonumber(vim.fn.input("PID: "))
+          end,
+          cwd = "${workspaceFolder}",
+        },
+      }
+
       dap.configurations.python = {
         {
           type = "python",

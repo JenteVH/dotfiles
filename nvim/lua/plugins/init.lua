@@ -285,7 +285,6 @@ return {
           "help",
           "dashboard",
           "neo-tree",
-          "lazygit",
         },
         under_cursor = true,
         min_count_to_highlight = 2,

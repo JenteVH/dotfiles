@@ -33,7 +33,7 @@ opt.completeopt = "menuone,noselect"
 opt.pumheight = 10
 opt.hidden = true  -- Allow hidden buffers (don't force save when switching)
 opt.ttimeoutlen = 150  -- Give Alt/Meta key sequences enough time to arrive
-opt.autoread = true  -- Reload files changed outside Neovim, e.g. from LazyGit
+opt.autoread = true  -- Reload files changed outside Neovim
 opt.clipboard = "unnamedplus"  -- Yank/delete/paste use the system clipboard
 
 -- Python specific

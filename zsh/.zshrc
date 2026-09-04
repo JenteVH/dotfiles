@@ -5,7 +5,11 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-source /usr/share/cachyos-zsh-config/cachyos-config.zsh
+if [[ -f /usr/share/cachyos-zsh-config/cachyos-config.zsh ]]; then
+  source /usr/share/cachyos-zsh-config/cachyos-config.zsh
+elif [[ -f /run/current-system/sw/share/zsh-powerlevel10k/powerlevel10k.zsh-theme ]]; then
+  source /run/current-system/sw/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+fi
 
 # Disable zsh command autocorrection prompts.
 unsetopt correct
@@ -43,7 +47,7 @@ if [[ -d "$HOME/.cargo/bin" && ":$PATH:" != *":$HOME/.cargo/bin:"* ]]; then
   export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+[[ -d /usr/lib/jvm/java-17-openjdk ]] && export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 export ANDROID_HOME="$HOME/Android/Sdk"
 export PATH="$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools"
 
