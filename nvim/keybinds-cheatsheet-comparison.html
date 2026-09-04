@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neovim Keybindings: Standard Vim vs Colemak Layer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 8px;
+            line-height: 1.15;
+            font-size: 12px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #89b4fa;
+            margin-bottom: 8px;
+            font-size: 1.3em;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 6px;
+        }
+
+        .category {
+            background: #313244;
+            border-radius: 4px;
+            padding: 6px;
+            border: 1px solid #45475a;
+        }
+
+        .category h2 {
+            color: #a6e3a1;
+            font-size: 0.9em;
+            margin-bottom: 4px;
+            padding-bottom: 2px;
+            border-bottom: 1px solid #45475a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            color: #89b4fa;
+            font-size: 0.8em;
+            padding: 1px 3px;
+            border-bottom: 1px solid #45475a;
+        }
+
+        td {
+            padding: 1px 3px;
+            border-bottom: 1px solid #3a3c4e;
+            vertical-align: top;
+        }
+
+        td.action {
+            color: #bac2de;
+            font-size: 0.85em;
+        }
+
+        td.std {
+            color: #bac2de;
+            white-space: nowrap;
+        }
+
+        td.cfg {
+            color: #f9e2af;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: #45475a;
+        }
+
+        .leader {
+            color: #f38ba8;
+            font-weight: bold;
+        }
+
+        .key {
+            background: #45475a;
+            padding: 0 2px;
+            border-radius: 2px;
+            margin: 0 1px;
+            font-size: 0.9em;
+        }
+
+        .legend {
+            background: #313244;
+            border-radius: 4px;
+            padding: 4px;
+            margin-bottom: 6px;
+            text-align: center;
+            border: 1px solid #45475a;
+            font-size: 0.85em;
+        }
+
+        .legend span {
+            margin: 0 6px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1600px) {
+            .container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Standard Vim vs Colemak Layer</h1>
+
+    <div class="legend">
+        <a href="keybinds-cheatsheet.html">QWERTY cheat sheet</a> |
+        <a href="keybinds-cheatsheet-colemak.html">Colemak cheat sheet</a>
+    </div>
+
+    <div class="legend">
+        <span>&mdash; = no standard Vim default</span>
+        <span><span class="leader">Space</span> = Leader</span>
+        <span><span class="key">C</span> = Ctrl</span>
+        <span><span class="key">S</span> = Shift</span>
+        <span><span class="key">M</span> = Alt</span>
+    </div>
+
+    <div class="container">
+        <div class="category">
+            <h2>Core Movement</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Layer</th></tr>
+                <tr><td class="action">Left / down / up / right</td><td class="std">h j k l</td><td class="cfg">n e u i</td></tr>
+                <tr><td class="action">Page up / down</td><td class="std"><span class="key">C-u</span> <span class="key">C-d</span></td><td class="cfg">j / h</td></tr>
+                <tr><td class="action">First non-blank / EOL</td><td class="std">^ / $</td><td class="cfg">L / Y</td></tr>
+                <tr><td class="action">Prev / next word</td><td class="std">b / w</td><td class="cfg">l / y</td></tr>
+                <tr><td class="action">Prev / next WORD</td><td class="std">B / W</td><td class="cfg"><span class="key">C-l</span> <span class="key">C-y</span></td></tr>
+                <tr><td class="action">WORD end prev / next</td><td class="std">gE / E</td><td class="cfg">gN / gI</td></tr>
+                <tr><td class="action">Jumplist back / fwd</td><td class="std"><span class="key">C-o</span> <span class="key">C-i</span></td><td class="cfg">( / )</td></tr>
+                <tr><td class="action">Sentence prev / next</td><td class="std">( / )</td><td class="cfg">g( / g)</td></tr>
+                <tr><td class="action">Search next / prev</td><td class="std">n / N</td><td class="cfg">k / K</td></tr>
+                <tr><td class="action">Till char fwd / back</td><td class="std">t / T</td><td class="cfg">p / P</td></tr>
+                <tr><td class="action">Leap fwd / back</td><td class="std">&mdash;</td><td class="cfg">f / F</td></tr>
+                <tr><td class="action">Screen top / bottom</td><td class="std">H / L</td><td class="cfg">gH / gL, B</td></tr>
+                <tr><td class="action">Next / prev reference</td><td class="std">&mdash;</td><td class="cfg">]] / [[</td></tr>
+                <tr><td class="action">Function/class motions</td><td class="std">&mdash;</td><td class="cfg">]m ]M [m [M ][ []</td></tr>
+                <tr><td class="action">Scroll viewport 10%</td><td class="std">&mdash;</td><td class="cfg"><span class="key">M-n/u/e/i</span></td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>Editing Verbs</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Layer</th></tr>
+                <tr><td class="action">Insert / at BOL</td><td class="std">i / I</td><td class="cfg">s / S</td></tr>
+                <tr><td class="action">Append / at EOL</td><td class="std">a / A</td><td class="cfg">t / T</td></tr>
+                <tr><td class="action">Change / to EOL / line</td><td class="std">c C cc</td><td class="cfg">w W ww</td></tr>
+                <tr><td class="action">Copy / to EOL</td><td class="std">y y$</td><td class="cfg">c C</td></tr>
+                <tr><td class="action">Cut line / selection</td><td class="std">dd / d</td><td class="cfg">X</td></tr>
+                <tr><td class="action">Cut word</td><td class="std">diw</td><td class="cfg">dry</td></tr>
+                <tr><td class="action">Paste after / before</td><td class="std">p / P</td><td class="cfg">v / V</td></tr>
+                <tr><td class="action">Paste w/o yank (visual)</td><td class="std">&mdash;</td><td class="cfg">v</td></tr>
+                <tr><td class="action">Paste, cursor after</td><td class="std">gp / gP</td><td class="cfg">gv / gV</td></tr>
+                <tr><td class="action">Undo / redo / line restore</td><td class="std">u <span class="key">C-r</span> U</td><td class="cfg">z Z gz</td></tr>
+                <tr><td class="action">Visual / V-line / reselect</td><td class="std">v V gv</td><td class="cfg">a A ga</td></tr>
+                <tr><td class="action">Inner / around object</td><td class="std">i / a</td><td class="cfg">r / t</td></tr>
+                <tr><td class="action">Delete backward / Ex mode</td><td class="std">X / Q</td><td class="cfg">gX / gQ</td></tr>
+                <tr><td class="action">Replay q macro</td><td class="std">@q</td><td class="cfg">Q</td></tr>
+                <tr><td class="action">Insert at column 1</td><td class="std">gI</td><td class="cfg">gS</td></tr>
+                <tr><td class="action">Move selection down / up</td><td class="std">&mdash;</td><td class="cfg">E / U</td></tr>
+                <tr><td class="action">Indent, keep selection</td><td class="std">&mdash;</td><td class="cfg">&lt; / &gt;</td></tr>
+                <tr><td class="action">Swap arg next / prev</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>a / A</td></tr>
+                <tr><td class="action">Comment line / block</td><td class="std">&mdash;</td><td class="cfg">gcc / gbc</td></tr>
+                <tr><td class="action">TS select grow / scope / shrink</td><td class="std">&mdash;</td><td class="cfg"><span class="key">C-Space</span> <span class="key">C-s</span> <span class="key">BS</span></td></tr>
+                <tr><td class="action">TS text objects</td><td class="std">&mdash;</td><td class="cfg">af if ac ic aa ia ab ib</td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>Wrap Selection (visual)</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Double quotes</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>s"</td></tr>
+                <tr><td class="action">Single quotes</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>s'</td></tr>
+                <tr><td class="action">Backticks</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>s`</td></tr>
+                <tr><td class="action">Curly / square / round / angle</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>s{ s[ s( s&lt;</td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>Folds</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Layer</th></tr>
+                <tr><td class="action">Toggle / open / close</td><td class="std">za zo zc</td><td class="cfg">ba bo bc</td></tr>
+                <tr><td class="action">Open / close recursive</td><td class="std">zO zC</td><td class="cfg">bO bC</td></tr>
+                <tr><td class="action">Open / close all</td><td class="std">zR zM</td><td class="cfg">bR bM</td></tr>
+                <tr><td class="action">Create / delete</td><td class="std">zf zd</td><td class="cfg">bf bd</td></tr>
+                <tr><td class="action">Next / prev fold</td><td class="std">zj zk</td><td class="cfg">be bu</td></tr>
+                <tr><td class="action">More / less folding</td><td class="std">zm zr</td><td class="cfg">bm br</td></tr>
+                <tr><td class="action">Enable / disable / toggle</td><td class="std">zN zn zi</td><td class="cfg">bN bn bi</td></tr>
+                <tr><td class="action">Update fold(s)</td><td class="std">zx zX</td><td class="cfg">bx bX</td></tr>
+                <tr><td class="action">Cursor top / bottom</td><td class="std">zt zb</td><td class="cfg">bt bb</td></tr>
+                <tr><td class="action">Spelling suggestions</td><td class="std">z=</td><td class="cfg">b=</td></tr>
+                <tr><td class="action">Fold start / end motion</td><td class="std">[z ]z</td><td class="cfg">[b ]b</td></tr>
+                <tr><td class="action">Peek fold / hover</td><td class="std">&mdash;</td><td class="cfg">bK</td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>Windows / Tabs</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Focus window</td><td class="std"><span class="key">C-w</span>hjkl</td><td class="cfg"><span class="key">C-n/u/e/i</span></td></tr>
+                <tr><td class="action">Move window</td><td class="std"><span class="key">C-w</span>HJKL</td><td class="cfg"><span class="key">C-w</span>NUEI</td></tr>
+                <tr><td class="action">Split vert / horiz / close</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>wv wh wx</td></tr>
+                <tr><td class="action">Equal / rotate splits</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>we wr</td></tr>
+                <tr><td class="action">Resize</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>wN wI wU wE</td></tr>
+                <tr><td class="action">Tab next/prev/new/close</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>tn tp to tc</td></tr>
+                <tr><td class="action">Go to tab N</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>t1..t9</td></tr>
+                <tr><td class="action">Window number</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>?</td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>Buffers / Files</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Prev / next buffer</td><td class="std">&mdash;</td><td class="cfg">N / I, <span class="key">S-h</span> <span class="key">S-l</span></td></tr>
+                <tr><td class="action">Move buffer left / right</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>bH bL</td></tr>
+                <tr><td class="action">Pin / pick-close</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>bp bP</td></tr>
+                <tr><td class="action">Close others / right / left</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>bo br bl</td></tr>
+                <tr><td class="action">Close / force close</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>c / C</td></tr>
+                <tr><td class="action">Save / save all / quit all</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>w W Q</td></tr>
+                <tr><td class="action">Copy full / relative path</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>yp yr</td></tr>
+                <tr><td class="action">Format document</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>f</td></tr>
+                <tr><td class="action">Tree toggle / find file</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>; <span class="leader">Space</span>:</td></tr>
+                <tr><td class="action">Yazi file / cwd / vim-style</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>e E -</td></tr>
+                <tr><td class="action">TODO file</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>T</td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>Telescope</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Files / grep / buffers</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>ff fg fb</td></tr>
+                <tr><td class="action">Help / commands / oldfiles</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>fh fc fo</td></tr>
+                <tr><td class="action">Keymaps / diagnostics / resume</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>fk fd fr</td></tr>
+                <tr><td class="action">Grep selection (visual)</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>fg</td></tr>
+                <tr><td class="action">Git commits / branches / status</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>gc gb gs</td></tr>
+                <tr><td class="action">LSP refs / doc / ws symbols</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>lr ls lw</td></tr>
+                <tr><td class="action">LSP impl / defs / type defs</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>li ld lt</td></tr>
+                <tr><td class="action">Picker: next / prev item</td><td class="std">&mdash;</td><td class="cfg"><span class="key">C-j</span> <span class="key">C-k</span></td></tr>
+                <tr><td class="action">Picker: history / qflist / hsplit</td><td class="std">&mdash;</td><td class="cfg"><span class="key">C-n</span> <span class="key">C-p</span> <span class="key">C-q</span> <span class="key">C-s</span></td></tr>
+                <tr><td class="action">Picker: close / delete buffer</td><td class="std">&mdash;</td><td class="cfg">q, <span class="key">C-d</span></td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>LSP / Diagnostics</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Hover</td><td class="std">K</td><td class="cfg">gK / gh</td></tr>
+                <tr><td class="action">Definition / declaration</td><td class="std">&mdash;</td><td class="cfg">gd gD</td></tr>
+                <tr><td class="action">Implementation / references</td><td class="std">&mdash;</td><td class="cfg">gi gr</td></tr>
+                <tr><td class="action">Type definition</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>D</td></tr>
+                <tr><td class="action">Rename / code action</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>rn ca</td></tr>
+                <tr><td class="action">Prev / next diagnostic</td><td class="std">&mdash;</td><td class="cfg">[d ]d</td></tr>
+                <tr><td class="action">Diagnostic float / loclist</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>de dq</td></tr>
+                <tr><td class="action">Workspace add / remove / list</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>wa wr wl</td></tr>
+                <tr><td class="action">Add / organize imports</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>lI lO</td></tr>
+                <tr><td class="action">Trouble: diag / buffer / sym / qf</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>xx xX xs xq</td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>Git</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Next / prev hunk</td><td class="std">]c [c</td><td class="cfg">]h [h</td></tr>
+                <tr><td class="action">Stage / reset hunk</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>hs hr</td></tr>
+                <tr><td class="action">Stage / reset buffer</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>hS hR</td></tr>
+                <tr><td class="action">Undo stage / blame line</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>hu hb</td></tr>
+                <tr><td class="action">Toggle blame</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>gB</td></tr>
+                <tr><td class="action">Diff file tab (close: q)</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>gd</td></tr>
+                <tr><td class="action">Hunk text object</td><td class="std">&mdash;</td><td class="cfg">ih (rh)</td></tr>
+                <tr><td class="action">LazyGit / log / file log</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>gg gl gf</td></tr>
+                <tr><td class="action">Diff put / get</td><td class="std">dp do</td><td class="cfg">gdp gdo</td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>Debug (DAP)</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Continue / over / into / out</td><td class="std">&mdash;</td><td class="cfg"><span class="key">F5</span> <span class="key">F10</span> <span class="key">F11</span> <span class="key">F12</span></td></tr>
+                <tr><td class="action">Breakpoint / conditional</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>db dB</td></tr>
+                <tr><td class="action">REPL / run last / UI</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>dr dl du</td></tr>
+                <tr><td class="action">Eval (normal / visual)</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>dE de</td></tr>
+                <tr><td class="action">Py test method / class / sel</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>dn df ds</td></tr>
+                <tr><td class="action">Go test / last test</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>dt dT</td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>Claude Code</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Toggle / focus</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>ac af</td></tr>
+                <tr><td class="action">Send selection</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>as</td></tr>
+                <tr><td class="action">Accept / deny diff</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>aa ad</td></tr>
+                <tr><td class="action">Model / add buffer / tree add</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>am ab at</td></tr>
+                <tr><td class="action">Toggle split direction</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>ap</td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>OpenCode</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Ask / actions / toggle</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>oa ox ot</td></tr>
+                <tr><td class="action">Ollama model</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>ou</td></tr>
+                <tr><td class="action">Add range / line</td><td class="std">&mdash;</td><td class="cfg">go goo</td></tr>
+                <tr><td class="action">Diff: accept / reject hunk</td><td class="std">&mdash;</td><td class="cfg">dp do</td></tr>
+                <tr><td class="action">Diff: accept / reject / close</td><td class="std">&mdash;</td><td class="cfg">da dr q</td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>Codex</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Toggle / focus / hide</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>kt kf kq</td></tr>
+                <tr><td class="action">Ask / ask selection</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>ka</td></tr>
+                <tr><td class="action">Add buffer / ask buffer</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>kb kB</td></tr>
+                <tr><td class="action">Add line / selection</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>kl ks</td></tr>
+                <tr><td class="action">Split direction</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>kp</td></tr>
+                <tr><td class="action">Add range / line (operator)</td><td class="std">&mdash;</td><td class="cfg">gC gCC</td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>AI Completion (Minuet)</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Predict / apply / dismiss</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>np na nd</td></tr>
+                <tr><td class="action">Select model</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>nm</td></tr>
+                <tr><td class="action">Insert: predict / apply / dismiss</td><td class="std">&mdash;</td><td class="cfg"><span class="key">M-z</span> <span class="key">M-a</span> <span class="key">M-x</span></td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>Terminals</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Toggle terminal</td><td class="std">&mdash;</td><td class="cfg"><span class="key">C-\</span></td></tr>
+                <tr><td class="action">Float / horiz / vert (1-9)</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>tf th tv</td></tr>
+                <tr><td class="action">Select / toggle all</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>ts ta</td></tr>
+                <tr><td class="action">Exit terminal mode</td><td class="std">&mdash;</td><td class="cfg"><span class="key">C-q</span></td></tr>
+                <tr><td class="action">Window nav from terminal</td><td class="std">&mdash;</td><td class="cfg"><span class="key">C-n/u/e/i</span></td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>Harpoon</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Add / menu</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>a e</td></tr>
+                <tr><td class="action">File 1-4</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>1 2 3 4</td></tr>
+                <tr><td class="action">Prev / next</td><td class="std">&mdash;</td><td class="cfg"><span class="key">C-S-P</span> <span class="key">C-S-N</span></td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>Completion (insert)</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Trigger / abort</td><td class="std">&mdash;</td><td class="cfg"><span class="key">C-Space</span> <span class="key">C-e</span></td></tr>
+                <tr><td class="action">Scroll docs up / down</td><td class="std">&mdash;</td><td class="cfg"><span class="key">C-b</span> <span class="key">C-f</span></td></tr>
+                <tr><td class="action">Confirm / next / prev</td><td class="std">&mdash;</td><td class="cfg"><span class="key">CR</span> <span class="key">Tab</span> <span class="key">S-Tab</span></td></tr>
+                <tr><td class="action">Minuet-only source</td><td class="std">&mdash;</td><td class="cfg"><span class="key">M-]</span></td></tr>
+            </table>
+        </div>
+
+        <div class="category">
+            <h2>Misc Plugins</h2>
+            <table>
+                <tr><th>Action</th><th>Vim</th><th>Config</th></tr>
+                <tr><td class="action">Diagram at cursor</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>md</td></tr>
+                <tr><td class="action">PlatformIO menu</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>p</td></tr>
+                <tr><td class="action">HTTP requests (kulala)</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>r...</td></tr>
+                <tr><td class="action">Flutter run / devices / emulators</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>Fr Fd Fe</td></tr>
+                <tr><td class="action">Flutter reload / restart / quit</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>FR Fs Fq</td></tr>
+                <tr><td class="action">Flutter outline / LSP / commands</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>Fo Fl Ft</td></tr>
+                <tr><td class="action">Toggle QWERTY / Colemak</td><td class="std">&mdash;</td><td class="cfg"><span class="leader">Space</span>uk</td></tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
