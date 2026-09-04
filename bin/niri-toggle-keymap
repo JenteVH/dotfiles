@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cfg="$HOME/.config/niri/cfg"
+if [[ "$(readlink "$cfg/keybinds.kdl")" == "keybinds-qwerty.kdl" ]]; then
+  layout=colemak
+else
+  layout=qwerty
+fi
+ln -sf "keybinds-$layout.kdl" "$cfg/keybinds.kdl"
+ln -sf "input-$layout.kdl" "$cfg/input.kdl"
+touch "$HOME/.config/niri/config.kdl"
+notify-send -t 2000 "Keymap" "$layout"

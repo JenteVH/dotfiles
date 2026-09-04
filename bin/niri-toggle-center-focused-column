@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+f="$HOME/.config/niri/cfg/layout.kdl"
+if grep -q 'center-focused-column "always"' "$f"; then
+  new=never
+else
+  new=always
+fi
+sed -i "s/center-focused-column \".*\"/center-focused-column \"$new\"/" "$f"
+notify-send -t 2000 "Center focused column" "$new"
