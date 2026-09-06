@@ -1,0 +1,179 @@
+#!/usr/bin/env python3
+"""Local Whisper dictation for Niri. Toggle recording, then paste without Enter."""
+import argparse
+import fcntl
+import json
+import os
+from pathlib import Path
+import signal
+import subprocess
+import sys
+import tempfile
+import time
+
+BASE = Path.home() / '.local/share/terminal-dictation'
+CACHE = Path.home() / '.cache/terminal-dictation'
+MODEL = Path(os.environ.get('DICTATION_MODEL', str(Path.home() / '.local/share/whisper-cpp/ggml-large-v3-turbo-q5_0.bin')))
+WHISPER = str(BASE / 'deps/whisper-vulkan/bin/whisper-cli')
+COPY = str(BASE / 'deps/clipboard/bin/wl-copy')
+TYPE = str(BASE / 'deps/wtype/bin/wtype')
+LANGUAGE = os.environ.get('DICTATION_LANGUAGE', 'auto')
+
+
+def notify(message):
+    subprocess.run(['notify-send', '-a', 'Terminal dictation', '-t', '4000',
+                    'Dictation', message], stdout=subprocess.DEVNULL,
+                   stderr=subprocess.DEVNULL, timeout=5, check=False)
+
+
+def focus():
+    result = subprocess.run(['niri', 'msg', '--json', 'focused-window'],
+                            capture_output=True, text=True, timeout=5, check=True)
+    return json.loads(result.stdout)
+
+
+def phase(value):
+    (CACHE / 'phase').write_text(value)
+
+
+def stopped():
+    return (CACHE / 'cancel').exists()
+
+
+def finish_process(process):
+    if process.poll() is None:
+        process.send_signal(signal.SIGINT)
+        try:
+            process.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.wait()
+
+
+def transcribe(audio, directory):
+    output = Path(directory) / 'transcript'
+    with (CACHE / 'whisper.log').open('w') as log:
+        process = subprocess.Popen([
+            WHISPER, '-m', str(MODEL), '-f', str(audio),
+            '-l', LANGUAGE, '-t', str(min(8, os.cpu_count() or 4)),
+            '-bs', '1', '-bo', '1', '-otxt', '-of', str(output), '-nt', '-sns',
+        ], stdout=log, stderr=log)
+        try:
+            deadline = time.monotonic() + 300
+            while process.poll() is None:
+                if stopped():
+                    return None
+                if time.monotonic() > deadline:
+                    raise RuntimeError('Transcription timed out; see ~/.cache/terminal-dictation/whisper.log')
+                time.sleep(0.1)
+        finally:
+            finish_process(process)
+        if process.returncode:
+            raise RuntimeError('Whisper failed; see ~/.cache/terminal-dictation/whisper.log')
+    # A single line ensures the paste cannot submit a terminal command.
+    return ' '.join(output.with_suffix('.txt').read_text().split())
+
+
+def deliver(text, target):
+    (CACHE / 'last.txt').write_text(text)
+    subprocess.run([COPY, '--type', 'text/plain;charset=utf-8'],
+                   input=text, text=True, check=True, timeout=5)
+    current = focus()
+    if not target or not current or current['id'] != target['id']:
+        notify('Copied to clipboard. Focus changed; press Ctrl+Shift+V to paste.')
+        return
+    terminal = target.get('app_id', '').lower()
+    if not any(name in terminal for name in ('kitty', 'alacritty', 'wezterm', 'foot', 'konsole', 'terminal', 'ghostty')):
+        notify('Copied to clipboard. Paste into your terminal when ready.')
+        return
+    subprocess.run([TYPE, '-M', 'ctrl', '-M', 'shift', '-k', 'v',
+                    '-m', 'shift', '-m', 'ctrl'], check=True, timeout=5)
+    notify('Pasted. Review the prompt, then press Enter.')
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('action', nargs='?', choices=['toggle', 'cancel', 'status', 'transcribe'], default='toggle')
+    parser.add_argument('audio', nargs='?', help='Audio file for transcribe (prints text; does not paste)')
+    args = parser.parse_args()
+    os.umask(0o077)
+    CACHE.mkdir(parents=True, exist_ok=True, mode=0o700)
+    with (CACHE / 'lock').open('a') as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            current = (CACHE / 'phase').read_text() if (CACHE / 'phase').exists() else 'starting'
+            if args.action == 'cancel':
+                (CACHE / 'cancel').touch()
+            elif args.action == 'toggle' and current == 'recording':
+                (CACHE / 'stop').touch()
+            elif args.action == 'status':
+                print(current)
+            else:
+                notify('Transcription is still running.' if current == 'transcribing' else 'Dictation is starting.')
+            return
+        if args.action in ('status', 'cancel'):
+            if args.action == 'status':
+                print('idle')
+            return
+        for name in ('stop', 'cancel'):
+            (CACHE / name).unlink(missing_ok=True)
+        phase('starting')
+        try:
+            if not MODEL.is_file():
+                raise RuntimeError(f'Model missing: {MODEL}')
+            with tempfile.TemporaryDirectory(prefix='recording-', dir=CACHE) as directory:
+                if args.action == 'transcribe':
+                    if not args.audio:
+                        raise RuntimeError('transcribe requires an audio file')
+                    phase('transcribing')
+                    text = transcribe(Path(args.audio).resolve(), directory)
+                    if text is not None:
+                        print(text)
+                    return
+                target = focus()
+                audio = Path(directory) / 'audio.wav'
+                with (CACHE / 'record.log').open('w') as log:
+                    recorder = subprocess.Popen(['pw-record', '--rate', '16000', '--channels', '1',
+                                                 '--format', 's16', str(audio)], stdout=log, stderr=log)
+                    try:
+                        time.sleep(0.2)
+                        if recorder.poll() is not None:
+                            raise RuntimeError('Microphone recording failed; see ~/.cache/terminal-dictation/record.log')
+                        phase('recording')
+                        notify('Listening. Super+R to finish; Super+Shift+R to cancel.')
+                        deadline = time.monotonic() + 180
+                        while not (CACHE / 'stop').exists() and not stopped() and time.monotonic() < deadline:
+                            if recorder.poll() is not None:
+                                raise RuntimeError('Microphone disconnected while recording.')
+                            time.sleep(0.1)
+                    finally:
+                        finish_process(recorder)
+                if stopped():
+                    notify('Cancelled.')
+                    return
+                phase('transcribing')
+                notify('Transcribing locally…')
+                text = transcribe(audio, directory)
+                if stopped():
+                    notify('Cancelled.')
+                elif text:
+                    deliver(text, target)
+                else:
+                    notify('No speech detected.')
+        finally:
+            phase('idle')
+            for name in ('stop', 'cancel'):
+                (CACHE / name).unlink(missing_ok=True)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as error:
+        print(str(error), file=sys.stderr)
+        try:
+            notify(str(error))
+        except Exception:
+            pass
+        sys.exit(1)

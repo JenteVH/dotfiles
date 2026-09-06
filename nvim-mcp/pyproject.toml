@@ -1,0 +1,9 @@
+[project]
+name = "local-nvim-mcp"
+version = "0.1.0"
+description = "Local MCP control of existing Neovim sessions over Unix RPC sockets"
+requires-python = ">=3.11"
+dependencies = ["mcp>=1.20,<2", "msgpack>=1.1,<2"]
+
+[tool.uv]
+package = false

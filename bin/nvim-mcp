@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+project_dir=$(CDPATH= cd -- "$(dirname -- "$(readlink -f -- "$0")")/../nvim-mcp" && pwd)
+exec "$project_dir/.venv/bin/python" "$project_dir/server.py" "$@"

@@ -1,0 +1,8 @@
+binds {
+    Mod+R repeat=false hotkey-overlay-title="Start/stop terminal dictation" {
+        spawn "/home/jente/.local/bin/terminal-dictation";
+    }
+    Mod+Shift+R repeat=false hotkey-overlay-title="Cancel dictation" {
+        spawn "/home/jente/.local/bin/terminal-dictation" "cancel";
+    }
+}

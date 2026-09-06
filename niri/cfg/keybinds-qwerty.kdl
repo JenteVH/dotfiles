@@ -99,10 +99,19 @@ binds {
     Mod+Shift+8 { move-window-to-workspace 8; }
     Mod+Shift+9 { move-window-to-workspace 9; }
 
+    // ─── Workspace Numbers on All Monitors ───
+    Mod+Ctrl+1 repeat=false { spawn "/home/jente/.local/bin/niri-focus-workspace-all" "1"; }
+    Mod+Ctrl+2 repeat=false { spawn "/home/jente/.local/bin/niri-focus-workspace-all" "2"; }
+    Mod+Ctrl+3 repeat=false { spawn "/home/jente/.local/bin/niri-focus-workspace-all" "3"; }
+    Mod+Ctrl+4 repeat=false { spawn "/home/jente/.local/bin/niri-focus-workspace-all" "4"; }
+    Mod+Ctrl+5 repeat=false { spawn "/home/jente/.local/bin/niri-focus-workspace-all" "5"; }
+    Mod+Ctrl+6 repeat=false { spawn "/home/jente/.local/bin/niri-focus-workspace-all" "6"; }
+    Mod+Ctrl+7 repeat=false { spawn "/home/jente/.local/bin/niri-focus-workspace-all" "7"; }
+    Mod+Ctrl+8 repeat=false { spawn "/home/jente/.local/bin/niri-focus-workspace-all" "8"; }
+    Mod+Ctrl+9 repeat=false { spawn "/home/jente/.local/bin/niri-focus-workspace-all" "9"; }
+
     // ─── Monitor Targets ───
     // Active outputs: DP-8 is the left monitor, DP-1 is the main/right monitor.
-    Mod+Ctrl+1 { focus-monitor "DP-8"; }
-    Mod+Ctrl+2 { focus-monitor "DP-1"; }
     Mod+W { focus-monitor "DP-8"; }
     Mod+E { focus-monitor "DP-1"; }
     Mod+Shift+W { move-window-to-monitor "DP-8"; }

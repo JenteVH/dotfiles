@@ -24,6 +24,12 @@
 { config, pkgs, ... }:
 
 let
+  # Kitty 0.48.2, including automatic .kitty-session extensions when saving.
+  kittyPkgs = import (builtins.fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/801bef6abd86b91e51083066b83fb354a11fc640.tar.gz";
+    sha256 = "sha256-hLD4l3QOGBQhkVp3mQ2lJ/YbEi99qUgKapb40KovZ88=";
+  }) { system = pkgs.stdenv.hostPlatform.system; };
+
   codex = pkgs.stdenv.mkDerivation rec {
     pname = "codex";
     version = "0.118.0";
@@ -106,7 +112,7 @@ in
     swaybg
     tmux
     rofi
-    kitty
+    kittyPkgs.kitty
     firefox
     google-chrome
     nwg-displays

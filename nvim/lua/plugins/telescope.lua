@@ -88,6 +88,13 @@ return {
           },
         },
         pickers = {
+          git_branches = {
+            attach_mappings = function(_, map)
+              actions.select_default:replace(actions.git_switch_branch)
+              map({ "i", "n" }, "<C-s>", actions.git_checkout)
+              return true
+            end,
+          },
           find_files = {
             hidden = true,
             follow = true,
